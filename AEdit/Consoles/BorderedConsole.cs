@@ -6,13 +6,16 @@ using Console = SadConsole.Console;
 
 namespace AEdit
 {
-	public class BorderedConsole : Console
+	internal class BorderedConsole : Console
 	{
-		public Basic BorderSurface { get; }
+		#region Private variables
+		private Basic BorderSurface { get; }
+		#endregion
 
+		#region Constructors
 		public BorderedConsole(int width, int height, Color fore, Color back) : base(width, height)
 		{
-			BorderSurface = new Basic(width + 2, height + 2, base.Font);
+			BorderSurface = new Basic(width + 2, height + 2, Font);
 			BorderSurface.DrawBox(new Rectangle(0, 0, BorderSurface.Width, BorderSurface.Height),
 				new Cell(fore, back), null, ConnectedLineThick);
 			BorderSurface.Position = new Point(-1, -1);
@@ -23,5 +26,6 @@ namespace AEdit
 		public BorderedConsole(int width, int height) : this(width, height, Color.White, Color.Black)
 		{
 		}
+		#endregion
 	}
 }

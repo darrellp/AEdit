@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using SadConsole;
 
 namespace AEdit.Consoles
 {
-	class ControlPanel : ControlsConsole
+	internal class ControlPanel : ControlsConsole
 	{
+		#region Private variables
 		readonly int _buttonWidth = 11;
+		#endregion
 
+		#region Constructor
 		public ControlPanel(int width, int height) : base(width, height)
 		{
 			Fill(Color.White, Color.Wheat, 0);
@@ -38,6 +36,6 @@ namespace AEdit.Consoles
 			btnUndo.Click += (s, a) => Program.Undos.PerformUndo();
 			Add(btnUndo);
 		}
-
+		#endregion
 	}
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.InteropServices;
-using AEdit.Handlers;
-using Microsoft.Xna.Framework.Input;
-using SadConsole;
+﻿using AEdit.Handlers;
 using SadConsole.Input;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
@@ -16,6 +11,11 @@ namespace AEdit.Consoles
 		Line,
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	The main display for the Ascii art. </summary>
+	///
+	/// <remarks>	Darrell Plank, 11/21/2018. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	internal class MainDisplay : Console
 	{
 		private EditMode _mode;
@@ -26,7 +26,7 @@ namespace AEdit.Consoles
 			new LineHandler(), 
 		};
 
-		public IHandler Handler { get; private set; }
+		private IHandler Handler { get; set; }
 
 		public EditMode Mode
 		{

@@ -19,10 +19,20 @@ namespace AEdit
 		ARight,			// Arriving right
 	}
 
-	public struct LineInfo
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Information about the line drawing process. </summary>
+	///
+	/// <remarks>	As we step through the line this is the information we return.
+	/// 			Aliasing information will only be supplied if it's asked for in
+	/// 			the LineStepper constructor.  If it is supplied it is a double
+	/// 			between 0 and 1 representing the portion of the way we are to the
+	/// 			next line.  
+	/// 			Darrell Plank, 11/21/2018. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	internal struct LineInfo
 	{
 		public LineStatus LineStatus { get; }
-		public double Alias { get; private set; }
+		private double Alias { get; }
 
 		public LineInfo(LineStatus lineStatus, double alias = 0)
 		{
@@ -31,8 +41,14 @@ namespace AEdit
 		}
 	}
 
-	public class LineStepper : IStepper<LineInfo>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	A line stepper using Bresenham's algorithm </summary>
+	///
+	/// <remarks>	Darrell Plank, 11/21/2018. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	internal class LineStepper : IStepper<LineInfo>
 	{
+		#region Private variables
 		private int _bresenhamSum;					// Sum for Bresenham's thus far
 		private readonly int _bresenhamAdd;			// How much to add to the sum each time
 		private readonly int _bresenhamSpan;		// How big the span is
@@ -44,8 +60,10 @@ namespace AEdit
 		private readonly LineStatus _aShortMove;	// LineStatus for when we arrive on the short move
 		private readonly LineStatus _longMove;		// LineStatus if not doing short move
 		private readonly bool _doAliasing;			// Whether we should bother with aliasing info.
-		private readonly Point _final;				// Last point we'll produce
+		private readonly Point _final;              // Last point we'll produce
+		#endregion
 
+		#region Constructor
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		///  <summary>	Constructor. </summary>
 		/// 
@@ -131,7 +149,9 @@ namespace AEdit
 			_bresenhamSum = (_bresenhamSpan + 1) / 2;
 			_lineStatus = _bresenhamAdd + _bresenhamSum > _bresenhamSpan ? _sShortMove : _longMove;
 		}
+		#endregion
 
+		#region Actual stepper
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Enumerates locations for this line and information about each point. </summary>
 		///
@@ -177,5 +197,6 @@ namespace AEdit
 				}
 			}
 		}
+		#endregion
 	}
 }

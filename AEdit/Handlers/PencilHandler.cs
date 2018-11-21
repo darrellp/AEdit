@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Linq;
 using Microsoft.Xna.Framework.Input;
-using SadConsole;
 using SadConsole.Input;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
@@ -10,10 +7,18 @@ using Keyboard = SadConsole.Input.Keyboard;
 
 namespace AEdit.Handlers
 {
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	A pencil handler. </summary>
+	///
+	/// <remarks>	Darrell Plank, 11/21/2018. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	class PencilHandler : IHandler
 	{
+		#region Private Variables
 		private char _drawChar = 'X';
+		#endregion
 
+		#region IHandler members
 		public void Reset() { }
 		public void Exit() { }
 
@@ -45,5 +50,6 @@ namespace AEdit.Handlers
 
 			return false;
 		}
+		#endregion
 	}
 }

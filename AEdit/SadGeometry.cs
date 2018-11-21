@@ -7,8 +7,8 @@ namespace AEdit
 {
 	public class LineBrush
 	{
-		private readonly char[] _chars = new char[Enum.GetValues(typeof(LineStatus)).Length];
-		public static LineBrush EraseBrush = new LineBrush("            ");
+		private readonly char[] _chars;
+		public static readonly LineBrush EraseBrush = new LineBrush("            ");
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Constructor. </summary>
@@ -50,7 +50,7 @@ namespace AEdit
 	{
 		private static readonly LineBrush _defaultBrush = new LineBrush(".-|`,/\\,`/\\");
 
-		public static void DrawLine(Point start, Point end, Console console, LineBrush brush = null)
+		private static void DrawLine(Point start, Point end, Console console, LineBrush brush = null)
 		{
 			if (brush == null)
 			{

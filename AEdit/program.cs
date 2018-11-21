@@ -1,7 +1,6 @@
 using AEdit.Consoles;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
-using SadConsole;
 using static SadConsole.Game;
 using static SadConsole.Global;
 using static SadConsole.Settings;
@@ -13,7 +12,7 @@ namespace AEdit
     {
 	    internal static Console StartingConsole;
 		internal static Console MainDisplay => _undos.CurrentDisplay;
-	    internal static ControlPanel ControlPanel => _controlPanel;
+	    private static ControlPanel ControlPanel => _controlPanel;
 		internal static Point MainDisplayPosition => new Point(DefaultControlWidth, 0);
 	    private static ControlPanel _controlPanel;
 	    private static Undo _undos;
@@ -22,10 +21,7 @@ namespace AEdit
 	    private const int DefaultHeight = 40;
 	    private const int DefaultControlWidth = 20;
 
-	    internal static Undo Undos
-	    {
-		    get => _undos;
-	    }
+	    internal static Undo Undos => _undos;
 
 	    private static void Main()
         {

@@ -5,10 +5,22 @@ using HtmlAgilityPack;
 
 namespace AEdit
 {
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Handler for the ASCII art archive. </summary>
+	///
+	/// <remarks>	This pulls in ascii drawings and categorized
+	/// 			from the web.
+	/// 			Darrell Plank, 11/21/2018. </remarks>
+	////////////////////////////////////////////////////////////////////////////////////////////////////
 	public class AsciiArtArchive
 	{
+		#region Private variables
 		private const string AaaPath = "https://www.asciiart.eu/";
+		private List<Hlink> _topLevel;
+		private bool LinkFailed { get; set; }
+		#endregion
 
+		#region Internal classes
 		private class Hlink
 		{
 			public Hlink(string name, Uri link)
@@ -18,7 +30,7 @@ namespace AEdit
 				Subtree = null;
 			}
 
-			public string Name { get; }
+			private string Name { get; }
 			public Uri Link { get; }
 			public List<Hlink> Subtree { get; private set; }
 
@@ -27,16 +39,16 @@ namespace AEdit
 				Subtree = subtree;
 			}
 		}
+		#endregion
 
-		List<Hlink> _topLevel;
-
-		public bool LinkFailed { get; set; }
-
+		#region Constructor
 		public AsciiArtArchive()
 		{
 			GetTree();
 		}
+		#endregion
 
+		#region Web Scraping
 		private void GetTree()
 		{
 			var topLevelTask = new System.Net.WebClient().DownloadStringTaskAsync(new Uri(AaaPath));
@@ -130,5 +142,6 @@ namespace AEdit
 				LinkFailed = true;
 			}
 		}
+		#endregion
 	}
 }
