@@ -16,6 +16,7 @@ namespace AEdit.Handlers
 	{
 		#region Private Variables
 		private char _drawChar = 'X';
+		private bool _fDragging;
 		#endregion
 
 		#region IHandler members
@@ -24,11 +25,24 @@ namespace AEdit.Handlers
 
 		public bool Mouse(MouseConsoleState state, Console console)
 		{
+			if (!state.IsOnConsole)
+			{
+				return true;
+			}
 			if (state.Mouse.LeftButtonDown)
 			{
+				if (!_fDragging)
+				{
+					Program.Undos.CreateUndo();
+					_fDragging = true;
+				}
 				var pt = state.CellPosition;
-				console.SetGlyph(pt.X, pt.Y, _drawChar);
+				Program.MainDisplay.SetGlyph(pt.X, pt.Y, _drawChar);
 				return false;
+			}
+			else if (_fDragging)
+			{
+				_fDragging = false;
 			}
 
 			return true;

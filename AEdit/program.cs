@@ -70,7 +70,8 @@ namespace AEdit
 	    {
 			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
 		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
-		    _undos = new Undo(EditMode.Line, DefaultWidth - DefaultControlWidth, DefaultHeight);
+		    _undos = new Undo(EditMode.Pencil, DefaultWidth - DefaultControlWidth, DefaultHeight);
+		    MainDisplay.IsFocused = true;
 
 		    CurrentScreen.Children.Add(MainDisplay);
 		    CurrentScreen.Children.Add(ControlPanel);

@@ -24,16 +24,6 @@ namespace AEdit
 				undoStack[i] = new MainDisplay(width, height)
 					{ Mode = initMode, Position = Program.MainDisplayPosition};
 				undoStack[i].Fill(Color.White, Color.MidnightBlue, 0);
-
-			}
-		}
-
-		private void AdvanceScreenIndex()
-		{
-			_iCurrent = (_iCurrent + 1) % (UndoCount + 1);
-			if (_iCurrent == _iLast)
-			{
-				_iLast = (_iLast + 1) % (UndoCount + 1);
 			}
 		}
 
@@ -51,6 +41,7 @@ namespace AEdit
 			undoScreen.Copy(CurrentDisplay);
 			Program.StartingConsole.Children.Remove(undoScreen);
 			Program.StartingConsole.Children.Add(CurrentDisplay);
+			CurrentDisplay.IsFocused = true;
 		}
 
 		public void PerformUndo()
@@ -64,6 +55,16 @@ namespace AEdit
 
 			Program.StartingConsole.Children.Remove(oldDisplay);
 			Program.StartingConsole.Children.Add(CurrentDisplay);
+			CurrentDisplay.IsFocused = true;
+		}
+
+		private void AdvanceScreenIndex()
+		{
+			_iCurrent = (_iCurrent + 1) % (UndoCount + 1);
+			if (_iCurrent == _iLast)
+			{
+				_iLast = (_iLast + 1) % (UndoCount + 1);
+			}
 		}
 
 		private bool RetreatScreenIndex()
