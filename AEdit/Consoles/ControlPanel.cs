@@ -23,6 +23,7 @@ namespace AEdit.Consoles
 			{
 				("About", (s, a) => Window.Message("AEdit by Darrell Plank", "Close")),
 				("Undo", (s, a) => Program.Undos.PerformUndo()),
+				("Clear", (s, a) => Program.MainDisplay.Clear()),
 				("Line", (s, a) => Program.MainDisplay.Mode = EditMode.Line),
 				("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Pencil),
 			};

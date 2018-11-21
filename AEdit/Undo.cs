@@ -23,7 +23,6 @@ namespace AEdit
 			{
 				undoStack[i] = new MainDisplay(width, height)
 					{ Mode = initMode, Position = Program.MainDisplayPosition};
-				undoStack[i].Fill(Color.White, Color.MidnightBlue, 0);
 			}
 		}
 
