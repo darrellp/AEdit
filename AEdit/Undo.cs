@@ -5,18 +5,23 @@ namespace AEdit
 {
 	internal class Undo
 	{
+		#region Public Variables
+		public MainDisplay CurrentDisplay => undoStack[_iCurrent];
+		#endregion
+
+		#region Private Variables
 		// Count of undo operations
 		private const int UndoCount = 5;
 
-		internal MainDisplay CurrentDisplay => undoStack[_iCurrent];
-
 		// We need the undo screens plus the current one
-		readonly MainDisplay[] undoStack = new MainDisplay[UndoCount + 1];
+		private readonly MainDisplay[] undoStack = new MainDisplay[UndoCount + 1];
 
 		// _iCurrent is the current screen.  _iCurrent - 1 (mod UndoCount) is the undo screen
 		// unless it's equal to _iLast in which case we've "underflowed" the stack.
 		private int _iLast = UndoCount, _iCurrent;
+		#endregion
 
+		#region Constructor
 		public Undo(EditMode initMode, int width, int height)
 		{
 			for (var i = 0; i < UndoCount + 1; i++)
@@ -25,7 +30,9 @@ namespace AEdit
 					{ Mode = initMode, Position = Program.MainDisplayPosition};
 			}
 		}
+		#endregion
 
+		#region Undo operations
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Creates an undo. </summary>
 		///
@@ -79,5 +86,6 @@ namespace AEdit
 			_iCurrent = iRetreat;
 			return true;
 		}
+		#endregion
 	}
 }

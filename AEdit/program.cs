@@ -8,22 +8,29 @@ using static SadConsole.Settings;
 namespace AEdit
 {
 	// ReSharper disable once ClassNeverInstantiated.Global
-	public class Program
+	internal class Program
     {
-	    internal static Console StartingConsole;
-		internal static MainDisplay MainDisplay => _undos.CurrentDisplay;
-	    private static ControlPanel ControlPanel => _controlPanel;
-		internal static Point MainDisplayPosition => new Point(DefaultControlWidth, 0);
-	    private static ControlPanel _controlPanel;
+		#region Private variables
+		private static ControlPanel _controlPanel;
 	    private static Undo _undos;
+	    private static ControlPanel ControlPanel => _controlPanel;
+		#endregion
 
-	    private const int DefaultWidth = 140;
+		#region Public variables
+		public static Console StartingConsole;
+	    public static MainDisplay MainDisplay => _undos.CurrentDisplay;
+	    public static Point MainDisplayPosition => new Point(DefaultControlWidth, 0);
+		public static Undo Undos => _undos;
+		#endregion
+
+		#region Formatting constants
+		private const int DefaultWidth = 140;
 	    private const int DefaultHeight = 40;
 	    private const int DefaultControlWidth = 23;
+		#endregion
 
-	    internal static Undo Undos => _undos;
-
-	    private static void Main()
+		#region Main
+		private static void Main()
         {
 			// Setup the engine and create the main window.
 			Create("Fonts/IBM.font", DefaultWidth, DefaultHeight);
@@ -43,8 +50,10 @@ namespace AEdit
             
             Instance.Dispose();
         }
+		#endregion
 
-        private static void Update(GameTime time)
+		#region Handlers
+		private static void Update(GameTime time)
         {
             // Called each logic update.
 
@@ -76,5 +85,6 @@ namespace AEdit
 		    CurrentScreen.Children.Add(MainDisplay);
 		    CurrentScreen.Children.Add(ControlPanel);
 	    }
+		#endregion
 	}
 }

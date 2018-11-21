@@ -5,11 +5,14 @@ using Microsoft.Xna.Framework;
 
 namespace AEdit
 {
-	public class LineBrush
+	internal class LineBrush
 	{
+		#region Private variables
 		private readonly char[] _chars;
-		public static readonly LineBrush EraseBrush = new LineBrush("            ");
+		internal static readonly LineBrush EraseBrush = new LineBrush("            ");
+		#endregion
 
+		#region Constructor
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// <summary>	Constructor. </summary>
 		///
@@ -37,19 +40,23 @@ namespace AEdit
 		{
 			_chars = chars.ToCharArray();
 		}
+		#endregion
 
+		#region Queries
 		public char CharFromLineStatus(LineStatus ls)
 		{
 			return _chars[(int) ls];
 		}
+		#endregion
 	}
 
-
-
-	public static class SadGeometry
+	internal static class SadGeometry
 	{
+		#region Private variables
 		private static readonly LineBrush _defaultBrush = new LineBrush(".-|`,/\\,`/\\");
+		#endregion
 
+		#region Operations
 		private static void DrawLine(Point start, Point end, Console console, LineBrush brush = null)
 		{
 			if (brush == null)
@@ -90,13 +97,12 @@ namespace AEdit
 			{
 				console.SetGlyph(pt.X, pt.Y, i >= memory.Count ? 0 :memory[i++]);
 			}
-
-
 		}
 
 		public static void EraseLine(Point start, Point end, Console console)
 		{
 			DrawLine(start, end, console, LineBrush.EraseBrush);
 		}
+		#endregion
 	}
 }

@@ -19,6 +19,7 @@ namespace AEdit
 		ARight,			// Arriving right
 	}
 
+	#region Internal classes
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	Information about the line drawing process. </summary>
 	///
@@ -40,6 +41,7 @@ namespace AEdit
 			Alias = alias;
 		}
 	}
+	#endregion
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	A line stepper using Bresenham's algorithm </summary>
