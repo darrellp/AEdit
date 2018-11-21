@@ -36,10 +36,11 @@ namespace AEdit
 		////////////////////////////////////////////////////////////////////////////////////////////////////
 		public void CreateUndo()
 		{
-			var undoScreen = CurrentDisplay;
+			var oldDisplay = CurrentDisplay;
 			AdvanceScreenIndex();
-			undoScreen.Copy(CurrentDisplay);
-			Program.StartingConsole.Children.Remove(undoScreen);
+			oldDisplay.Copy(CurrentDisplay);
+			Program.StartingConsole.Children.Remove(oldDisplay);
+			CurrentDisplay.Mode = oldDisplay.Mode;
 			Program.StartingConsole.Children.Add(CurrentDisplay);
 			CurrentDisplay.IsFocused = true;
 		}
@@ -54,6 +55,7 @@ namespace AEdit
 			}
 
 			Program.StartingConsole.Children.Remove(oldDisplay);
+			CurrentDisplay.Mode = oldDisplay.Mode;
 			Program.StartingConsole.Children.Add(CurrentDisplay);
 			CurrentDisplay.IsFocused = true;
 		}

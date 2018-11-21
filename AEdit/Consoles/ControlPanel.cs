@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using SadConsole;
 
 namespace AEdit.Consoles
@@ -6,7 +7,7 @@ namespace AEdit.Consoles
 	internal class ControlPanel : ControlsConsole
 	{
 		#region Private variables
-		readonly int _buttonWidth = 11;
+		const int ButtonWidth = 10;
 		#endregion
 
 		#region Constructor
@@ -18,23 +19,39 @@ namespace AEdit.Consoles
 
 		private void CreateButtons(int width, int height)
 		{
-			var btnAbout = new SadConsole.Controls.Button(_buttonWidth, 1)
+			(string, EventHandler)[] buttonInfo = new (string, EventHandler)[]
 			{
-				Text = "About",
-				Position = new Point((width - _buttonWidth) / 2, 3)
+				("About", (s, a) => Window.Message("AEdit by Darrell Plank", "Close")),
+				("Undo", (s, a) => Program.Undos.PerformUndo()),
+				("Line", (s, a) => Program.MainDisplay.Mode = EditMode.Line),
+				("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Pencil),
 			};
 
-			btnAbout.Click += (s, a) => Window.Message("AEdit by Darrell Plank", "Close");
-			Add(btnAbout);
+			var btnSpacing = (width - 2 * ButtonWidth) / 3;
+			var leftCol = btnSpacing;
+			var rightCol = btnSpacing * 2 + ButtonWidth;
+			var row = 0;
+			var col = leftCol;
 
-			var btnUndo = new SadConsole.Controls.Button(_buttonWidth, 1)
+			foreach (var (title, handler) in buttonInfo)
 			{
-				Text = "Undo",
-				Position = new Point((width - _buttonWidth) / 2, 4)
-			};
-
-			btnUndo.Click += (s, a) => Program.Undos.PerformUndo();
-			Add(btnUndo);
+				var btn = new SadConsole.Controls.Button(ButtonWidth, 1)
+				{
+					Text = title,
+					Position = new Point(col, row)
+				};
+				btn.Click += handler;
+				Add(btn);
+				if (col == leftCol)
+				{
+					col = rightCol;
+				}
+				else
+				{
+					col = leftCol;
+					row++;
+				}
+			}
 		}
 		#endregion
 	}

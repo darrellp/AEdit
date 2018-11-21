@@ -11,15 +11,15 @@ namespace AEdit
 	public class Program
     {
 	    internal static Console StartingConsole;
-		internal static Console MainDisplay => _undos.CurrentDisplay;
+		internal static MainDisplay MainDisplay => _undos.CurrentDisplay;
 	    private static ControlPanel ControlPanel => _controlPanel;
 		internal static Point MainDisplayPosition => new Point(DefaultControlWidth, 0);
 	    private static ControlPanel _controlPanel;
 	    private static Undo _undos;
 
-	    private const int DefaultWidth = 120;
+	    private const int DefaultWidth = 140;
 	    private const int DefaultHeight = 40;
-	    private const int DefaultControlWidth = 20;
+	    private const int DefaultControlWidth = 23;
 
 	    internal static Undo Undos => _undos;
 
