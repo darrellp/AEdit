@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AEdit.Consoles;
+﻿using AEdit.Consoles;
 using Microsoft.Xna.Framework;
 
 namespace AEdit
@@ -42,6 +37,13 @@ namespace AEdit
 			}
 		}
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Creates an undo. </summary>
+		///
+		/// <remarks>	This should be thought of as "making a snapshot so new changes can be made" - i.e.,
+		/// 			it should be done immediately BEFORE new changes are made, not after they are made.
+		/// 			Darrell Plank, 11/20/2018. </remarks>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
 		public void CreateUndo()
 		{
 			var undoScreen = CurrentDisplay;
@@ -49,6 +51,31 @@ namespace AEdit
 			undoScreen.Copy(CurrentDisplay);
 			Program.StartingConsole.Children.Remove(undoScreen);
 			Program.StartingConsole.Children.Add(CurrentDisplay);
+		}
+
+		public void PerformUndo()
+		{
+			var oldDisplay = CurrentDisplay;
+			if (!RetreatScreenIndex())
+			{
+				// Off the end of the stack
+				return;
+			}
+
+			Program.StartingConsole.Children.Remove(oldDisplay);
+			Program.StartingConsole.Children.Add(CurrentDisplay);
+		}
+
+		private bool RetreatScreenIndex()
+		{
+			var iRetreat = (_iCurrent + UndoCount) % (UndoCount + 1);
+			if (iRetreat == _iLast)
+			{
+				return false;
+			}
+
+			_iCurrent = iRetreat;
+			return true;
 		}
 	}
 }

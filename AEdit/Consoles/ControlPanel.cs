@@ -12,22 +12,32 @@ namespace AEdit.Consoles
 	{
 		readonly int _buttonWidth = 11;
 
-		public ControlPanel(int width, int height, Color fore, Color back) : base(width, height)
+		public ControlPanel(int width, int height) : base(width, height)
 		{
-			DrawBox(new Rectangle(0, 0, width, height),
-				new Cell(Color.White, Color.Black), null, ConnectedLineThick);
-			var button = new SadConsole.Controls.Button(_buttonWidth, 1)
-			{
-				Text = "Click",
-				Position = new Point((width - _buttonWidth) /2, 3)
-			};
 			Fill(Color.White, Color.Wheat, 0);
-
-			button.Click += (s, a) => Window.Message("This has been clicked!", "Close");
-			Add(button);
+			CreateButtons(width, height);
 		}
 
-		public ControlPanel(int width, int height) : this(width, height, Color.Black, Color.Wheat) { }
+		private void CreateButtons(int width, int height)
+		{
+			var btnAbout = new SadConsole.Controls.Button(_buttonWidth, 1)
+			{
+				Text = "About",
+				Position = new Point((width - _buttonWidth) / 2, 3)
+			};
+
+			btnAbout.Click += (s, a) => Window.Message("AEdit by Darrell Plank", "Close");
+			Add(btnAbout);
+
+			var btnUndo = new SadConsole.Controls.Button(_buttonWidth, 1)
+			{
+				Text = "Undo",
+				Position = new Point((width - _buttonWidth) / 2, 4)
+			};
+
+			btnUndo.Click += (s, a) => Program.Undos.PerformUndo();
+			Add(btnUndo);
+		}
 
 	}
 }

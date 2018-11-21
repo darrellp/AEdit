@@ -25,11 +25,16 @@ namespace AEdit.Handlers
 
 		public bool Mouse(MouseConsoleState state, Console console)
 		{
+			if (!state.IsOnConsole)
+			{
+				return true;
+			}
 			if (state.Mouse.LeftButtonDown && !_fDragging)
 			{
+				Program.Undos.CreateUndo();
 				_ptStart = _ptEnd = state.CellPosition;
 				_fDragging = true;
-				_lineMemory = DrawLineMemory(_ptStart, _ptEnd, console);
+				_lineMemory = DrawLineMemory(_ptStart, _ptEnd, Program.MainDisplay);
 			}
 			else if (state.Mouse.LeftButtonDown)
 			{
@@ -38,13 +43,12 @@ namespace AEdit.Handlers
 					//EraseLine(_ptStart, _ptEnd, console);
 					DrawLineFromMemory(_ptStart, _ptEnd, console, _lineMemory);
 					_ptEnd = state.CellPosition;
-					_lineMemory = DrawLineMemory(_ptStart, _ptEnd, console);
+					_lineMemory = DrawLineMemory(_ptStart, _ptEnd, Program.MainDisplay);
 				}
 			}
 			else if (_fDragging)
 			{
 				_fDragging = false;
-				Program.Undos.CreateUndo();
 			}
 
 			return false;
