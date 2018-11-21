@@ -44,6 +44,7 @@ namespace AEdit.Handlers
 			else if (_fDragging)
 			{
 				_fDragging = false;
+				Program.Undos.CreateUndo();
 			}
 
 			return false;

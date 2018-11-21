@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
 using HtmlAgilityPack;
 
 namespace AEdit
@@ -21,9 +18,9 @@ namespace AEdit
 				Subtree = null;
 			}
 
-			public string Name { get; private set; }
-			public Uri Link { get; private set; }
-			public List<Hlink> Subtree { get; set; }
+			public string Name { get; }
+			public Uri Link { get; }
+			public List<Hlink> Subtree { get; private set; }
 
 			public void SetSubtree(List<Hlink> subtree)
 			{
@@ -33,7 +30,7 @@ namespace AEdit
 
 		List<Hlink> _topLevel;
 
-		internal bool LinkFailed { get; set; } = false;
+		public bool LinkFailed { get; set; }
 
 		public AsciiArtArchive()
 		{

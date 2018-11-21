@@ -11,9 +11,21 @@ namespace AEdit
 	// ReSharper disable once ClassNeverInstantiated.Global
 	public class Program
     {
+	    internal static Console StartingConsole;
+		internal static Console MainDisplay => _undos.CurrentDisplay;
+	    internal static ControlPanel ControlPanel => _controlPanel;
+		internal static Point MainDisplayPosition => new Point(DefaultControlWidth, 0);
+	    private static ControlPanel _controlPanel;
+	    private static Undo _undos;
+
 	    private const int DefaultWidth = 120;
 	    private const int DefaultHeight = 40;
 	    private const int DefaultControlWidth = 20;
+
+	    internal static Undo Undos
+	    {
+		    get => _undos;
+	    }
 
 	    private static void Main()
         {
@@ -47,14 +59,12 @@ namespace AEdit
             }
         }
 
-	    internal static Console startingConsole;
-
         private static void Init()
         {
 	        Instance.Window.Title = "AEdit";
 
-			startingConsole = new Console(DefaultWidth, DefaultHeight);
-            CurrentScreen = startingConsole;
+			StartingConsole = new Console(DefaultWidth, DefaultHeight);
+            CurrentScreen = StartingConsole;
 
             // Set our new console as the thing to render and process
 	        SetupConsoles();
@@ -62,16 +72,12 @@ namespace AEdit
 
 	    private static void SetupConsoles()
 	    {
-		    var controls = new ControlPanel(DefaultControlWidth, DefaultHeight);
-		    controls.Fill(Color.White, Color.Wheat, 0);
+			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
+		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
+		    _undos = new Undo(EditMode.Line, DefaultWidth - DefaultControlWidth, DefaultHeight);
 
-		    var display = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
-		    display.Fill(Color.White, Color.MidnightBlue, 0);
-			display.Position = new Point(DefaultControlWidth, 0);
-			display.Mode = EditMode.Line;
-
-		    CurrentScreen.Children.Add(display);
-		    CurrentScreen.Children.Add(controls);
+		    CurrentScreen.Children.Add(MainDisplay);
+		    CurrentScreen.Children.Add(ControlPanel);
 	    }
 	}
 }
