@@ -1,12 +1,12 @@
-﻿using AEdit.Consoles;
-using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using AEdit.Consoles;
 
 namespace AEdit
 {
 	internal class Undo
 	{
 		#region Public Variables
-		public MainDisplay CurrentDisplay => undoStack[_iCurrent];
+		public MainDisplay CurrentDisplay => _undoStack[_iCurrent];
 		#endregion
 
 		#region Private Variables
@@ -14,11 +14,11 @@ namespace AEdit
 		private const int UndoCount = 5;
 
 		// We need the undo screens plus the current one
-		private readonly MainDisplay[] undoStack = new MainDisplay[UndoCount + 1];
+		private readonly MainDisplay[] _undoStack = new MainDisplay[UndoCount + 1];
 
 		// _iCurrent is the current screen.  _iCurrent - 1 (mod UndoCount) is the undo screen
 		// unless it's equal to _iLast in which case we've "underflowed" the stack.
-		private int _iLast = UndoCount, _iCurrent;
+		private int _iLast, _iCurrent, _iRedoLimit;
 		#endregion
 
 		#region Constructor
@@ -26,7 +26,7 @@ namespace AEdit
 		{
 			for (var i = 0; i < UndoCount + 1; i++)
 			{
-				undoStack[i] = new MainDisplay(width, height)
+				_undoStack[i] = new MainDisplay(width, height)
 					{ Mode = initMode, Position = Program.MainDisplayPosition};
 			}
 		}
@@ -66,25 +66,51 @@ namespace AEdit
 			CurrentDisplay.IsFocused = true;
 		}
 
+		public void PerformRedo()
+		{
+			var oldDisplay = CurrentDisplay;
+			if (_iCurrent != _iRedoLimit)
+			{
+				_iCurrent = (_iCurrent + 1) % (UndoCount + 1);
+			}
+
+			Program.StartingConsole.Children.Remove(oldDisplay);
+			CurrentDisplay.Mode = oldDisplay.Mode;
+			Program.StartingConsole.Children.Add(CurrentDisplay);
+			CurrentDisplay.IsFocused = true;
+		}
+
 		private void AdvanceScreenIndex()
 		{
-			_iCurrent = (_iCurrent + 1) % (UndoCount + 1);
+			var next = (_iCurrent + 1) % (UndoCount + 1);
+			if (_iCurrent == _iRedoLimit)
+			{
+				_iRedoLimit = next;
+			}
+	
+			_iCurrent = next;
 			if (_iCurrent == _iLast)
 			{
 				_iLast = (_iLast + 1) % (UndoCount + 1);
 			}
 		}
-
 		private bool RetreatScreenIndex()
 		{
-			var iRetreat = (_iCurrent + UndoCount) % (UndoCount + 1);
-			if (iRetreat == _iLast)
+			if (_iCurrent == _iLast)
 			{
 				return false;
 			}
+			var iRetreat = (_iCurrent + UndoCount) % (UndoCount + 1);
 
 			_iCurrent = iRetreat;
 			return true;
+		}
+
+		[Conditional("DEBUG")]
+		// ReSharper disable once UnusedMember.Local
+		private void PrintIndices()
+		{
+			Program.AETraceLine($"_iLast = {_iLast} : _iCurrent = {_iCurrent} : _iRedoLimit = {_iRedoLimit}");
 		}
 		#endregion
 	}

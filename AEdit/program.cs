@@ -1,6 +1,9 @@
+using System.Diagnostics;
 using AEdit.Consoles;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
+using SadConsole;
+using SharpDX.DXGI;
 using static SadConsole.Game;
 using static SadConsole.Global;
 using static SadConsole.Settings;
@@ -12,6 +15,7 @@ namespace AEdit
     {
 		#region Private variables
 		private static ControlPanel _controlPanel;
+	    private static Console _debugConsole;
 	    private static Undo _undos;
 	    private static ControlPanel ControlPanel => _controlPanel;
 		#endregion
@@ -27,13 +31,18 @@ namespace AEdit
 		private const int DefaultWidth = 140;
 	    private const int DefaultHeight = 40;
 	    private const int DefaultControlWidth = 23;
+#if DEBUG
+		private const int DebugConsoleHeight = 10;
+#else
+		private const int DebugConsoleHeight = 0;
+#endif
 		#endregion
 
 		#region Main
 		private static void Main()
         {
 			// Setup the engine and create the main window.
-			Create("Fonts/IBM.font", DefaultWidth, DefaultHeight);
+			Create("Fonts/IBM.font", DefaultWidth, DefaultHeight + DebugConsoleHeight);
 
             // Hook the start event so we can add consoles to the system.
             OnInitialize = Init;
@@ -50,9 +59,9 @@ namespace AEdit
             
             Instance.Dispose();
         }
-		#endregion
+#endregion
 
-		#region Handlers
+#region Handlers
 		private static void Update(GameTime time)
         {
             // Called each logic update.
@@ -77,6 +86,8 @@ namespace AEdit
 
 	    private static void SetupConsoles()
 	    {
+		    SetupDebug();
+
 			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
 		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
 		    _undos = new Undo(EditMode.Pencil, DefaultWidth - DefaultControlWidth, DefaultHeight);
@@ -84,6 +95,26 @@ namespace AEdit
 
 		    CurrentScreen.Children.Add(MainDisplay);
 		    CurrentScreen.Children.Add(ControlPanel);
+	    }
+
+	    [Conditional("DEBUG")]
+		private static void SetupDebug()
+	    {
+		    _debugConsole = new Console(DefaultWidth, DebugConsoleHeight) {Position = new Point(0, DefaultHeight), DefaultBackground = Color.MidnightBlue};
+			_debugConsole.Cursor.PrintAppearance = new Cell(Color.White, Color.MidnightBlue);
+			CurrentScreen.Children.Add(_debugConsole);
+		}
+
+	    [Conditional("DEBUG")]
+	    public static void AETrace(string printString)
+	    {
+			_debugConsole.Cursor.Print(printString);
+	    }
+
+	    [Conditional("DEBUG")]
+	    public static void AETraceLine(string printString)
+	    {
+		    _debugConsole.Cursor.Print(printString + "\r\n");
 	    }
 		#endregion
 	}
