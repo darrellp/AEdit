@@ -52,25 +52,8 @@ namespace AEdit.Handlers
 				{
 					return false;
 				}
-				Program.AETraceLine($"({pt.X}, {pt.Y})");
-				if (pt.X < _bounds.X)
-				{
-					_bounds.Width = _bounds.Right - pt.X;
-					_bounds.X = pt.X;
-				}
-				else if (pt.X >= _bounds.Right)
-				{
-					_bounds.Width = pt.X - _bounds.X + 1;
-				}
-				if (pt.Y < _bounds.Y)
-				{
-					_bounds.Height = _bounds.Bottom - pt.Y;
-					_bounds.Y = pt.Y;
-				}
-				else if (pt.Y >= _bounds.Bottom)
-				{
-					_bounds.Height = pt.Y - _bounds.Y + 1;
-				}
+
+				UpdateBounds(pt);
 				return false;
 			}
 			else if (_fDragging)
@@ -80,6 +63,29 @@ namespace AEdit.Handlers
 			}
 
 			return true;
+		}
+
+		private void UpdateBounds(Point pt)
+		{
+			if (pt.X < _bounds.X)
+			{
+				_bounds.Width = _bounds.Right - pt.X;
+				_bounds.X = pt.X;
+			}
+			else if (pt.X >= _bounds.Right)
+			{
+				_bounds.Width = pt.X - _bounds.X + 1;
+			}
+
+			if (pt.Y < _bounds.Y)
+			{
+				_bounds.Height = _bounds.Bottom - pt.Y;
+				_bounds.Y = pt.Y;
+			}
+			else if (pt.Y >= _bounds.Bottom)
+			{
+				_bounds.Height = pt.Y - _bounds.Y + 1;
+			}
 		}
 
 		public bool Keyboard(Keyboard info, Console console)
