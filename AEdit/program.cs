@@ -93,6 +93,7 @@ namespace AEdit
 			_mainDisplay = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
 		    MainDisplay.Drawing.IsFocused = true;
 		    MainDisplay.Drawing.Mode = EditMode.Brush;
+			_mainDisplay.Position = new Point(ControlPanel.Width, 0);
 
 		    CurrentScreen.Children.Add(MainDisplay);
 		    CurrentScreen.Children.Add(ControlPanel);
