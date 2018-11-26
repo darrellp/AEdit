@@ -14,10 +14,10 @@ namespace AEdit.Consoles
 		public ControlPanel(int width, int height) : base(width, height)
 		{
 			Fill(Color.White, Color.Wheat, 0);
-			CreateButtons(width, height);
+			CreateButtons(width);
 		}
 
-		private void CreateButtons(int width, int height)
+		private void CreateButtons(int width)
 		{
 			(string, EventHandler)[] buttonInfo = new (string, EventHandler)[]
 			{
@@ -25,7 +25,7 @@ namespace AEdit.Consoles
 				("Redo", (s, a) => Program.Undos.PerformRedo()),
 				("Clear", (s, a) => Program.MainDisplay.Clear()),
 				("Line", (s, a) => Program.MainDisplay.Mode = EditMode.Line),
-				("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Pencil),
+				("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Brush),
 			};
 
 			var btnSpacing = (width - 2 * ButtonWidth) / 3;

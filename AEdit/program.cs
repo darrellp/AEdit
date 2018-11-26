@@ -3,7 +3,6 @@ using AEdit.Consoles;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
 using SadConsole;
-using SharpDX.DXGI;
 using static SadConsole.Game;
 using static SadConsole.Global;
 using static SadConsole.Settings;
@@ -18,13 +17,13 @@ namespace AEdit
 	    private static Console _debugConsole;
 	    private static Undo _undos;
 	    private static ControlPanel ControlPanel => _controlPanel;
+	    private static MainDisplay _mainDisplay;
 		#endregion
 
 		#region Public variables
-		public static Console StartingConsole;
-	    public static MainDisplay MainDisplay => _undos.CurrentDisplay;
-	    public static Point MainDisplayPosition => new Point(DefaultControlWidth, 0);
-		public static Undo Undos => _undos;
+	    private static Console StartingConsole;
+	    public static MainDisplay MainDisplay => _mainDisplay;
+	    public static Undo Undos => _undos;
 		#endregion
 
 		#region Formatting constants
@@ -90,8 +89,10 @@ namespace AEdit
 
 			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
 		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
-		    _undos = new Undo(EditMode.Pencil, DefaultWidth - DefaultControlWidth, DefaultHeight);
-		    MainDisplay.IsFocused = true;
+		    _undos = new Undo();
+			_mainDisplay = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
+		    MainDisplay.Drawing.IsFocused = true;
+		    MainDisplay.Drawing.Mode = EditMode.Brush;
 
 		    CurrentScreen.Children.Add(MainDisplay);
 		    CurrentScreen.Children.Add(ControlPanel);
@@ -100,19 +101,27 @@ namespace AEdit
 	    [Conditional("DEBUG")]
 		private static void SetupDebug()
 	    {
-		    _debugConsole = new Console(DefaultWidth, DebugConsoleHeight) {Position = new Point(0, DefaultHeight), DefaultBackground = Color.MidnightBlue};
-			_debugConsole.Cursor.PrintAppearance = new Cell(Color.White, Color.MidnightBlue);
-			CurrentScreen.Children.Add(_debugConsole);
+		    _debugConsole = new Console(DefaultWidth, DebugConsoleHeight)
+		    {
+			    Position = new Point(0, DefaultHeight),
+			    DefaultBackground = Color.MidnightBlue,
+			    Cursor = {PrintAppearance = new Cell(Color.White, Color.MidnightBlue)}
+		    };
+		    CurrentScreen.Children.Add(_debugConsole);
 		}
 
 	    [Conditional("DEBUG")]
+	    // ReSharper disable once UnusedMember.Global
+	    // ReSharper disable once InconsistentNaming
 	    public static void AETrace(string printString)
 	    {
 			_debugConsole.Cursor.Print(printString);
 	    }
 
 	    [Conditional("DEBUG")]
-	    public static void AETraceLine(string printString)
+	    // ReSharper disable once UnusedMember.Global
+	    // ReSharper disable once InconsistentNaming
+		public static void AETraceLine(string printString)
 	    {
 		    _debugConsole.Cursor.Print(printString + "\r\n");
 	    }

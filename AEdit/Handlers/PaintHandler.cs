@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole.Input;
 using Console = SadConsole.Console;
@@ -12,11 +13,13 @@ namespace AEdit.Handlers
 	///
 	/// <remarks>	Darrell Plank, 11/21/2018. </remarks>
 	////////////////////////////////////////////////////////////////////////////////////////////////////
-	class PencilHandler : IHandler
+	class PaintHandler : IHandler
 	{
 		#region Private Variables
 		private char _drawChar = 'X';
 		private bool _fDragging;
+		private Rectangle _bounds;
+		private Point _ptLast = new Point(-1, -1);
 		#endregion
 
 		#region IHandler members
@@ -33,15 +36,46 @@ namespace AEdit.Handlers
 			{
 				if (!_fDragging)
 				{
-					Program.Undos.CreateUndo();
+					_bounds = new Rectangle(state.CellPosition, new Point(1, 1));
 					_fDragging = true;
 				}
 				var pt = state.CellPosition;
-				Program.MainDisplay.SetGlyph(pt.X, pt.Y, _drawChar);
+				if (pt == _ptLast)
+				{
+					return false;
+				}
+
+				_ptLast = pt;
+				Program.MainDisplay.Drawing.SetGlyph(pt.X, pt.Y, _drawChar);
+				Program.MainDisplay.Drawing.SetForeground(pt.X, pt.Y, Color.White);
+				if (_bounds.Contains(pt))
+				{
+					return false;
+				}
+				Program.AETraceLine($"({pt.X}, {pt.Y})");
+				if (pt.X < _bounds.X)
+				{
+					_bounds.Width = _bounds.Right - pt.X;
+					_bounds.X = pt.X;
+				}
+				else if (pt.X >= _bounds.Right)
+				{
+					_bounds.Width = pt.X - _bounds.X + 1;
+				}
+				if (pt.Y < _bounds.Y)
+				{
+					_bounds.Height = _bounds.Bottom - pt.Y;
+					_bounds.Y = pt.Y;
+				}
+				else if (pt.Y >= _bounds.Bottom)
+				{
+					_bounds.Height = pt.Y - _bounds.Y + 1;
+				}
 				return false;
 			}
 			else if (_fDragging)
 			{
+				Program.MainDisplay.SetObject(_bounds);
 				_fDragging = false;
 			}
 

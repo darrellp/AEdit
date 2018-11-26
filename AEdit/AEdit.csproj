@@ -109,10 +109,12 @@
     <Compile Include="AsciiArtArchive.cs" />
     <Compile Include="Consoles\BorderedConsole.cs" />
     <Compile Include="Consoles\ControlPanel.cs" />
+    <Compile Include="Consoles\DrawingConsole.cs" />
     <Compile Include="Consoles\MainDisplay.cs" />
+    <Compile Include="EditObject.cs" />
     <Compile Include="Handlers\IHandler.cs" />
     <Compile Include="Handlers\LineHandler.cs" />
-    <Compile Include="Handlers\PencilHandler.cs" />
+    <Compile Include="Handlers\PaintHandler.cs" />
     <Compile Include="LineStepper.cs" />
     <Compile Include="program.cs" />
     <Compile Include="SadGeometry.cs" />
