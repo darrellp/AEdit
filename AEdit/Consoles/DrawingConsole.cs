@@ -64,6 +64,7 @@ namespace AEdit.Consoles
 			Handler.Reset();
 		}
 
+		// TODO: Ctl down and dragging and drawing across empty screen "catches" first object
 		public override bool ProcessMouse(MouseConsoleState state)
 		{
 			if (!state.IsOnConsole)
@@ -77,8 +78,9 @@ namespace AEdit.Consoles
 				return true;
 			}
 
-			if (Global.KeyboardState.IsKeyDown(Keys.LeftControl) ||
-			    Global.KeyboardState.IsKeyDown(Keys.RightControl))
+			if (
+					(Global.KeyboardState.IsKeyDown(Keys.LeftControl) ||
+					Global.KeyboardState.IsKeyDown(Keys.RightControl)))
 			{
 				return false;
 			}

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
+using SadConsole.Themes;
 
 namespace AEdit
 {
@@ -53,10 +54,17 @@ namespace AEdit
 	{
 		#region Private variables
 		private static readonly LineBrush _defaultBrush = new LineBrush(".-|`,/\\,`/\\");
+		private static readonly LineBrush _eraseBrush = new LineBrush("\0\0\0\0\0\0\0\0\0\0\0");
 		#endregion
 
 		#region Operations
-		private static void DrawLine(Point start, Point end, Console console, LineBrush brush = null)
+
+		public static void DrawLine(Point start, Point end, Console console, LineBrush brush = null)
+		{
+			DrawLine(start, end, console, Color.White, Color.Black, brush);
+		}
+
+		public static void DrawLine(Point start, Point end, Console console, Color fore, Color back, LineBrush brush = null)
 		{
 			if (brush == null)
 			{
@@ -67,6 +75,8 @@ namespace AEdit
 			foreach (var (pt, linfo) in ls.Locations())
 			{
 				console.SetGlyph(pt.X, pt.Y, brush.CharFromLineStatus(linfo.LineStatus));
+				console.SetForeground(pt.X, pt.Y, fore);
+				console.SetBackground(pt.X, pt.Y, back);
 			}
 		}
 
@@ -103,6 +113,11 @@ namespace AEdit
 			{
 				console.SetGlyph(pt.X, pt.Y, i >= memory.Count ? 0 :memory[i++]);
 			}
+		}
+
+		public static void EraseLine(Point start, Point end, Console console)
+		{
+			DrawLine(start, end, console, Color.Transparent, Color.Transparent, _eraseBrush);
 		}
 		#endregion
 	}

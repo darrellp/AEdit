@@ -44,6 +44,7 @@ namespace AEdit.Handlers
 				_ptLast = pt;
 				Program.MainDisplay.Drawing.SetGlyph(pt.X, pt.Y, _drawChar);
 				Program.MainDisplay.Drawing.SetForeground(pt.X, pt.Y, Color.White);
+				Program.MainDisplay.Drawing.SetBackground(pt.X, pt.Y, Color.Black);
 				if (_bounds.Contains(pt))
 				{
 					return;

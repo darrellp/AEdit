@@ -34,15 +34,14 @@ namespace AEdit.Handlers
 			{
 				_ptStart = _ptEnd = state.CellPosition;
 				_fDragging = true;
-				_lineMemory = DrawLineMemory(_ptStart, _ptEnd, Program.MainDisplay.Drawing);
 			}
 			else if (state.Mouse.LeftButtonDown)
 			{
 				if (state.CellPosition != _ptEnd)
 				{
-					DrawLineFromMemory(_ptStart, _ptEnd, console, _lineMemory);
+					EraseLine(_ptStart, _ptEnd, console);
 					_ptEnd = state.CellPosition;
-					_lineMemory = DrawLineMemory(_ptStart, _ptEnd, Program.MainDisplay.Drawing);
+					DrawLine(_ptStart, _ptEnd, Program.MainDisplay.Drawing);
 				}
 			}
 			else if (_fDragging)
