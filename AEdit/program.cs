@@ -21,6 +21,7 @@ namespace AEdit
 		#endregion
 
 		#region Public variables
+	    internal static EditObject DraggedObject;
 	    private static Console StartingConsole;
 	    public static MainDisplay MainDisplay => _mainDisplay;
 	    public static Undo Undos => _undos;
@@ -85,8 +86,6 @@ namespace AEdit
 
 	    private static void SetupConsoles()
 	    {
-		    SetupDebug();
-
 			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
 		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
 		    _undos = new Undo();
@@ -97,6 +96,7 @@ namespace AEdit
 
 		    CurrentScreen.Children.Add(MainDisplay);
 		    CurrentScreen.Children.Add(ControlPanel);
+		    SetupDebug();
 	    }
 
 	    [Conditional("DEBUG")]

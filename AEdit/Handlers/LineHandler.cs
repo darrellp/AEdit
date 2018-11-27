@@ -28,12 +28,8 @@ namespace AEdit.Handlers
 		}
 		public void Exit() { }
 
-		public bool Mouse(MouseConsoleState state, Console console)
+		public void Mouse(MouseConsoleState state, Console console)
 		{
-			if (!state.IsOnConsole)
-			{
-				return true;
-			}
 			if (state.Mouse.LeftButtonDown && !_fDragging)
 			{
 				_ptStart = _ptEnd = state.CellPosition;
@@ -56,14 +52,9 @@ namespace AEdit.Handlers
 				Program.MainDisplay.SetObject(new Rectangle(boundsPosition, boundsSize));
 				_fDragging = false;
 			}
-
-			return false;
 		}
 
-		public bool Keyboard(Keyboard info, Console console)
-		{
-			return false;
-		}
+		public void Keyboard(Keyboard info, Console console) { }
 		#endregion
 	}
 }

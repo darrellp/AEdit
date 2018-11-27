@@ -26,12 +26,8 @@ namespace AEdit.Handlers
 		public void Reset() { }
 		public void Exit() { }
 
-		public bool Mouse(MouseConsoleState state, Console console)
+		public void Mouse(MouseConsoleState state, Console console)
 		{
-			if (!state.IsOnConsole)
-			{
-				return true;
-			}
 			if (state.Mouse.LeftButtonDown)
 			{
 				if (!_fDragging)
@@ -42,7 +38,7 @@ namespace AEdit.Handlers
 				var pt = state.CellPosition;
 				if (pt == _ptLast)
 				{
-					return false;
+					return;
 				}
 
 				_ptLast = pt;
@@ -50,19 +46,20 @@ namespace AEdit.Handlers
 				Program.MainDisplay.Drawing.SetForeground(pt.X, pt.Y, Color.White);
 				if (_bounds.Contains(pt))
 				{
-					return false;
+					return;
 				}
 
 				UpdateBounds(pt);
-				return false;
+				return;
 			}
-			else if (_fDragging)
+
+			if (_fDragging)
 			{
 				Program.MainDisplay.SetObject(_bounds);
 				_fDragging = false;
 			}
 
-			return true;
+			return;
 		}
 
 		private void UpdateBounds(Point pt)
@@ -88,7 +85,7 @@ namespace AEdit.Handlers
 			}
 		}
 
-		public bool Keyboard(Keyboard info, Console console)
+		public void Keyboard(Keyboard info, Console console)
 		{
 			if (!info.IsKeyDown(Keys.LeftControl) &&
 			    !info.IsKeyDown(Keys.LeftAlt) &&
@@ -102,7 +99,7 @@ namespace AEdit.Handlers
 				}
 			}
 
-			return false;
+			return;
 		}
 		#endregion
 	}

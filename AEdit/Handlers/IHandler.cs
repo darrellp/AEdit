@@ -18,10 +18,10 @@ namespace AEdit.Handlers
 		void Exit();
 
 		// Mouse handler
-		bool Mouse(MouseConsoleState state, Console console);
+		void Mouse(MouseConsoleState state, Console console);
 
 		// Keyboard handler
 		// ReSharper disable once UnusedParameter.Global
-		bool Keyboard(Keyboard info, Console console);
+		void Keyboard(Keyboard info, Console console);
 	}
 }
