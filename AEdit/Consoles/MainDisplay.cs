@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AEdit.Undo;
+using Microsoft.Xna.Framework;
 using SadConsole;
+using static AEdit.Undo.Undo;
 
 namespace AEdit.Consoles
 {
@@ -31,11 +33,14 @@ namespace AEdit.Consoles
 		public void SetObject(Rectangle rect)
 		{
 			var editObject = new EditObject(Drawing, rect);
+			var insertRecord = new InsertRecord(editObject);
+			AddRecord(insertRecord);
 			// The last child is "on top".  We want the new object to be beneath
 			// the top EditObject but still below the drawing console.
+			
 			Children.Insert(Children.Count - 1, editObject);
 			Drawing.Clear();
-			Program.Undos.ClearRedos();
+			ClearRedos();
 		}
 		#endregion
 

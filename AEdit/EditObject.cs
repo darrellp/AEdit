@@ -9,7 +9,6 @@ namespace AEdit
 	class EditObject : Console
 	{
 		private Point _startPoint;
-		private Point _startLocation;
 
 		public EditObject(SurfaceBase surface, Rectangle rect) : base(rect.Width, rect.Height)
 		{

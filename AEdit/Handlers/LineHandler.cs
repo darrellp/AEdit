@@ -18,7 +18,6 @@ namespace AEdit.Handlers
 		private bool _fDragging;
 		private Point _ptStart;
 		private Point _ptEnd;
-		private List<int> _lineMemory;
 		#endregion
 
 		#region IHandler methods

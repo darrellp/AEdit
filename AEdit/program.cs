@@ -6,26 +6,42 @@ using SadConsole;
 using static SadConsole.Game;
 using static SadConsole.Global;
 using static SadConsole.Settings;
+using static AEdit.Undo.Undo;
 
 namespace AEdit
 {
+	// TODO: Don't "catch" objects when ctl dragging
+	// Right now we only look at whether CTL is down and the mouse button is
+	// down to decide when to drag.  This means if we have control and start
+	// "dragging" over open space then as soon as we encounter an EditObject
+	// we'll pick it up and start moving it.
+	// TODO: Individual control panels for different handlers
+	// Different modes should have mode specific controls
+	// TODO: Layers
+	// TODO: Undo/Redo including non-editobject insertion
+	// TODO: Object selection
+	// TODO: Z Order - probably depends on layering UI
+	// TODO: Rectangles
+	// TODO: Circles
+	// TODO: Exporting/Importing
+	// TODO: Importing from web site
+	// TODO: Figlet fonts
+	// TODO: Copy/Paste
+	// TODO: Connect paint gaps
 	// ReSharper disable once ClassNeverInstantiated.Global
 	internal class Program
     {
+
 		#region Private variables
-		private static ControlPanel _controlPanel;
-	    private static Console _debugConsole;
-	    private static Undo _undos;
-	    private static ControlPanel ControlPanel => _controlPanel;
-	    private static MainDisplay _mainDisplay;
+		private static Console _debugConsole;
+	    private static ControlPanel ControlPanel { get; set; }
+	    private static Console _startingConsole;
 		#endregion
 
 		#region Public variables
-	    internal static EditObject DraggedObject;
-	    private static Console StartingConsole;
-	    public static MainDisplay MainDisplay => _mainDisplay;
-	    public static Undo Undos => _undos;
-		#endregion
+		public static EditObject DraggedObject;
+		public static MainDisplay MainDisplay { get; private set; }
+	    #endregion
 
 		#region Formatting constants
 		private const int DefaultWidth = 140;
@@ -52,10 +68,6 @@ namespace AEdit
 			
             // Start the editor.
             Instance.Run();
-
-            //
-            // Code here will not run until the game window closes.
-            //
             
             Instance.Dispose();
         }
@@ -77,8 +89,8 @@ namespace AEdit
         {
 	        Instance.Window.Title = "AEdit";
 
-			StartingConsole = new Console(DefaultWidth, DefaultHeight);
-            CurrentScreen = StartingConsole;
+			_startingConsole = new Console(DefaultWidth, DefaultHeight);
+            CurrentScreen = _startingConsole;
 
             // Set our new console as the thing to render and process
 	        SetupConsoles();
@@ -86,13 +98,12 @@ namespace AEdit
 
 	    private static void SetupConsoles()
 	    {
-			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
+			ControlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
 		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
-		    _undos = new Undo();
-			_mainDisplay = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
+			MainDisplay = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
 		    MainDisplay.Drawing.IsFocused = true;
 		    MainDisplay.Drawing.Mode = EditMode.Brush;
-			_mainDisplay.Position = new Point(ControlPanel.Width, 0);
+			MainDisplay.Position = new Point(ControlPanel.Width, 0);
 
 		    CurrentScreen.Children.Add(MainDisplay);
 		    CurrentScreen.Children.Add(ControlPanel);

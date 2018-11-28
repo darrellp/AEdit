@@ -115,11 +115,13 @@
     <Compile Include="Handlers\IHandler.cs" />
     <Compile Include="Handlers\LineHandler.cs" />
     <Compile Include="Handlers\PaintHandler.cs" />
+    <Compile Include="Undo\InsertRecord.cs" />
+    <Compile Include="Undo\IUndoRecord.cs" />
     <Compile Include="LineStepper.cs" />
     <Compile Include="program.cs" />
     <Compile Include="SadGeometry.cs" />
     <Compile Include="Stepper.cs" />
-    <Compile Include="Undo.cs" />
+    <Compile Include="Undo\Undo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\" />

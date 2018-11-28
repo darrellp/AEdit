@@ -21,8 +21,8 @@ namespace AEdit.Consoles
 		{
 			(string, EventHandler)[] buttonInfo = new (string, EventHandler)[]
 			{
-				("Undo", (s, a) => Program.Undos.PerformUndo()),
-				("Redo", (s, a) => Program.Undos.PerformRedo()),
+				("Undo", (s, a) => Undo.Undo.PerformUndo()),
+				("Redo", (s, a) => Undo.Undo.PerformRedo()),
 				("Clear", (s, a) => Program.MainDisplay.Clear()),
 				("Line", (s, a) => Program.MainDisplay.Mode = EditMode.Line),
 				("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Brush),
