@@ -34,16 +34,19 @@ namespace AEdit.Consoles
 		};
 
 		private IHandler Handler { get; set; }
-		private EditMode _mode;
+		private EditMode _mode = (EditMode)(-1);
 		#endregion
 
 		#region Properties
 		public EditMode Mode
 		{
 			get => _mode;
-			set => SetMode(_mode = value);
+			set
+			{
+				SetMode(value);
+				_mode = value;
+			}
 		}
-
 		#endregion
 
 		#region Constructor
