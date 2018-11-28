@@ -1,6 +1,8 @@
 ﻿using System;
+using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using static AEdit.Undo.Undo;
 
 namespace AEdit.Consoles
 {
@@ -21,9 +23,13 @@ namespace AEdit.Consoles
 		{
 			(string, EventHandler)[] buttonInfo = new (string, EventHandler)[]
 			{
-				("Undo", (s, a) => Undo.Undo.PerformUndo()),
-				("Redo", (s, a) => Undo.Undo.PerformRedo()),
-				("Clear", (s, a) => Program.MainDisplay.Clear()),
+				("Undo", (s, a) => PerformUndo()),
+				("Redo", (s, a) => PerformRedo()),
+				("Clear", (s, a) =>
+				{
+					AddRecord(new ClearRecord());
+					Program.MainDisplay.Clear();
+				}),
 				("Line", (s, a) => Program.MainDisplay.Mode = EditMode.Line),
 				("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Brush),
 			};
