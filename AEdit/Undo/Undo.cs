@@ -16,6 +16,7 @@ namespace AEdit.Undo
 		public static void AddRecord(IUndoRecord record)
 		{
 			History.Push(record);
+			Future.Clear();
 		}
 
 		public static void PerformUndo()
@@ -41,11 +42,6 @@ namespace AEdit.Undo
 			undoRecord.Redo();
 			History.Push(undoRecord);
 
-		}
-
-		public static void ClearRedos()
-		{
-			Future.Clear();
 		}
 		#endregion
 	}

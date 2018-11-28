@@ -40,7 +40,6 @@ namespace AEdit.Consoles
 			
 			Children.Insert(Children.Count - 1, editObject);
 			Drawing.Clear();
-			ClearRedos();
 		}
 		#endregion
 
