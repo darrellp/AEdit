@@ -71,6 +71,7 @@ namespace AEdit.Consoles
 		}
 
 		// TODO: Ctl down and dragging and drawing across empty screen "catches" first object
+		private bool _ctlCheck = true;
 		public override bool ProcessMouse(MouseConsoleState state)
 		{
 			if (!state.IsOnConsole)
@@ -84,13 +85,17 @@ namespace AEdit.Consoles
 				return true;
 			}
 
-			if (
-					(Global.KeyboardState.IsKeyDown(Keys.LeftControl) ||
-					Global.KeyboardState.IsKeyDown(Keys.RightControl)))
+			if (state.Mouse.LeftButtonDown &&
+			    (Global.KeyboardState.IsKeyDown(Keys.LeftControl) ||
+				Global.KeyboardState.IsKeyDown(Keys.RightControl)))
 			{
-				return false;
+				var doCheck = !_ctlCheck;
+				_ctlCheck = false;
+				Program.AETraceLine(doCheck ? "T" : "F");
+				return doCheck;
 			}
 
+			_ctlCheck = true;
 			Handler?.Mouse(state, this);
 			return true;
 		}
