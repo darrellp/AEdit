@@ -33,19 +33,20 @@ namespace AEdit
 
 		#region Private variables
 		private static Console _debugConsole;
-	    private static ControlPanel ControlPanel { get; set; }
 	    private static Console _startingConsole;
+	    private static ControlPanel _controlPanel;
 		#endregion
 
 		#region Public variables
-		public static EditObject DraggedObject;
-		public static MainDisplay MainDisplay { get; private set; }
-	    #endregion
+	    public static ControlPanel ControlPanel => _controlPanel;
+	    public static EditObject DraggedObject;
+	    public static MainDisplay MainDisplay { get; private set; }
+		#endregion
 
 		#region Formatting constants
-		private const int DefaultWidth = 140;
-	    private const int DefaultHeight = 40;
-	    private const int DefaultControlWidth = 23;
+	    public const int DefaultWidth = 140;
+	    public const int DefaultHeight = 40;
+	    public const int DefaultControlWidth = 23;
 #if DEBUG
 		private const int DebugConsoleHeight = 10;
 #else
@@ -97,7 +98,7 @@ namespace AEdit
 
 	    private static void SetupConsoles()
 	    {
-			ControlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
+			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
 		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
 			MainDisplay = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
 		    MainDisplay.Drawing.IsFocused = true;

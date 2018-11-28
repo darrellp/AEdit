@@ -8,7 +8,7 @@ using Keyboard = SadConsole.Input.Keyboard;
 
 namespace AEdit.Consoles
 {
-	enum EditMode
+	internal enum EditMode
 	{
 		Brush,
 		Line,
@@ -68,6 +68,7 @@ namespace AEdit.Consoles
 			Handler?.Exit();
 			Handler = _handlerTable[(int)mode];
 			Handler.Reset();
+			Program.ControlPanel.InstallModeSpecificControls(mode);
 		}
 
 		// TODO: Ctl down and dragging and drawing across empty screen "catches" first object
@@ -91,7 +92,6 @@ namespace AEdit.Consoles
 			{
 				var doCheck = !_ctlCheck;
 				_ctlCheck = false;
-				Program.AETraceLine(doCheck ? "T" : "F");
 				return doCheck;
 			}
 

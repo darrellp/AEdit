@@ -110,7 +110,9 @@
     <Compile Include="Consoles\BorderedConsole.cs" />
     <Compile Include="Consoles\ControlPanel.cs" />
     <Compile Include="Consoles\DrawingConsole.cs" />
+    <Compile Include="Consoles\LineControls.cs" />
     <Compile Include="Consoles\MainDisplay.cs" />
+    <Compile Include="Consoles\PaintControls.cs" />
     <Compile Include="EditObject.cs" />
     <Compile Include="Handlers\IHandler.cs" />
     <Compile Include="Handlers\LineHandler.cs" />
