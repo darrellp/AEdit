@@ -6,7 +6,6 @@ using SadConsole;
 using static SadConsole.Game;
 using static SadConsole.Global;
 using static SadConsole.Settings;
-using static AEdit.Undo.Undo;
 
 namespace AEdit
 {
@@ -18,7 +17,6 @@ namespace AEdit
 	// TODO: Individual control panels for different handlers
 	// Different modes should have mode specific controls
 	// TODO: Layers
-	// TODO: Undo/Redo including non-editobject insertion
 	// TODO: Object selection
 	// TODO: Z Order - probably depends on layering UI
 	// TODO: Rectangles
@@ -28,6 +26,7 @@ namespace AEdit
 	// TODO: Figlet fonts
 	// TODO: Copy/Paste
 	// TODO: Connect paint gaps
+	// TODO: Offer different line types and potentially other shapes also
 	// ReSharper disable once ClassNeverInstantiated.Global
 	internal class Program
     {

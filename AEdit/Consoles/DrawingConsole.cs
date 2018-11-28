@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using AEdit.Handlers;
+﻿using AEdit.Handlers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -59,6 +58,10 @@ namespace AEdit.Consoles
 		#region Event handling
 		private void SetMode(EditMode mode)
 		{
+			if (mode == Mode)
+			{
+				return;
+			}
 			Handler?.Exit();
 			Handler = _handlerTable[(int)mode];
 			Handler.Reset();
