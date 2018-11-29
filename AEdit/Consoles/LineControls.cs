@@ -29,19 +29,14 @@ namespace AEdit.Consoles
 			button.Click += (s, a) => Window.Message("This has been clicked!", "Close");
 			Add(button);
 
-			PrintLabels();
+			var label = new DrawingSurface(20, 1)
+			{
+				Position = new Point(1, 1),
+
+			};
+			label.Surface.Print(0, 0, "LINE", Color.Black, Color.Transparent);
+			Add(label);
 		}
 
-		public override void Invalidate()
-		{
-			base.Invalidate();
-
-			PrintLabels();
-		}
-
-		private void PrintLabels()
-		{
-			Print(1, 1, "LINE", Colors.BlueDark);
-		}
 	}
 }
