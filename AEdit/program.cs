@@ -3,6 +3,7 @@ using AEdit.Consoles;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using SadConsole.Themes;
 using static SadConsole.Game;
 using static SadConsole.Global;
 using static SadConsole.Settings;
@@ -99,7 +100,7 @@ namespace AEdit
 	    private static void SetupConsoles()
 	    {
 			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
-		    ControlPanel.Fill(Color.White, Color.Wheat, 0);
+		    ControlPanel.Fill(Color.White, Colors.BlueDark, 0);
 			MainDisplay = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
 		    MainDisplay.Drawing.IsFocused = true;
 		    MainDisplay.Drawing.Mode = EditMode.Brush;

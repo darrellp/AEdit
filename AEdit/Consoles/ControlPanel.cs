@@ -2,6 +2,7 @@
 using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using SadConsole.Themes;
 using static AEdit.Undo.Undo;
 
 namespace AEdit.Consoles
@@ -37,7 +38,7 @@ namespace AEdit.Consoles
 		#region Constructor
 		public ControlPanel(int width, int height) : base(width, height)
 		{
-			Fill(Color.White, Color.Wheat, 0);
+			Fill(Color.White, Colors.BlueDark, 0);
 			CreateButtons(width);
 			foreach (var panel in ModeControlPanels)
 			{

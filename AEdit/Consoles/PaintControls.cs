@@ -16,7 +16,7 @@ namespace AEdit.Consoles
 			var button = new Button(9, 1)
 			{
 				Text = "Foregnd ",
-				Position = new Point(1, 2),
+				Position = new Point(1, 3),
 			};
 			button.Click += (s, a) => Window.Message("This has been clicked!", "Close");
 			Add(button);
@@ -34,7 +34,7 @@ namespace AEdit.Consoles
 				Position = new Point(1, 1),
 
 			};
-			label.Surface.Print(0, 0, "PAINT", Color.Black, Color.Transparent);
+			label.Surface.Print(0, 0, "PAINT", Colors.Yellow, Color.Transparent);
 			Add(label);
 		}
 	}
