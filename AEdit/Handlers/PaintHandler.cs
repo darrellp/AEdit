@@ -72,8 +72,6 @@ namespace AEdit.Handlers
 				Program.MainDisplay.SetObject(_bounds);
 				_fDragging = false;
 			}
-
-			return;
 		}
 
 		private void UpdateBounds(Point pt)
@@ -112,8 +110,6 @@ namespace AEdit.Handlers
 					_drawChar = input;
 				}
 			}
-
-			return;
 		}
 
 		public void Update(ControlsConsole ModeSpecificPanel)
