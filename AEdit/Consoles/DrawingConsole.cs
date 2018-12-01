@@ -36,6 +36,7 @@ namespace AEdit.Consoles
 		private EditMode _mode = (EditMode)(-1);
 		private bool _ctlCheck = true;
 		private IHandler _handler;
+		private EditObject _selected = null;
 		#endregion
 
 		#region Properties

@@ -12,7 +12,23 @@ namespace AEdit.Consoles
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	internal class MainDisplay : ScreenObject
 	{
+		#region Private Variables
+		private EditObject _selected;
+		#endregion
+
 		#region Public properties
+		public EditObject Selected
+		{
+			get => _selected;
+			set
+			{
+				_selected?.DisplayAsSelected(false);
+				_selected = value;
+				_selected.DisplayAsSelected(true);
+
+			}
+		}
+
 		public EditMode Mode
 		{
 			set => Drawing.Mode = value;
@@ -35,11 +51,11 @@ namespace AEdit.Consoles
 			var editObject = new EditObject(Drawing, rect);
 			var insertRecord = new InsertRecord(editObject);
 			AddRecord(insertRecord);
-			// The last child is "on top".  We want the new object to be beneath
+			// The last child is "on top".  We want the new object to be above
 			// the top EditObject but still below the drawing console.
-			
 			Children.Insert(Children.Count - 1, editObject);
 			Drawing.Clear();
+			Selected = editObject;
 		}
 		#endregion
 

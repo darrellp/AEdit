@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AEdit.Consoles;
 using Microsoft.Xna.Framework;
 
 namespace AEdit.Undo

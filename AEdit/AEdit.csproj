@@ -114,7 +114,7 @@
     <Compile Include="Consoles\LineControls.cs" />
     <Compile Include="Consoles\MainDisplay.cs" />
     <Compile Include="Consoles\PaintControls.cs" />
-    <Compile Include="EditObject.cs" />
+    <Compile Include="Consoles\EditObject.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Handlers\IHandler.cs" />
     <Compile Include="Handlers\LineHandler.cs" />
