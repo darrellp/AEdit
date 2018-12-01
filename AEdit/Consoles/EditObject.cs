@@ -13,13 +13,22 @@ namespace AEdit.Consoles
 		#region Private variables
 		private Point _startPoint;
 		private Point _initialPosition;
+		private EditMode _mode;
+		private object _parms;
+		#endregion
+
+		#region Public properties
+		public EditMode Mode => _mode;
+		public object Parms => _parms;
 		#endregion
 
 		#region Constructor
-		public EditObject(SurfaceBase surface, Rectangle rect) : base(rect.Width, rect.Height)
+		public EditObject(SurfaceBase surface, EditMode mode, object parms, Rectangle rect) : base(rect.Width, rect.Height)
 		{
 			surface.Copy(rect.X, rect.Y, rect.Width, rect.Height, this, 0, 0);
 			Position = new Point(rect.X, rect.Y);
+			_mode = mode;
+			_parms = parms;
 		}
 		#endregion
 

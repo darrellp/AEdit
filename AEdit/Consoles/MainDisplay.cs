@@ -25,13 +25,16 @@ namespace AEdit.Consoles
 				_selected?.DisplayAsSelected(false);
 				_selected = value;
 				_selected.DisplayAsSelected(true);
-
+				Mode = _selected.Mode;
+				Program.ControlPanel.EditControls.SetParameters(_selected.Parms);
+				Program.ControlPanel.UpdateHandler();
 			}
 		}
 
 		public EditMode Mode
 		{
 			set => Drawing.Mode = value;
+			get => Drawing.Mode;
 		}
 
 		public DrawingConsole Drawing { get; }
@@ -48,7 +51,7 @@ namespace AEdit.Consoles
 		#region EditObject Handling
 		public void SetObject(Rectangle rect)
 		{
-			var editObject = new EditObject(Drawing, rect);
+			var editObject = new EditObject(Drawing, Drawing.Mode, Program.ControlPanel.EditControls.GetParameterInfo(), rect);
 			var insertRecord = new InsertRecord(editObject);
 			AddRecord(insertRecord);
 			// The last child is "on top".  We want the new object to be above

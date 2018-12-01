@@ -1,12 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
 
 namespace AEdit.Consoles
 {
-	internal class PaintControls : ControlsConsole
+	internal class PaintControls : EditControl
 	{
+		private DrawingSurface _foreSwatch;
+		private DrawingSurface _backSwatch;
+
 		public Color Foreground { get; private set; }
 		public Color Background { get; private set; }
 
@@ -21,8 +25,8 @@ namespace AEdit.Consoles
 			Foreground = fgnd;
 			Background = bgnd;
 
-			ControlHelpers.SetColorButton(this, new Point(1, 3), "Foregnd", Foreground, c => Foreground = c);
-			ControlHelpers.SetColorButton(this, new Point(1, 4), "Backgrnd", Background, c => Background = c);
+			_foreSwatch = ControlHelpers.SetColorButton(this, new Point(1, 3), "Foregnd", Foreground, c => Foreground = c);
+			_backSwatch = ControlHelpers.SetColorButton(this, new Point(1, 4), "Backgrnd", Background, c => Background = c);
 
 			var label = new DrawingSurface(20, 1)
 			{
@@ -32,5 +36,19 @@ namespace AEdit.Consoles
 			label.Surface.Print(0, 0, "PAINT", Colors.Yellow, Color.Transparent);
 			Add(label);
 		}
+
+		public override object GetParameterInfo()
+		{
+			return (Foreground, Background);
+		}
+
+		public override void SetParameters(object parms)
+		{
+			(Foreground, Background) = ((Color, Color))parms;
+			ControlHelpers.UpdateColorSwatch(_foreSwatch, Foreground);
+			ControlHelpers.UpdateColorSwatch(_backSwatch, Background);
+		}
+
+		public override EditMode Mode => EditMode.Brush;
 	}
 }

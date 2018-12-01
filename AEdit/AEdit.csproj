@@ -111,6 +111,7 @@
     <Compile Include="Consoles\ControlHelpers.cs" />
     <Compile Include="Consoles\ControlPanel.cs" />
     <Compile Include="Consoles\DrawingConsole.cs" />
+    <Compile Include="Consoles\EditControl.cs" />
     <Compile Include="Consoles\LineControls.cs" />
     <Compile Include="Consoles\MainDisplay.cs" />
     <Compile Include="Consoles\PaintControls.cs" />

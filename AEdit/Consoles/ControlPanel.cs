@@ -27,12 +27,16 @@ namespace AEdit.Consoles
 
 		private static readonly int ButtonRowCount = (ButtonInfo.Length + 1) / 2;
 
-		private static readonly ControlsConsole[] ModeControlPanels =
+		private static readonly EditControl[] ModeControlPanels =
 		{
 			new PaintControls(Program.DefaultControlWidth, Program.DefaultHeight - ButtonRowCount),
 			new LineControls(Program.DefaultControlWidth, Program.DefaultHeight - ButtonRowCount)
 		};
-		private ControlsConsole _modeSpecificControls;
+		private EditControl _modeSpecificControls;
+		#endregion
+
+		#region Public Properties
+		public EditControl EditControls => _modeSpecificControls;
 		#endregion
 
 		#region Constructor
@@ -48,6 +52,10 @@ namespace AEdit.Consoles
 
 		public void InstallModeSpecificControls(EditMode mode)
 		{
+			if (_modeSpecificControls != null && mode == _modeSpecificControls.Mode)
+			{
+				return;
+			}
 			var index = (int) mode;
 			if (index >= ModeControlPanels.Length)
 			{
