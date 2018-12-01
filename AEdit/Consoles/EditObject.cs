@@ -38,6 +38,7 @@ namespace AEdit.Consoles
 				Program.DraggedObject = null;
 				var moveRecord = new MoveRecord(_initialPosition, Position, this);
 				Undo.Undo.AddRecord(moveRecord);
+				Program.MainDisplay.Selected = this;
 			}
 			else if (pt != _startPoint)
 			{
@@ -67,7 +68,6 @@ namespace AEdit.Consoles
 				// Get position relative to parent
 				_startPoint = state.CellPosition + Position;
 				_initialPosition = Position;
-				Program.MainDisplay.Selected = this;
 				return true;
 			}
 
