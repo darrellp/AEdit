@@ -36,7 +36,6 @@ namespace AEdit.Consoles
 		private EditMode _mode = (EditMode)(-1);
 		private bool _ctlCheck = true;
 		private IHandler _handler;
-		private EditObject _selected = null;
 		#endregion
 
 		#region Properties
@@ -71,7 +70,7 @@ namespace AEdit.Consoles
 			}
 			Handler?.Exit();
 			_handler = _handlerTable[(int)mode];
-			Handler.Reset();
+			_handler.Reset();
 			Program.ControlPanel.InstallModeSpecificControls(mode);
 		}
 

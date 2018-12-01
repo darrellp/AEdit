@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
-using SadConsole.Themes;
 
 namespace AEdit
 {

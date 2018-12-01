@@ -6,7 +6,7 @@ namespace AEdit.Undo
 {
 	class ClearRecord : IUndoRecord
 	{
-		private List<EditObject> _clearedEdits;
+		private readonly List<EditObject> _clearedEdits;
 
 		public ClearRecord()
 		{

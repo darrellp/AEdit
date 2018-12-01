@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AEdit.Consoles;
 using Microsoft.Xna.Framework;
 using SadConsole;
