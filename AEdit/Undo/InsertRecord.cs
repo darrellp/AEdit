@@ -22,11 +22,16 @@ namespace AEdit.Undo
 			Edit = (EditObject)Program.MainDisplay.Children[cUndos - 1];
 
 			Program.MainDisplay.Children.Remove(Edit);
+			if (Program.MainDisplay.Selected == Edit && Program.MainDisplay.Children.Count > 1)
+			{
+				Program.MainDisplay.Selected = (EditObject) Program.MainDisplay.Children[cUndos - 2];
+			}
 		}
 
 		public void Redo()
 		{
 			Program.MainDisplay.Children.Insert(Program.MainDisplay.Children.Count - 1, Edit);
+			Program.MainDisplay.Selected = Edit;
 		}
 	}
 }
