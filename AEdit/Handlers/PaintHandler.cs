@@ -35,7 +35,7 @@ namespace AEdit.Handlers
 		public PaintHandler()
 		{
 			_foreDefault = Color.White;
-			_backDefault = Color.Transparent;
+			_backDefault = Color.Black;
 			_lineBrush = new LineBrush(new string(_drawChar, 11));
 		}
 		#endregion

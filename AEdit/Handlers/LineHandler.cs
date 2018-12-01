@@ -28,7 +28,7 @@ namespace AEdit.Handlers
 		public LineHandler()
 		{
 			_foreDefault = Color.White;
-			_backDefault = Color.Transparent;
+			_backDefault = Color.Black;
 		}
 		#endregion
 
