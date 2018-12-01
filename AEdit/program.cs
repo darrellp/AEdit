@@ -10,13 +10,6 @@ using static SadConsole.Settings;
 
 namespace AEdit
 {
-	// TODO: Don't "catch" objects when ctl dragging
-	// Right now we only look at whether CTL is down and the mouse button is
-	// down to decide when to drag.  This means if we have control and start
-	// "dragging" over open space then as soon as we encounter an EditObject
-	// we'll pick it up and start moving it.
-	// TODO: Individual control panels for different handlers
-	// Different modes should have mode specific controls
 	// TODO: Layers
 	// TODO: Object selection
 	// TODO: Z Order - probably depends on layering UI
@@ -42,6 +35,7 @@ namespace AEdit
 	    public static ControlPanel ControlPanel => _controlPanel;
 	    public static EditObject DraggedObject;
 	    public static MainDisplay MainDisplay { get; private set; }
+	    public static DrawingConsole Drawing => MainDisplay.Drawing;
 		#endregion
 
 		#region Formatting constants
@@ -74,7 +68,7 @@ namespace AEdit
         }
 #endregion
 
-#region Handlers
+		#region Handlers
 		private static void Update(GameTime time)
         {
             // Called each logic update.

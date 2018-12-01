@@ -7,27 +7,21 @@ namespace AEdit.Consoles
 {
 	internal class LineControls : ControlsConsole
 	{
-		public LineControls(int width, int height) : base(width, height)
+		public Color Foreground { get; private set; }
+		public Color Background { get; private set; }
+
+		public LineControls(int width, int height) : this(width, height, Color.White, Color.Black) { }
+
+		public LineControls(int width, int height, Color fgnd, Color bgnd) : base(width, height)
 		{
 			DefaultBackground = Color.Transparent;
-			DefaultForeground = Color.White;
 			Clear();
 
-			var button = new Button(9, 1)
-			{
-				Text = "Foregnd ",
-				Position = new Point(1, 3),
-			};
-			button.Click += (s, a) => Window.Message("This has been clicked!", "Close");
-			Add(button);
+			Foreground = fgnd;
+			Background = bgnd;
 
-			button = new Button(10, 1)
-			{
-				Text = "Backgrnd",
-				Position = new Point(1, 4),
-			};
-			button.Click += (s, a) => Window.Message("This has been clicked!", "Close");
-			Add(button);
+			ControlHelpers.SetColorButton(this, new Point(1, 3), "Foregnd", Foreground, c => Foreground = c);
+			ControlHelpers.SetColorButton(this, new Point(1, 4), "Backgrnd", Background, c => Background = c);
 
 			var label = new DrawingSurface(20, 1)
 			{

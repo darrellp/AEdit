@@ -92,5 +92,12 @@ namespace AEdit.Consoles
 			}
 		}
 		#endregion
+
+		#region Operations
+		public void UpdateHandler()
+		{
+			Program.Drawing.Handler.Update(_modeSpecificControls);
+		}
+		#endregion
 	}
 }

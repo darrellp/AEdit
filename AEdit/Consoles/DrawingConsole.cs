@@ -33,11 +33,14 @@ namespace AEdit.Consoles
 			new LineHandler(),
 		};
 
-		private IHandler Handler { get; set; }
 		private EditMode _mode = (EditMode)(-1);
+		private bool _ctlCheck = true;
+		private IHandler _handler;
 		#endregion
 
 		#region Properties
+		public IHandler Handler => _handler;
+
 		public EditMode Mode
 		{
 			get => _mode;
@@ -66,13 +69,11 @@ namespace AEdit.Consoles
 				return;
 			}
 			Handler?.Exit();
-			Handler = _handlerTable[(int)mode];
+			_handler = _handlerTable[(int)mode];
 			Handler.Reset();
 			Program.ControlPanel.InstallModeSpecificControls(mode);
 		}
 
-		// TODO: Ctl down and dragging and drawing across empty screen "catches" first object
-		private bool _ctlCheck = true;
 		public override bool ProcessMouse(MouseConsoleState state)
 		{
 			if (!state.IsOnConsole)
@@ -103,7 +104,7 @@ namespace AEdit.Consoles
 		public override bool ProcessKeyboard(Keyboard info)
 		{
 			Handler?.Keyboard(info, this);
-			return true;
+			return false;
 		}
 		#endregion
 	}

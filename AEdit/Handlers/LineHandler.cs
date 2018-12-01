@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using AEdit.Consoles;
 using Microsoft.Xna.Framework;
+using SadConsole;
 using SadConsole.Input;
 using static System.Math;
 using Console = SadConsole.Console;
@@ -18,6 +21,16 @@ namespace AEdit.Handlers
 		private bool _fDragging;
 		private Point _ptStart;
 		private Point _ptEnd;
+		private Color _foreDefault;
+		private Color _backDefault;
+		#endregion
+
+		#region Constructor
+		public LineHandler()
+		{
+			_foreDefault = Color.White;
+			_backDefault = Color.Transparent;
+		}
 		#endregion
 
 		#region IHandler methods
@@ -40,7 +53,7 @@ namespace AEdit.Handlers
 				{
 					EraseLine(_ptStart, _ptEnd, console);
 					_ptEnd = state.CellPosition;
-					DrawLine(_ptStart, _ptEnd, Program.MainDisplay.Drawing);
+					DrawLine(_ptStart, _ptEnd, Program.MainDisplay.Drawing, _foreDefault, _backDefault);
 				}
 			}
 			else if (_fDragging)
@@ -53,6 +66,14 @@ namespace AEdit.Handlers
 		}
 
 		public void Keyboard(Keyboard info, Console console) { }
+		public void Update(ControlsConsole ModeSpecificPanel)
+		{
+			var lineControls = ModeSpecificPanel as LineControls;
+			Debug.Assert(lineControls != null, "Non-paint controls being passed to paint handler");
+			_foreDefault = lineControls.Foreground;
+			_backDefault = lineControls.Background;
+		}
+
 		#endregion
 	}
 }

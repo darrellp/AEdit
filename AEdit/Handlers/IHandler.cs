@@ -1,4 +1,5 @@
-﻿using SadConsole.Input;
+﻿using SadConsole;
+using SadConsole.Input;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
 
@@ -23,5 +24,7 @@ namespace AEdit.Handlers
 		// Keyboard handler
 		// ReSharper disable once UnusedParameter.Global
 		void Keyboard(Keyboard info, Console console);
+
+		void Update(ControlsConsole ModeSpecificPanel);
 	}
 }

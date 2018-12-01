@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
+using AEdit.Consoles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using SadConsole;
 using SadConsole.Input;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
@@ -20,6 +23,16 @@ namespace AEdit.Handlers
 		private bool _fDragging;
 		private Rectangle _bounds;
 		private Point _ptLast = new Point(-1, -1);
+		private Color _foreDefault;
+		private Color _backDefault;
+		#endregion
+
+		#region Constructor
+		public PaintHandler()
+		{
+			_foreDefault = Color.White;
+			_backDefault = Color.Transparent;
+		}
 		#endregion
 
 		#region IHandler members
@@ -43,8 +56,8 @@ namespace AEdit.Handlers
 
 				_ptLast = pt;
 				Program.MainDisplay.Drawing.SetGlyph(pt.X, pt.Y, _drawChar);
-				Program.MainDisplay.Drawing.SetForeground(pt.X, pt.Y, Color.White);
-				Program.MainDisplay.Drawing.SetBackground(pt.X, pt.Y, Color.Black);
+				Program.MainDisplay.Drawing.SetForeground(pt.X, pt.Y, _foreDefault);
+				Program.MainDisplay.Drawing.SetBackground(pt.X, pt.Y, _backDefault);
 				if (_bounds.Contains(pt))
 				{
 					return;
@@ -101,6 +114,15 @@ namespace AEdit.Handlers
 			}
 
 			return;
+		}
+
+		public void Update(ControlsConsole ModeSpecificPanel)
+		{
+			// ReSharper disable once UsePatternMatching
+			var paintControls = ModeSpecificPanel as PaintControls;
+			Debug.Assert(paintControls != null, "Non-paint controls being passed to paint handler");
+			_foreDefault = paintControls.Foreground;
+			_backDefault = paintControls.Background;
 		}
 		#endregion
 	}
