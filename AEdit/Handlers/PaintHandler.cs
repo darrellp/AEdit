@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using AEdit.Consoles;
 using Microsoft.Xna.Framework;
@@ -7,6 +8,8 @@ using SadConsole;
 using SadConsole.Input;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
+using static AEdit.SadGeometry;
+
 
 
 namespace AEdit.Handlers
@@ -22,9 +25,10 @@ namespace AEdit.Handlers
 		private char _drawChar = 'X';
 		private bool _fDragging;
 		private Rectangle _bounds;
-		private Point _ptLast = new Point(-1, -1);
+		private Point _ptLast;
 		private Color _foreDefault;
 		private Color _backDefault;
+		private LineBrush _lineBrush;
 		#endregion
 
 		#region Constructor
@@ -32,6 +36,7 @@ namespace AEdit.Handlers
 		{
 			_foreDefault = Color.White;
 			_backDefault = Color.Transparent;
+			_lineBrush = new LineBrush(new string(_drawChar, 11));
 		}
 		#endregion
 
@@ -46,6 +51,7 @@ namespace AEdit.Handlers
 				if (!_fDragging)
 				{
 					_bounds = new Rectangle(state.CellPosition, new Point(1, 1));
+					_ptLast = new Point(-1, -1);
 					_fDragging = true;
 				}
 				var pt = state.CellPosition;
@@ -54,6 +60,10 @@ namespace AEdit.Handlers
 					return;
 				}
 
+				if (_ptLast.X >= 0 && (Math.Abs(pt.X - _ptLast.X) > 1 || Math.Abs(pt.Y - _ptLast.Y) > 1))
+				{
+					DrawLine(_ptLast, pt, Program.MainDisplay.Drawing, _foreDefault, _backDefault, _lineBrush);
+				}
 				_ptLast = pt;
 				Program.MainDisplay.Drawing.SetGlyph(pt.X, pt.Y, _drawChar);
 				Program.MainDisplay.Drawing.SetForeground(pt.X, pt.Y, _foreDefault);
@@ -108,6 +118,7 @@ namespace AEdit.Handlers
 				if (input != '\0')
 				{
 					_drawChar = input;
+					_lineBrush = new LineBrush(new string(_drawChar, 11));
 				}
 			}
 		}
