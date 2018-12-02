@@ -45,8 +45,12 @@ namespace AEdit.Consoles
 			if (!Global.MouseState.LeftButtonDown)
 			{
 				Program.DraggedObject = null;
-				var moveRecord = new MoveRecord(_initialPosition, Position, this);
-				Undo.Undo.AddRecord(moveRecord);
+				if (Position != _initialPosition)
+				{
+					var moveRecord = new MoveRecord(_initialPosition, Position, this);
+					Undo.Undo.AddRecord(moveRecord);
+				}
+
 				Program.MainDisplay.Selected = this;
 			}
 			else if (pt != _startPoint)

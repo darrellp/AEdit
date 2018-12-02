@@ -52,7 +52,7 @@ namespace AEdit.Consoles
 
 		public void InstallModeSpecificControls(EditMode mode)
 		{
-			if (_modeSpecificControls != null && mode == _modeSpecificControls.Mode)
+			if (mode == null || _modeSpecificControls != null && mode == _modeSpecificControls.Mode)
 			{
 				return;
 			}
@@ -67,8 +67,11 @@ namespace AEdit.Consoles
 				Children.Remove(_modeSpecificControls);
 			}
 
-			_modeSpecificControls = ModeControlPanels[index];
-			Children.Add(_modeSpecificControls);
+			if (index >= 0)
+			{
+				_modeSpecificControls = ModeControlPanels[index];
+				Children.Add(_modeSpecificControls);
+			}
 		}
 
 		private void CreateButtons(int width)

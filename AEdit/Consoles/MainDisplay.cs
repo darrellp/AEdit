@@ -24,10 +24,13 @@ namespace AEdit.Consoles
 			{
 				_selected?.DisplayAsSelected(false);
 				_selected = value;
-				_selected.DisplayAsSelected(true);
-				Mode = _selected.Mode;
-				Program.ControlPanel.EditControls.SetParameters(_selected.Parms);
-				Program.ControlPanel.UpdateHandler();
+				if (value != null)
+				{
+					_selected.DisplayAsSelected(true);
+					Mode = _selected.Mode;
+					Program.ControlPanel.EditControls.SetParameters(_selected.Parms);
+					Program.ControlPanel.UpdateHandler();
+				}
 			}
 		}
 

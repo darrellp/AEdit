@@ -10,6 +10,7 @@ namespace AEdit.Consoles
 {
 	internal enum EditMode
 	{
+		Null = -1,
 		Brush,
 		Line,
 	}
@@ -33,7 +34,7 @@ namespace AEdit.Consoles
 			new LineHandler(),
 		};
 
-		private EditMode _mode = (EditMode)(-1);
+		private EditMode _mode = EditMode.Null;
 		private bool _ctlCheck = true;
 		private IHandler _handler;
 		#endregion
@@ -64,7 +65,7 @@ namespace AEdit.Consoles
 		#region Event handling
 		private void SetMode(EditMode mode)
 		{
-			if (mode == Mode)
+			if (mode == EditMode.Null || mode == Mode)
 			{
 				return;
 			}
