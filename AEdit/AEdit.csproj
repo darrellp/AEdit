@@ -120,6 +120,7 @@
     <Compile Include="Handlers\IHandler.cs" />
     <Compile Include="Handlers\LineHandler.cs" />
     <Compile Include="Handlers\PaintHandler.cs" />
+    <Compile Include="Undo\ApplyRecord.cs" />
     <Compile Include="Undo\ClearRecord.cs" />
     <Compile Include="Undo\InsertRecord.cs" />
     <Compile Include="Undo\IUndoRecord.cs" />

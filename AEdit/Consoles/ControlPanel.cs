@@ -21,6 +21,15 @@ namespace AEdit.Consoles
 				AddRecord(new ClearRecord());
 				Program.MainDisplay.Clear();
 			}),
+			("Apply", (s, a) =>
+			{
+				if (Program.MainDisplay.Selected != null)
+				{
+					var oldParms = Program.MainDisplay.Selected.Parms;
+					_modeSpecificControls.Apply(Program.MainDisplay.Selected);
+					AddRecord(new ApplyRecord(Program.MainDisplay.Selected, Program.MainDisplay.Mode, oldParms, Program.MainDisplay.Selected.Parms));
+				}
+			}),
 			("Line", (s, a) => Program.MainDisplay.Mode = EditMode.Line),
 			("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Brush),
 		};
@@ -32,7 +41,7 @@ namespace AEdit.Consoles
 			new PaintControls(Program.DefaultControlWidth, Program.DefaultHeight - ButtonRowCount),
 			new LineControls(Program.DefaultControlWidth, Program.DefaultHeight - ButtonRowCount)
 		};
-		private EditControl _modeSpecificControls;
+		private static EditControl _modeSpecificControls;
 		#endregion
 
 		#region Public Properties
@@ -52,7 +61,7 @@ namespace AEdit.Consoles
 
 		public void InstallModeSpecificControls(EditMode mode)
 		{
-			if (mode == null || _modeSpecificControls != null && mode == _modeSpecificControls.Mode)
+			if (mode == EditMode.Null || _modeSpecificControls != null && mode == _modeSpecificControls.Mode)
 			{
 				return;
 			}

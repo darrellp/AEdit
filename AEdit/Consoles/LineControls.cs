@@ -12,6 +12,7 @@ namespace AEdit.Consoles
 
 		public Color Foreground { get; private set; }
 		public Color Background { get; private set; }
+		public override EditMode Mode => EditMode.Line;
 
 		public LineControls(int width, int height) : this(width, height, Color.White, Color.Black) { }
 
@@ -47,6 +48,9 @@ namespace AEdit.Consoles
 			ControlHelpers.UpdateColorSwatch(_backSwatch, Background);
 		}
 
-		public override EditMode Mode => EditMode.Line;
+		public override void Apply(EditObject edit)
+		{
+			edit.ApplyColors(Foreground, Background);
+		}
 	}
 }

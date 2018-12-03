@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.Xna.Framework;
-using SadConsole;
+﻿using Microsoft.Xna.Framework;
 using SadConsole.Controls;
 using SadConsole.Themes;
 
@@ -13,6 +11,7 @@ namespace AEdit.Consoles
 
 		public Color Foreground { get; private set; }
 		public Color Background { get; private set; }
+		public override EditMode Mode => EditMode.Brush;
 
 		public PaintControls(int width, int height) : this(width, height, Color.White, Color.Black) { }
 
@@ -49,6 +48,11 @@ namespace AEdit.Consoles
 			ControlHelpers.UpdateColorSwatch(_backSwatch, Background);
 		}
 
-		public override EditMode Mode => EditMode.Brush;
+		public override void Apply(EditObject edit)
+		{
+			edit.ApplyColors(Foreground, Background);
+			edit.Parms = GetParameterInfo();
+		}
+
 	}
 }

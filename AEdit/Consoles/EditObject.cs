@@ -1,4 +1,5 @@
-﻿using AEdit.Undo;
+﻿using System.Linq;
+using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Effects;
@@ -14,12 +15,11 @@ namespace AEdit.Consoles
 		private Point _startPoint;
 		private Point _initialPosition;
 		private EditMode _mode;
-		private object _parms;
 		#endregion
 
 		#region Public properties
 		public EditMode Mode => _mode;
-		public object Parms => _parms;
+		public object Parms { get; set; }
 		#endregion
 
 		#region Constructor
@@ -28,7 +28,7 @@ namespace AEdit.Consoles
 			surface.Copy(rect.X, rect.Y, rect.Width, rect.Height, this, 0, 0);
 			Position = new Point(rect.X, rect.Y);
 			_mode = mode;
-			_parms = parms;
+			Parms = parms;
 		}
 		#endregion
 
@@ -106,6 +106,17 @@ namespace AEdit.Consoles
 			{
 				Effects.RemoveAll();
 			}
+		}
+
+		public void ApplyColors(Color fore, Color back)
+		{
+			foreach (var cell in Cells.Where(c => c.Glyph != 0 || c.Background != Color.Transparent))
+			{
+				cell.Foreground = fore;
+				cell.Background = back;
+			}
+			IsDirty = true;
+			SetRenderCells();
 		}
 		#endregion
 	}
