@@ -10,17 +10,6 @@ using static SadConsole.Settings;
 
 namespace AEdit
 {
-	// TODO: Layers
-	// TODO: Object selection
-	// TODO: Z Order - probably depends on layering UI
-	// TODO: Rectangles
-	// TODO: Circles
-	// TODO: Exporting/Importing
-	// TODO: Importing from web site
-	// TODO: Figlet fonts
-	// TODO: Copy/Paste
-	// TODO: Connect paint gaps
-	// TODO: Offer different line types and potentially other shapes also
 	// ReSharper disable once ClassNeverInstantiated.Global
 	internal class Program
     {
