@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using AEdit.Consoles;
+using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
@@ -16,22 +17,22 @@ namespace AEdit.Undo
 		public void Undo()
 		{
 			// Don't count the drawing console
-			var cUndos = Program.MainDisplay.Children.Count - 1;
+			var cUndos = Main.Children.Count - 1;
 			Debug.Assert(cUndos != 0, "Trying to undo when there's no edit in the picture");
 
-			Edit = (EditObject)Program.MainDisplay.Children[cUndos - 1];
+			Edit = (EditObject)Main.Children[cUndos - 1];
 
-			Program.MainDisplay.Children.Remove(Edit);
-			if (Program.MainDisplay.Selected == Edit && Program.MainDisplay.Children.Count > 1)
+			Main.Children.Remove(Edit);
+			if (Selected == Edit && Main.Children.Count > 1)
 			{
-				Program.MainDisplay.Selected = (EditObject) Program.MainDisplay.Children[cUndos - 2];
+				Selected = (EditObject) Main.Children[cUndos - 2];
 			}
 		}
 
 		public void Redo()
 		{
-			Program.MainDisplay.Children.Insert(Program.MainDisplay.Children.Count - 1, Edit);
-			Program.MainDisplay.Selected = Edit;
+			Main.Children.Insert(Main.Children.Count - 1, Edit);
+			Selected = Edit;
 		}
 	}
 }

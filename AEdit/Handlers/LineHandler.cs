@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Input;
 using static System.Math;
+using static AEdit.AEGlobals;
 using Console = SadConsole.Console;
 using static AEdit.SadGeometry;
 
@@ -52,14 +53,14 @@ namespace AEdit.Handlers
 				{
 					EraseLine(_ptStart, _ptEnd, console);
 					_ptEnd = state.CellPosition;
-					DrawLine(_ptStart, _ptEnd, Program.MainDisplay.Drawing, _foreDefault, _backDefault);
+					DrawLine(_ptStart, _ptEnd, Main.Drawing, _foreDefault, _backDefault);
 				}
 			}
 			else if (_fDragging)
 			{
 				var boundsPosition = new Point(Min(_ptStart.X, _ptEnd.X), Min(_ptStart.Y, _ptEnd.Y));
 				var boundsSize = new Point(Abs(_ptStart.X - _ptEnd.X) + 1, Abs(_ptStart.Y - _ptEnd.Y) + 1);
-				Program.MainDisplay.SetObject(new Rectangle(boundsPosition, boundsSize));
+				Main.SetObject(new Rectangle(boundsPosition, boundsSize));
 				_fDragging = false;
 			}
 		}

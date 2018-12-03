@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Input;
+using static AEdit.AEGlobals;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
 
@@ -22,7 +23,7 @@ namespace AEdit.Consoles
 	/// 			drawing operation the handler will call MainWindow.SetObject() with a bounding
 	/// 			rectangle for the drawn element.  MainWindow will turn it into an EditObject
 	/// 			Console, add that as a child, clear the DrawingConsole and ensure it's the
-	/// 			top console in MainDisplay.
+	/// 			top console in Main.
 	/// 			Darrell Plank, 11/26/2018. </remarks>
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	class DrawingConsole : Console
@@ -72,7 +73,7 @@ namespace AEdit.Consoles
 			Handler?.Exit();
 			_handler = _handlerTable[(int)mode];
 			_handler.Reset();
-			Program.ControlPanel.InstallModeSpecificControls(mode);
+			Ctrls.InstallModeSpecificControls(mode);
 		}
 
 		public override bool ProcessMouse(MouseConsoleState state)
@@ -82,9 +83,9 @@ namespace AEdit.Consoles
 				return false;
 			}
 
-			if (Program.DraggedObject != null)
+			if (DraggedObject != null)
 			{
-				Program.DraggedObject.MouseMoveFromParent(state.CellPosition);
+				DraggedObject.MouseMoveFromParent(state.CellPosition);
 				return true;
 			}
 

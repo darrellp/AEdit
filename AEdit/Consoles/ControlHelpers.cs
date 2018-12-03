@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
+using static AEdit.AEGlobals;
 
 namespace AEdit.Consoles
 {
@@ -32,7 +33,7 @@ namespace AEdit.Consoles
 					var newColor = p.GetColor;
 					fnAssign(newColor);
 					UpdateColorSwatch(colorSwatch, newColor);
-					Program.ControlPanel.UpdateHandler();
+					Ctrls.UpdateHandler();
 				});
 				cp.Show(true);
 			};

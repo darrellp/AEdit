@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Input;
+using static AEdit.AEGlobals;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
 using static AEdit.SadGeometry;
@@ -62,12 +63,12 @@ namespace AEdit.Handlers
 
 				if (_ptLast.X >= 0 && (Math.Abs(pt.X - _ptLast.X) > 1 || Math.Abs(pt.Y - _ptLast.Y) > 1))
 				{
-					DrawLine(_ptLast, pt, Program.MainDisplay.Drawing, _foreDefault, _backDefault, _lineBrush);
+					DrawLine(_ptLast, pt, Main.Drawing, _foreDefault, _backDefault, _lineBrush);
 				}
 				_ptLast = pt;
-				Program.MainDisplay.Drawing.SetGlyph(pt.X, pt.Y, _drawChar);
-				Program.MainDisplay.Drawing.SetForeground(pt.X, pt.Y, _foreDefault);
-				Program.MainDisplay.Drawing.SetBackground(pt.X, pt.Y, _backDefault);
+				Main.Drawing.SetGlyph(pt.X, pt.Y, _drawChar);
+				Main.Drawing.SetForeground(pt.X, pt.Y, _foreDefault);
+				Main.Drawing.SetBackground(pt.X, pt.Y, _backDefault);
 				if (_bounds.Contains(pt))
 				{
 					return;
@@ -79,7 +80,7 @@ namespace AEdit.Handlers
 
 			if (_fDragging)
 			{
-				Program.MainDisplay.SetObject(_bounds);
+				Main.SetObject(_bounds);
 				_fDragging = false;
 			}
 		}

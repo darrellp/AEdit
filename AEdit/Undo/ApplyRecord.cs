@@ -1,4 +1,5 @@
 ﻿using AEdit.Consoles;
+using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
@@ -19,18 +20,18 @@ namespace AEdit.Undo
 
 		public void Undo()
 		{
-			Program.MainDisplay.Selected = _appliedEdit;
-			Program.MainDisplay.Mode = _mode;
-			Program.ControlPanel.EditControls.SetParameters(_parmsOld);
-			Program.ControlPanel.EditControls.Apply(Program.MainDisplay.Selected);
+			Selected = _appliedEdit;
+			Main.Mode = _mode;
+			Ctrls.EditControls.SetParameters(_parmsOld);
+			Ctrls.EditControls.Apply(Selected);
 		}
 
 		public void Redo()
 		{
-			Program.MainDisplay.Selected = _appliedEdit;
-			Program.MainDisplay.Mode = _mode;
-			Program.ControlPanel.EditControls.SetParameters(_parmsNew);
-			Program.ControlPanel.EditControls.Apply(Program.MainDisplay.Selected);
+			Selected = _appliedEdit;
+			Main.Mode = _mode;
+			Ctrls.EditControls.SetParameters(_parmsNew);
+			Ctrls.EditControls.Apply(Selected);
 		}
 	}
 }

@@ -3,6 +3,8 @@ using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Themes;
+using static AEdit.AEGlobals;
+using static AEdit.Program;
 using static AEdit.Undo.Undo;
 
 namespace AEdit.Consoles
@@ -19,27 +21,27 @@ namespace AEdit.Consoles
 			("Clear", (s, a) =>
 			{
 				AddRecord(new ClearRecord());
-				Program.MainDisplay.Clear();
+				Main.Clear();
 			}),
 			("Apply", (s, a) =>
 			{
-				if (Program.MainDisplay.Selected != null)
+				if (Selected != null)
 				{
-					var oldParms = Program.MainDisplay.Selected.Parms;
-					_modeSpecificControls.Apply(Program.MainDisplay.Selected);
-					AddRecord(new ApplyRecord(Program.MainDisplay.Selected, Program.MainDisplay.Mode, oldParms, Program.MainDisplay.Selected.Parms));
+					var oldParms =Selected.Parms;
+					_modeSpecificControls.Apply(Selected);
+					AddRecord(new ApplyRecord(Selected, Main.Mode, oldParms, Selected.Parms));
 				}
 			}),
-			("Line", (s, a) => Program.MainDisplay.Mode = EditMode.Line),
-			("Paint", (s, a) => Program.MainDisplay.Mode = EditMode.Brush),
+			("Line", (s, a) => Main.Mode = EditMode.Line),
+			("Paint", (s, a) => Main.Mode = EditMode.Brush),
 		};
 
 		private static readonly int ButtonRowCount = (ButtonInfo.Length + 1) / 2;
 
 		private static readonly EditControl[] ModeControlPanels =
 		{
-			new PaintControls(Program.DefaultControlWidth, Program.DefaultHeight - ButtonRowCount),
-			new LineControls(Program.DefaultControlWidth, Program.DefaultHeight - ButtonRowCount)
+			new PaintControls(DefaultControlWidth, DefaultHeight - ButtonRowCount),
+			new LineControls(DefaultControlWidth, DefaultHeight - ButtonRowCount)
 		};
 		private static EditControl _modeSpecificControls;
 		#endregion
@@ -116,7 +118,7 @@ namespace AEdit.Consoles
 		#region Operations
 		public void UpdateHandler()
 		{
-			Program.Drawing.Handler.Update(_modeSpecificControls);
+			Drawing.Handler.Update(_modeSpecificControls);
 		}
 		#endregion
 	}

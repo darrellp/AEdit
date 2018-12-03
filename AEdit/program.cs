@@ -4,6 +4,7 @@ using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Themes;
+using static AEdit.AEGlobals;
 using static SadConsole.Game;
 using static SadConsole.Global;
 using static SadConsole.Settings;
@@ -17,15 +18,10 @@ namespace AEdit
 		#region Private variables
 		private static Console _debugConsole;
 	    private static Console _startingConsole;
-	    private static ControlPanel _controlPanel;
-		#endregion
+	    #endregion
 
 		#region Public variables
-	    public static ControlPanel ControlPanel => _controlPanel;
-	    public static EditObject DraggedObject;
-	    public static MainDisplay MainDisplay { get; private set; }
-	    public static DrawingConsole Drawing => MainDisplay.Drawing;
-		#endregion
+	    #endregion
 
 		#region Formatting constants
 	    public const int DefaultWidth = 140;
@@ -82,15 +78,15 @@ namespace AEdit
 
 	    private static void SetupConsoles()
 	    {
-			_controlPanel = new ControlPanel(DefaultControlWidth, DefaultHeight);
-		    ControlPanel.Fill(Color.White, Colors.BlueDark, 0);
-			MainDisplay = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
-		    MainDisplay.Drawing.IsFocused = true;
-		    MainDisplay.Drawing.Mode = EditMode.Brush;
-			MainDisplay.Position = new Point(ControlPanel.Width, 0);
+		    Ctrls = new ControlPanel(DefaultControlWidth, DefaultHeight);
+		    Ctrls.Fill(Color.White, Colors.BlueDark, 0);
+		    AEGlobals.Main = new MainDisplay(DefaultWidth - DefaultControlWidth, DefaultHeight);
+		    AEGlobals.Main.Drawing.IsFocused = true;
+		    AEGlobals.Main.Drawing.Mode = EditMode.Brush;
+		    AEGlobals.Main.Position = new Point(Ctrls.Width, 0);
 
-		    CurrentScreen.Children.Add(MainDisplay);
-		    CurrentScreen.Children.Add(ControlPanel);
+		    CurrentScreen.Children.Add(AEGlobals.Main);
+		    CurrentScreen.Children.Add(Ctrls);
 		    SetupDebug();
 	    }
 

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using AEdit.Consoles;
 using Microsoft.Xna.Framework;
+using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
@@ -20,13 +21,13 @@ namespace AEdit.Undo
 		public void Undo()
 		{
 			_edit.Position = _start;
-			Program.MainDisplay.Selected = _edit;
+			Selected = _edit;
 		}
 
 		public void Redo()
 		{
 			_edit.Position = _end;
-			Program.MainDisplay.Selected = _edit;
+			Selected = _edit;
 		}
 	}
 }

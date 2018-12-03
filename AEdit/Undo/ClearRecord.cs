@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AEdit.Consoles;
+using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
@@ -11,25 +12,25 @@ namespace AEdit.Undo
 
 		public ClearRecord()
 		{
-			_clearedEdits = Program.MainDisplay.Children.Take(Program.MainDisplay.Children.Count - 1).Cast<EditObject>().ToList();
-			_selected = Program.MainDisplay.Selected;
+			_clearedEdits = Main.Children.Take(Main.Children.Count - 1).Cast<EditObject>().ToList();
+			_selected = Selected;
 		}
 
 		public void Undo()
 		{
-			Program.MainDisplay.Children.Clear();
+			Main.Children.Clear();
 			foreach (var edit in _clearedEdits)
 			{
-				Program.MainDisplay.Children.Add(edit);
+				Main.Children.Add(edit);
 			}
-			Program.MainDisplay.Children.Add(Program.MainDisplay.Drawing);
-			Program.MainDisplay.Selected = _selected;
+			Main.Children.Add(Main.Drawing);
+			Selected = _selected;
 		}
 
 		public void Redo()
 		{
-			Program.MainDisplay.Children.Clear();
-			Program.MainDisplay.Children.Add(Program.MainDisplay.Drawing);
+			Main.Children.Clear();
+			Main.Children.Add(Main.Drawing);
 		}
 	}
 }

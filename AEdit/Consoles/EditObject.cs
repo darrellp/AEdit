@@ -5,6 +5,7 @@ using SadConsole;
 using SadConsole.Effects;
 using SadConsole.Input;
 using SadConsole.Surfaces;
+using static AEdit.AEGlobals;
 using Console = SadConsole.Console;
 
 namespace AEdit.Consoles
@@ -44,14 +45,14 @@ namespace AEdit.Consoles
 		{
 			if (!Global.MouseState.LeftButtonDown)
 			{
-				Program.DraggedObject = null;
+				DraggedObject = null;
 				if (Position != _initialPosition)
 				{
 					var moveRecord = new MoveRecord(_initialPosition, Position, this);
 					Undo.Undo.AddRecord(moveRecord);
 				}
 
-				Program.MainDisplay.Selected = this;
+				Selected = this;
 			}
 			else if (pt != _startPoint)
 			{
@@ -77,7 +78,7 @@ namespace AEdit.Consoles
 			}
 			if (state.Mouse.LeftButtonDown && this[state.CellPosition.X, state.CellPosition.Y].Glyph != 0)
 			{
-				Program.DraggedObject = this;
+				DraggedObject = this;
 				// Get position relative to parent
 				_startPoint = state.CellPosition + Position;
 				_initialPosition = Position;

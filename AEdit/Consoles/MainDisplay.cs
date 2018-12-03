@@ -1,6 +1,7 @@
 ﻿using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using static AEdit.AEGlobals;
 using static AEdit.Undo.Undo;
 
 namespace AEdit.Consoles
@@ -28,8 +29,8 @@ namespace AEdit.Consoles
 				{
 					_selected.DisplayAsSelected(true);
 					Mode = _selected.Mode;
-					Program.ControlPanel.EditControls.SetParameters(_selected.Parms);
-					Program.ControlPanel.UpdateHandler();
+					Ctrls.EditControls.SetParameters(_selected.Parms);
+					Ctrls.UpdateHandler();
 				}
 			}
 		}
@@ -54,7 +55,7 @@ namespace AEdit.Consoles
 		#region EditObject Handling
 		public void SetObject(Rectangle rect)
 		{
-			var editObject = new EditObject(Drawing, Drawing.Mode, Program.ControlPanel.EditControls.GetParameterInfo(), rect);
+			var editObject = new EditObject(Drawing, Drawing.Mode, Ctrls.EditControls.GetParameterInfo(), rect);
 			var insertRecord = new InsertRecord(editObject);
 			AddRecord(insertRecord);
 			// The last child is "on top".  We want the new object to be above
@@ -69,7 +70,7 @@ namespace AEdit.Consoles
 		public void Clear()
 		{
 			Children.Clear();
-			Children.Add(Program.MainDisplay.Drawing);
+			Children.Add(Main.Drawing);
 		}
 		#endregion
 	}
