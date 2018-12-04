@@ -9,6 +9,6 @@ namespace AEdit.Consoles
 		public abstract Object GetParameterInfo();
 		public abstract void SetParameters(Object parms);
 		public virtual EditMode Mode => EditMode.Null;
-		public abstract void Apply(EditObject edit);
+		public abstract bool Apply(EditObject edit);
 	}
 }

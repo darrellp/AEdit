@@ -31,8 +31,10 @@ namespace AEdit.Consoles
 				if (Selected != null)
 				{
 					var oldParms = Selected.Parms;
-					_modeSpecificControls.Apply(Selected);
-					AddUndoRecord(new ApplyRecord(Selected, Main.Mode, oldParms, Selected.Parms));
+					if (_modeSpecificControls.Apply(Selected))
+					{
+						AddUndoRecord(new ApplyRecord(Selected, Main.Mode, oldParms, Selected.Parms));
+					}
 				}
 			}),
 			("Line", (s, a) => Main.Mode = EditMode.Line),

@@ -48,10 +48,20 @@ namespace AEdit.Consoles
 			ControlHelpers.UpdateColorSwatch(_backSwatch, Background);
 		}
 
-		public override void Apply(EditObject edit)
+		public override bool Apply(EditObject edit)
 		{
+			if (edit.Mode != EditMode.Brush)
+			{
+				return false;
+			}
+			var (foreground, background) = ((Color, Color))edit.Parms;
+			if (foreground == Foreground && background == Background)
+			{
+				return false;
+			}
 			edit.ApplyColors(Foreground, Background);
 			edit.Parms = GetParameterInfo();
+			return true;
 		}
 
 	}
