@@ -92,6 +92,7 @@
       <HintPath>..\packages\SharpDX.XInput.4.0.1\lib\net45\SharpDX.XInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Fonts\Cheepicus_12x12.png">
@@ -116,6 +117,8 @@
     <Compile Include="Consoles\LayersControl.cs" />
     <Compile Include="Consoles\LineControls.cs" />
     <Compile Include="Consoles\MainDisplay.cs" />
+    <Compile Include="Consoles\MyListbox.cs" />
+    <Compile Include="Consoles\MyListboxTheme.cs" />
     <Compile Include="Consoles\PaintControls.cs" />
     <Compile Include="Consoles\EditObject.cs" />
     <Compile Include="Extensions.cs" />

@@ -41,7 +41,6 @@ namespace AEdit.Undo
 
 			undoRecord.Redo();
 			History.Push(undoRecord);
-
 		}
 		#endregion
 	}

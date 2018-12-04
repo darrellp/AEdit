@@ -8,7 +8,7 @@ namespace AEdit.Undo
 	class ClearRecord : IUndoRecord
 	{
 		private readonly List<EditObject> _clearedEdits;
-		private EditObject _selected;
+		private readonly EditObject _selected;
 
 		public ClearRecord()
 		{
@@ -22,6 +22,7 @@ namespace AEdit.Undo
 			foreach (var edit in _clearedEdits)
 			{
 				Main.Children.Add(edit);
+				DoRaiseEditEvent(edit, EditAction.Add);
 			}
 			Main.Children.Add(Main.Drawing);
 			Selected = _selected;
@@ -31,6 +32,7 @@ namespace AEdit.Undo
 		{
 			Main.Children.Clear();
 			Main.Children.Add(Main.Drawing);
+			DoRaiseEditEvent(null, EditAction.Clear);
 		}
 	}
 }

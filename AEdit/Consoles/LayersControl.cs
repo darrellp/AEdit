@@ -7,7 +7,7 @@ using Console = System.Console;
 
 namespace AEdit.Consoles
 {
-	internal class LayersControl : ListBox
+	internal class LayersControl : MyListBox
 	{
 		public LayersControl(int width, int height) : base(width, height)
 		{
@@ -63,23 +63,10 @@ namespace AEdit.Consoles
 
 		private void RemoveEdit(EditObject edit)
 		{
-			// TODO: eliminate the try when SadConsole gets the fix mentioned below.
-			try
-			{
-				Items.Remove(edit);
-			}
-			catch (ArgumentOutOfRangeException)
-			{
-				// SadConsole throws an exception here because we're deleting the selected item and it tries to
-				// set the SelectedItem to null.  Sadly, when setting a selected item it looks it up and if it
-				// doesn't find it throws it's own exception.  Of course, it doesn't find null and hence throws
-				// the exception which we catch here.  We need to remove this catch when that's fixed in SadConsole.
-				// I think this is also what causes the last item in the list to not get deleted when the last edit
-				// is undone from existence.
-			}
+			Items.Remove(edit);
 		}
 
-		private void ListOnSelectedItemChanged(object sender, ListBox.SelectedItemEventArgs e)
+		private void ListOnSelectedItemChanged(object sender, SelectedItemEventArgs e)
 		{
 			var selectedEdit = (EditObject)e.Item;
 			if (Selected != selectedEdit)

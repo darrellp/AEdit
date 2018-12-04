@@ -24,7 +24,7 @@ namespace AEdit.Undo
 
 			DoRaiseEditEvent(Edit, EditAction.Remove);
 			Main.Children.Remove(Edit);
-			if (Selected == Edit && Main.Children.Count > 1)
+			if ((Selected == null || Selected == Edit) && Main.Children.Count > 1)
 			{
 				Selected = (EditObject) Main.Children[cUndos - 2];
 			}
