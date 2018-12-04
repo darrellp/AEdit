@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
 
@@ -7,8 +6,8 @@ namespace AEdit.Consoles
 {
 	internal class LineControls : EditControl
 	{
-		private DrawingSurface _foreSwatch;
-		private DrawingSurface _backSwatch;
+		private readonly DrawingSurface _foreSwatch;
+		private readonly DrawingSurface _backSwatch;
 
 		public Color Foreground { get; private set; }
 		public Color Background { get; private set; }
@@ -16,6 +15,7 @@ namespace AEdit.Consoles
 
 		public LineControls(int width, int height) : this(width, height, Color.White, Color.Black) { }
 
+		// ReSharper disable once MemberCanBePrivate.Global
 		public LineControls(int width, int height, Color fgnd, Color bgnd) : base(width, height)
 		{
 			DefaultBackground = Color.Transparent;
