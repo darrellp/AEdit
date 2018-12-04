@@ -2,6 +2,7 @@
 using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using SadConsole.Controls;
 using SadConsole.Themes;
 using static AEdit.AEGlobals;
 using static AEdit.Program;
@@ -13,6 +14,7 @@ namespace AEdit.Consoles
 	{
 		#region Private variables
 		private const int ButtonWidth = 10;
+		private const int LayerHeight = 20;
 
 		private static readonly (string, EventHandler)[] ButtonInfo = new (string, EventHandler)[]
 		{
@@ -20,16 +22,17 @@ namespace AEdit.Consoles
 			("Redo", (s, a) => PerformRedo()),
 			("Clear", (s, a) =>
 			{
-				AddRecord(new ClearRecord());
+				AddUndoRecord(new ClearRecord());
 				Main.Clear();
+				DoRaiseEditEvent(null, EditAction.Clear);
 			}),
 			("Apply", (s, a) =>
 			{
 				if (Selected != null)
 				{
-					var oldParms =Selected.Parms;
+					var oldParms = Selected.Parms;
 					_modeSpecificControls.Apply(Selected);
-					AddRecord(new ApplyRecord(Selected, Main.Mode, oldParms, Selected.Parms));
+					AddUndoRecord(new ApplyRecord(Selected, Main.Mode, oldParms, Selected.Parms));
 				}
 			}),
 			("Line", (s, a) => Main.Mode = EditMode.Line),
@@ -38,10 +41,11 @@ namespace AEdit.Consoles
 
 		private static readonly int ButtonRowCount = (ButtonInfo.Length + 1) / 2;
 
+		private static readonly int ModeControlHeight = DefaultHeight - ButtonRowCount - LayerHeight;
 		private static readonly EditControl[] ModeControlPanels =
 		{
-			new PaintControls(DefaultControlWidth, DefaultHeight - ButtonRowCount),
-			new LineControls(DefaultControlWidth, DefaultHeight - ButtonRowCount)
+			new PaintControls(DefaultControlWidth, ModeControlHeight),
+			new LineControls(DefaultControlWidth, ModeControlHeight)
 		};
 		private static EditControl _modeSpecificControls;
 		#endregion
@@ -59,6 +63,12 @@ namespace AEdit.Consoles
 			{
 				panel.Position = new Point(0, ButtonRowCount);
 			}
+
+			var layers = new LayersControl(width, LayerHeight)
+			{
+				Position = new Point(0, height - LayerHeight)
+			};
+			Add(layers);
 		}
 
 		public void InstallModeSpecificControls(EditMode mode)

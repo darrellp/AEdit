@@ -13,7 +13,7 @@ namespace AEdit.Undo
 		#endregion
 
 		#region Undo operations
-		public static void AddRecord(IUndoRecord record)
+		public static void AddUndoRecord(IUndoRecord record)
 		{
 			History.Push(record);
 			Future.Clear();

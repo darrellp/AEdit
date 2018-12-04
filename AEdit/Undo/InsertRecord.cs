@@ -22,16 +22,19 @@ namespace AEdit.Undo
 
 			Edit = (EditObject)Main.Children[cUndos - 1];
 
+			DoRaiseEditEvent(Edit, EditAction.Remove);
 			Main.Children.Remove(Edit);
 			if (Selected == Edit && Main.Children.Count > 1)
 			{
 				Selected = (EditObject) Main.Children[cUndos - 2];
 			}
+
 		}
 
 		public void Redo()
 		{
 			Main.Children.Insert(Main.Children.Count - 1, Edit);
+			DoRaiseEditEvent(Edit, EditAction.Add);
 			Selected = Edit;
 		}
 	}

@@ -14,7 +14,6 @@ namespace AEdit
 	// ReSharper disable once ClassNeverInstantiated.Global
 	internal class Program
     {
-
 		#region Private variables
 		private static Console _debugConsole;
 	    private static Console _startingConsole;
@@ -36,7 +35,7 @@ namespace AEdit
 
 		#region Main
 		private static void Main()
-        {
+		{
 			// Setup the engine and create the main window.
 			Create("Fonts/IBM.font", DefaultWidth, DefaultHeight + DebugConsoleHeight);
 

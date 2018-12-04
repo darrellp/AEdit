@@ -23,7 +23,11 @@ namespace AEdit.Consoles
 			get => _selected;
 			set
 			{
-				_selected?.DisplayAsSelected(false);
+				if (_selected != null)
+				{
+					_selected.DisplayAsSelected(false);
+					DoRaiseEditEvent(_selected, EditAction.Deselect);
+				}
 				_selected = value;
 				if (value != null)
 				{
@@ -31,6 +35,7 @@ namespace AEdit.Consoles
 					Mode = _selected.Mode;
 					Ctrls.EditControls.SetParameters(_selected.Parms);
 					Ctrls.UpdateHandler();
+					DoRaiseEditEvent(_selected, EditAction.Select);
 				}
 			}
 		}
@@ -57,11 +62,12 @@ namespace AEdit.Consoles
 		{
 			var editObject = new EditObject(Drawing, Drawing.Mode, Ctrls.EditControls.GetParameterInfo(), rect);
 			var insertRecord = new InsertRecord(editObject);
-			AddRecord(insertRecord);
+			AddUndoRecord(insertRecord);
 			// The last child is "on top".  We want the new object to be above
 			// the top EditObject but still below the drawing console.
 			Children.Insert(Children.Count - 1, editObject);
 			Drawing.Clear();
+			DoRaiseEditEvent(editObject, EditAction.Add);
 			Selected = editObject;
 		}
 		#endregion

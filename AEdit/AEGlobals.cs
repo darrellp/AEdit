@@ -1,3 +1,4 @@
+using System;
 using AEdit.Consoles;
 
 namespace AEdit
@@ -12,6 +13,19 @@ namespace AEdit
 		{
 			get => Main.Selected;
 			set => Main.Selected = value;
+		}
+
+		// Events
+		public static event EventHandler<EditObjectEventArgs> RaiseEditEvent;
+		public static void DoRaiseEditEvent(EditObject edit, EditAction action)
+		{
+			var handler = RaiseEditEvent;
+
+			if (handler != null)
+			{
+				var args = new EditObjectEventArgs(edit, action);
+				handler(Main, args);
+			}
 		}
 	}
 }

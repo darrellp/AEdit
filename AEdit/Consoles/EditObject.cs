@@ -15,12 +15,13 @@ namespace AEdit.Consoles
 		#region Private variables
 		private Point _startPoint;
 		private Point _initialPosition;
-		private EditMode _mode;
+		private static int NameCount = 0;
 		#endregion
 
 		#region Public properties
-		public EditMode Mode => _mode;
+		public EditMode Mode { get; }
 		public object Parms { get; set; }
+		public string Name { get; set; }
 		#endregion
 
 		#region Constructor
@@ -28,8 +29,14 @@ namespace AEdit.Consoles
 		{
 			surface.Copy(rect.X, rect.Y, rect.Width, rect.Height, this, 0, 0);
 			Position = new Point(rect.X, rect.Y);
-			_mode = mode;
+			Mode = mode;
 			Parms = parms;
+			Name = PickName();
+		}
+
+		private static string PickName()
+		{
+			return $"Edit{NameCount++:000}";
 		}
 		#endregion
 
@@ -49,7 +56,7 @@ namespace AEdit.Consoles
 				if (Position != _initialPosition)
 				{
 					var moveRecord = new MoveRecord(_initialPosition, Position, this);
-					Undo.Undo.AddRecord(moveRecord);
+					Undo.Undo.AddUndoRecord(moveRecord);
 				}
 
 				Selected = this;
@@ -119,6 +126,10 @@ namespace AEdit.Consoles
 			IsDirty = true;
 			SetRenderCells();
 		}
+		#endregion
+
+		#region Overrides
+		public override string ToString() => Name;
 		#endregion
 	}
 }
