@@ -6,6 +6,7 @@ using SadConsole.Input;
 using static AEdit.AEGlobals;
 using Console = SadConsole.Console;
 using Keyboard = SadConsole.Input.Keyboard;
+using static AEdit.Undo.Undo;
 
 namespace AEdit.Consoles
 {
@@ -105,6 +106,22 @@ namespace AEdit.Consoles
 
 		public override bool ProcessKeyboard(Keyboard info)
 		{
+			if (info.IsKeyDown(Keys.LeftControl) || info.IsKeyDown(Keys.RightControl))
+			{
+				if (info.IsKeyPressed(Keys.Z))
+				{
+					PerformUndo();
+					Program.AETraceLine("Undoing");
+					return true;
+				}
+
+				if (info.IsKeyPressed(Keys.Y))
+				{
+					Program.AETraceLine("Redoing");
+					PerformRedo();
+					return true;
+				}
+			}
 			Handler?.Keyboard(info, this);
 			return false;
 		}
