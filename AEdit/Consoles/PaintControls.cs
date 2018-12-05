@@ -26,7 +26,7 @@ namespace AEdit.Consoles
 			Background = bgnd;
 
 			_foreSwatch = ControlHelpers.SetColorButton(this, new Point(1, 3), "Foregnd", Foreground, c => Foreground = c);
-			_backSwatch = ControlHelpers.SetColorButton(this, new Point(1, 4), "Backgrnd", Background, c => Background = c);
+			_backSwatch = ControlHelpers.SetColorButton(this, new Point(1, 4), "Backgnd", Background, c => Background = c);
 
 			var label = new DrawingSurface(20, 1)
 			{

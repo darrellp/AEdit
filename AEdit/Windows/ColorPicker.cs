@@ -12,8 +12,9 @@ namespace AEdit.Windows
 		private readonly ScrollBar _red;
 		private readonly ScrollBar _green;
 		private readonly ScrollBar _blue;
+		private readonly ScrollBar _alpha;
 
-		public ColorPicker(Action<ColorPicker> fn) : base(130, 7)
+		public ColorPicker(Action<ColorPicker> fn) : base(130, 8)
 		{
 			Title = "Color Picker";
 			Center();
@@ -57,9 +58,22 @@ namespace AEdit.Windows
 			label.Surface.Print(0, 0, "Blue", Colors.Yellow, Color.Transparent);
 			Add(label);
 
+			_alpha = ScrollBar.Create(Orientation.Horizontal, 123);
+			_alpha.Position = new Point(6, 4);
+			_alpha.Maximum = 255;
+			_alpha.ValueChanged += (s, a) => UpdateColorSwatch();
+			Add(_alpha);
+			label = new DrawingSurface(5, 1)
+			{
+				Position = new Point(1, 4),
+
+			};
+			label.Surface.Print(0, 0, "Alpha", Colors.Yellow, Color.Transparent);
+			Add(label);
+
 			var button = new Button(9, 1)
 			{
-				Position = new Point(4, 5),
+				Position = new Point(4, 6),
 				Text = "Save"
 			};
 			Add(button);
@@ -70,10 +84,9 @@ namespace AEdit.Windows
 				fn(this);
 			};
 
-			_colorSwatch = new DrawingSurface(5, 1)
+			_colorSwatch = new DrawingSurface(125, 1)
 			{
-				Position = new Point(8, 4)
-
+				Position = new Point(2, 5)
 			};
 			UpdateColorSwatch();
 			Add(_colorSwatch);
@@ -86,7 +99,8 @@ namespace AEdit.Windows
 				var r = _red.Value;
 				var g = _green.Value;
 				var b = _blue.Value;
-				var ret =  new Color(r, g, b);
+				var a = _alpha.Value;
+				var ret =  new Color(r, g, b, a);
 				return ret;
 			}
 			set
@@ -94,12 +108,13 @@ namespace AEdit.Windows
 				_red.Value = value.R;
 				_green.Value = value.G;
 				_blue.Value = value.B;
+				_alpha.Value = value.A;
 			}
 		}
 
 		private void UpdateColorSwatch()
 		{
-			_colorSwatch.Surface.Print(0, 0, "     ", Colors.White, CurColor);
+			_colorSwatch.Surface.Print(0, 0, new string(' ', 123), Colors.White, CurColor);
 		}
 	}
 }
