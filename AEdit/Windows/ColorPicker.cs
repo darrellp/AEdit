@@ -9,46 +9,58 @@ namespace AEdit.Windows
 	internal class ColorPicker : Window
 	{
 		private readonly DrawingSurface _colorSwatch;
-		private readonly TextBox _red;
-		private readonly TextBox _green;
-		private readonly TextBox _blue;
+		private readonly ScrollBar _red;
+		private readonly ScrollBar _green;
+		private readonly ScrollBar _blue;
 
-		public ColorPicker(Action<ColorPicker> fn) : base(20, 7)
+		public ColorPicker(Action<ColorPicker> fn) : base(130, 7)
 		{
 			Title = "Color Picker";
 			Center();
 
-			_red = new TextBox(5)
-			{
-				Text = "255",
-				Position = new Point(2, 1),
-				IsNumeric = true
-			};
+			_red = ScrollBar.Create(Orientation.Horizontal, 123);
+			_red.Position = new Point(6, 1);
+			_red.Maximum = 255;
+			_red.ValueChanged += (s, a) => UpdateColorSwatch();
 			Add(_red);
-			_red.TextChangedPreview += (s, a) => UpdateColorSwatch();
-
-			_green = new TextBox(5)
+			var label = new DrawingSurface(3, 1)
 			{
-				Text = "255",
-				Position = new Point(2, 2),
-				IsNumeric = true
+				Position = new Point(1, 1),
+
 			};
+			label.Surface.Print(0, 0, "Red", Colors.Yellow, Color.Transparent);
+			Add(label);
+
+			_green = ScrollBar.Create(Orientation.Horizontal, 123);
+			_green.Position = new Point(6, 2);
+			_green.Maximum = 255;
+			_green.ValueChanged += (s, a) => UpdateColorSwatch();
 			Add(_green);
-			_green.TextChangedPreview += (s, a) => UpdateColorSwatch();
-
-			_blue = new TextBox(5)
+			label = new DrawingSurface(3, 1)
 			{
-				Text = "255",
-				Position = new Point(2, 3),
-				IsNumeric = true
+				Position = new Point(1, 2),
+
 			};
+			label.Surface.Print(0, 0, "Green", Colors.Yellow, Color.Transparent);
+			Add(label);
+
+			_blue = ScrollBar.Create(Orientation.Horizontal, 123);
+			_blue.Position = new Point(6, 3);
+			_blue.Maximum = 255;
+			_blue.ValueChanged += (s, a) => UpdateColorSwatch();
 			Add(_blue);
-			_blue.TextChangedPreview += (s, a) => UpdateColorSwatch();
+			label = new DrawingSurface(3, 1)
+			{
+				Position = new Point(1, 3),
+
+			};
+			label.Surface.Print(0, 0, "Blue", Colors.Yellow, Color.Transparent);
+			Add(label);
 
 			var button = new Button(9, 1)
 			{
 				Position = new Point(4, 5),
-				Text = "Close"
+				Text = "Save"
 			};
 			Add(button);
 
@@ -60,28 +72,34 @@ namespace AEdit.Windows
 
 			_colorSwatch = new DrawingSurface(5, 1)
 			{
-				Position = new Point(8, 1)
+				Position = new Point(8, 4)
 
 			};
 			UpdateColorSwatch();
 			Add(_colorSwatch);
 		}
 
-		public Color GetColor
+		public Color CurColor
 		{
 			get
 			{
-				var r = (byte)(_red.EditingText == "" ? 0 : int.Parse(_red.EditingText).ClipTo(0, 255));
-				var g = (byte)(_green.EditingText == "" ? 0 : int.Parse(_green.EditingText).ClipTo(0, 255));
-				var b = (byte)(_blue.EditingText == "" ? 0 : int.Parse(_blue.EditingText).ClipTo(0, 255));
+				var r = _red.Value;
+				var g = _green.Value;
+				var b = _blue.Value;
 				var ret =  new Color(r, g, b);
 				return ret;
+			}
+			set
+			{
+				_red.Value = value.R;
+				_green.Value = value.G;
+				_blue.Value = value.B;
 			}
 		}
 
 		private void UpdateColorSwatch()
 		{
-			_colorSwatch.Surface.Print(0, 0, "     ", Colors.White, GetColor);
+			_colorSwatch.Surface.Print(0, 0, "     ", Colors.White, CurColor);
 		}
 	}
 }

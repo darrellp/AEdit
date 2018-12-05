@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using SadConsole.Controls;
 using SadConsole.Themes;
 
@@ -63,5 +64,24 @@ namespace AEdit.Consoles
 			edit.Parms = GetParameterInfo();
 			return true;
 		}
+
+		public override object GetParmValue(string parm)
+		{
+			switch (parm)
+			{
+				case "Foregnd":
+					return Foreground;
+
+				case "Backgnd":
+					return Background;
+
+				default:
+					Debug.Assert(false, "Bad parm type");
+					break;
+			}
+
+			return null;
+		}
+
 	}
 }
