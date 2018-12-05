@@ -17,13 +17,13 @@ namespace AEdit
 
 		// Events
 		public static event EventHandler<EditObjectEventArgs> RaiseEditEvent;
-		public static void DoRaiseEditEvent(EditObject edit, EditAction action)
+		public static void DoRaiseEditEvent(EditObject edit, EditAction action, int childIndex = -1)
 		{
 			var handler = RaiseEditEvent;
 
 			if (handler != null)
 			{
-				var args = new EditObjectEventArgs(edit, action);
+				var args = new EditObjectEventArgs(edit, action, childIndex);
 				handler(Main, args);
 			}
 		}

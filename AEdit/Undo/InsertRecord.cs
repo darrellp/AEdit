@@ -22,7 +22,7 @@ namespace AEdit.Undo
 
 			Edit = (EditObject)Main.Children[cUndos - 1];
 
-			DoRaiseEditEvent(Edit, EditAction.Remove);
+			DoRaiseEditEvent(Edit, EditAction.Remove, cUndos - 1);
 			Main.Children.Remove(Edit);
 			if ((Selected == null || Selected == Edit) && Main.Children.Count > 1)
 			{
@@ -34,7 +34,7 @@ namespace AEdit.Undo
 		public void Redo()
 		{
 			Main.Children.Insert(Main.Children.Count - 1, Edit);
-			DoRaiseEditEvent(Edit, EditAction.Add);
+			DoRaiseEditEvent(Edit, EditAction.Add, Main.Children.Count - 2);
 			Selected = Edit;
 		}
 	}

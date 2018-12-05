@@ -2,7 +2,6 @@
 using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
-using SadConsole.Controls;
 using SadConsole.Themes;
 using static AEdit.AEGlobals;
 using static AEdit.Program;
@@ -26,6 +25,7 @@ namespace AEdit.Consoles
 				Main.Clear();
 				DoRaiseEditEvent(null, EditAction.Clear);
 			}),
+			("Delete", (s, a) => Main.DeleteSelected()),
 			("Apply", (s, a) =>
 			{
 				if (Selected != null)

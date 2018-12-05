@@ -1,7 +1,6 @@
 ﻿using System;
 using AEdit.Windows;
 using Microsoft.Xna.Framework;
-using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Themes;
 using static AEdit.AEGlobals;

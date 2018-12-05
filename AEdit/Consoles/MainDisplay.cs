@@ -1,4 +1,5 @@
-﻿using AEdit.Undo;
+﻿using System;
+using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using static AEdit.AEGlobals;
@@ -77,6 +78,23 @@ namespace AEdit.Consoles
 		{
 			Children.Clear();
 			Children.Add(Main.Drawing);
+		}
+
+		public void DeleteSelected()
+		{
+			if (Selected == null)
+			{
+				return;
+			}
+			var edit = Selected;
+			var childIndex = Children.IndexOf(edit);
+			AddUndoRecord(new DeleteRecord(childIndex, edit));
+			Children.Remove(edit);
+			DoRaiseEditEvent(edit, EditAction.Remove, childIndex);
+			if (Main.Children.Count > 1)
+			{
+				Selected = (EditObject)Main.Children[Math.Min(childIndex, Main.Children.Count - 2)];
+			}
 		}
 		#endregion
 	}

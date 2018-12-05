@@ -7,8 +7,8 @@ namespace AEdit.Consoles
 {
 	internal class PaintControls : EditControl
 	{
-		private DrawingSurface _foreSwatch;
-		private DrawingSurface _backSwatch;
+		private readonly DrawingSurface _foreSwatch;
+		private readonly DrawingSurface _backSwatch;
 
 		public Color Foreground { get; private set; }
 		public Color Background { get; private set; }
@@ -16,7 +16,7 @@ namespace AEdit.Consoles
 
 		public PaintControls(int width, int height) : this(width, height, Color.White, Color.Black) { }
 
-		public PaintControls(int width, int height, Color fgnd, Color bgnd) : base(width, height)
+		private PaintControls(int width, int height, Color fgnd, Color bgnd) : base(width, height)
 
 		{
 			DefaultBackground = Color.Transparent;

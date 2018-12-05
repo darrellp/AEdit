@@ -22,11 +22,11 @@ namespace AEdit.Consoles
 			switch (e.Action)
 			{
 				case EditAction.Add:
-					AddEdit(e.Edit);
+					AddEdit(e.Edit, e.ChildIndex);
 					break;
 
 				case EditAction.Remove:
-					RemoveEdit(e.Edit);
+					RemoveEdit(e.ChildIndex);
 					break;
 
 				case EditAction.Deselect:
@@ -40,14 +40,7 @@ namespace AEdit.Consoles
 					break;
 
 				case EditAction.Clear:
-					// TODO: eliminate the try when SadConsole gets the fix mentioned below.
-					try
-					{
-						Items.Clear();
-					}
-					catch (ArgumentOutOfRangeException)
-					{
-					}
+					Items.Clear();
 					break;
 
 				default:
@@ -56,14 +49,14 @@ namespace AEdit.Consoles
 			}
 		}
 
-		private void AddEdit(EditObject edit)
+		private void AddEdit(EditObject edit, int childIndex)
 		{
-			Items.Add(edit);
+			Items.Insert(childIndex, edit);
 		}
 
-		private void RemoveEdit(EditObject edit)
+		private void RemoveEdit(int childIndex)
 		{
-			Items.Remove(edit);
+			Items.RemoveAt(childIndex);
 		}
 
 		private void ListOnSelectedItemChanged(object sender, SelectedItemEventArgs e)
