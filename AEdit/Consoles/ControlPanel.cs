@@ -26,6 +26,8 @@ namespace AEdit.Consoles
 				DoRaiseEditEvent(null, EditAction.Clear);
 			}),
 			("Delete", (s, a) => Main.DeleteSelected()),
+			("Copy", (s, a) => Main.CopySelected()),
+			("SCopy", (s, a) => Main.CopyScreen()),
 			("Apply", (s, a) =>
 			{
 				if (Selected != null)

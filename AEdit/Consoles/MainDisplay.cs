@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Windows.Forms;
 using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
@@ -94,6 +96,28 @@ namespace AEdit.Consoles
 			if (Main.Children.Count > 1)
 			{
 				Selected = (EditObject)Main.Children[Math.Min(childIndex, Main.Children.Count - 2)];
+			}
+		}
+
+		public void CopySelected()
+		{
+			if (Selected != null)
+			{
+				Clipboard.SetText(Selected.ToAscii());
+			}
+		}
+
+		public void CopyScreen()
+		{
+			// No sense in keeping Drawing console in for this since it will not have anything on it
+			Children.Remove(Drawing);
+			try
+			{
+				Clipboard.SetText(this.Flatten().ToAscii());
+			}
+			finally
+			{
+				Children.Add(Drawing);
 			}
 		}
 		#endregion

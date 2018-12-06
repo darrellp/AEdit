@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using AEdit.Consoles;
 using Console = SadConsole.Console;
@@ -34,6 +35,7 @@ namespace AEdit
 		#endregion
 
 		#region Main
+	    [STAThreadAttribute]
 		private static void Main()
 		{
 			// Setup the engine and create the main window.
@@ -49,7 +51,7 @@ namespace AEdit
             Instance.Run();
             
             Instance.Dispose();
-        }
+		}
 #endregion
 
 		#region Handlers
