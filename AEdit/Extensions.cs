@@ -31,7 +31,7 @@ namespace AEdit
 			return value > to ? to : (value < @from ? @from : value);
 		}
 
-		public static (int width, int height) Dimensions(this ScreenObject obj)
+		private static (int width, int height) Dimensions(this ScreenObject obj)
 		{
 			if (obj is SurfaceBase thisSurface)
 			{
@@ -64,6 +64,82 @@ namespace AEdit
 			}
 
 			return sb.ToString();
+		}
+
+		public static string ToHtml(this SurfaceBase surface)
+		{
+			var sbText = new StringBuilder();
+			var cellpos = 0;
+			var colors = new List<(Color, Color)>();
+			var colorDict = new Dictionary<(Color, Color), int>();
+			var nextColor = 0;
+
+			sbText.Append("<p>");
+			for (var iRow = 0; iRow < surface.Height; iRow++)
+			{
+				while (true)
+				{
+					var (run, fg, bg, isRowEnd) = GetRun(surface, ref cellpos);
+					if (!colorDict.TryGetValue((fg, bg), out int iColor))
+					{
+						iColor = nextColor++;
+						colorDict[(fg, bg)] = iColor;
+						colors.Add((fg, bg));
+					}
+
+					sbText.Append($"<span class=\"ae{iColor:000}\">");
+					sbText.Append(run);
+					sbText.Append($"</span>");
+					if (isRowEnd)
+					{
+						break;
+					}
+				}
+				sbText.Append("<br />" + Environment.NewLine);
+			}
+
+			sbText.Append("</p>" + Environment.NewLine);
+
+			var sbStyles = new StringBuilder(
+				"<html>" + Environment.NewLine +
+				"<head>" + Environment.NewLine +
+				"<style>" + Environment.NewLine);
+			for (var i = 0; i < colors.Count; i++)
+			{
+				var (fg, bg) = colors[i];
+				sbStyles.Append(
+					$".ae{i:000} {{font-family: monospace; color: rgb({fg.R},{fg.G},{fg.B}); background-color: rgb({bg.R},{bg.G},{bg.B});}}" +
+				    Environment.NewLine);
+			}
+
+			sbStyles.Append("</style>" + Environment.NewLine + "</head>" + Environment.NewLine);
+			return sbStyles.ToString() + sbText + "</body>" + Environment.NewLine + "</html>";
+		}
+
+		private static (string run, Color fg, Color bg, bool isRowEnd) GetRun(SurfaceBase surface, ref int cellpos)
+		{
+			var row = cellpos / surface.Width;
+			var cell = surface.Cells[cellpos];
+			var fg = cell.Foreground;
+			var bg = cell.Background;
+			var nextRow = (row + 1) * surface.Width;
+			var run = new StringBuilder();
+
+			while (true)
+			{
+				cell = surface.Cells[cellpos];
+
+				if (cell.Foreground != fg || cell.Background != bg)
+				{
+					return (run.ToString(), fg, bg, false);
+				}
+				var ch = cell.Glyph == 0 ? "&nbsp" : ((char)cell.Glyph).ToString();
+				run.Append(ch);
+				if (++cellpos == nextRow)
+				{
+					return (run.ToString(), fg, bg, true);
+				}
+			}
 		}
 
 		public static SurfaceBase Flatten(this ScreenObject obj, bool fCrop = true)

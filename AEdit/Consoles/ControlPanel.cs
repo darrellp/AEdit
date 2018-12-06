@@ -28,6 +28,7 @@ namespace AEdit.Consoles
 			("Delete", (s, a) => Main.DeleteSelected()),
 			("Copy", (s, a) => Main.CopySelected()),
 			("SCopy", (s, a) => Main.CopyScreen()),
+			("HCopy", (s, a) => Main.CopyHtml()),
 			("Apply", (s, a) =>
 			{
 				if (Selected != null)

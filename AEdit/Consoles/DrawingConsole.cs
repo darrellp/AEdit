@@ -111,13 +111,11 @@ namespace AEdit.Consoles
 				if (info.IsKeyPressed(Keys.Z))
 				{
 					PerformUndo();
-					Program.AETraceLine("Undoing");
 					return true;
 				}
 
 				if (info.IsKeyPressed(Keys.Y))
 				{
-					Program.AETraceLine("Redoing");
 					PerformRedo();
 					return true;
 				}

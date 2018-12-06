@@ -120,6 +120,19 @@ namespace AEdit.Consoles
 				Children.Add(Drawing);
 			}
 		}
+
+		public void CopyHtml()
+		{
+			Children.Remove(Drawing);
+			try
+			{
+				Clipboard.SetText(this.Flatten().ToHtml());
+			}
+			finally
+			{
+				Children.Add(Drawing);
+			}
+		}
 		#endregion
 	}
 }
