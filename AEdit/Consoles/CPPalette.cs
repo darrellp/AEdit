@@ -1,22 +1,21 @@
 ﻿using System.Linq;
 using AEdit.Windows;
 using Microsoft.Xna.Framework;
-using SadConsole;
 using SadConsole.Input;
 using Console = SadConsole.Console;
 
 namespace AEdit.Consoles
 {
-	class MyPalette : Console
+	internal class CPPalette : Console
 	{
-		private static MyPalette _singleton;
-		public static MyPalette Singleton
+		private static CPPalette _singleton;
+		public static CPPalette Singleton
 		{
 			get
 			{
 				if (_singleton == null)
 				{
-					_singleton = new MyPalette(ColorPicker.WidthConst - 2, 1);
+					_singleton = new CPPalette(ColorPicker.WidthConst - 2, 1);
 				}
 
 				return _singleton;
@@ -25,7 +24,7 @@ namespace AEdit.Consoles
 
 		public ColorPicker ColorPicker { get; set; }
 
-		private MyPalette(int width, int height) : base(width, height)
+		private CPPalette(int width, int height) : base(width, height)
 		{
 			Fill(Color.Transparent, Color.Transparent, ' ');
 		}

@@ -89,7 +89,7 @@ namespace AEdit.Windows
 			button.Click += (btn, args) =>
 			{
 				Hide();
-				MyPalette.Singleton.InsertMyPaletteColor(CurColor);
+				CPPalette.Singleton.InsertMyPaletteColor(CurColor);
 				fn(this);
 			};
 
@@ -100,9 +100,9 @@ namespace AEdit.Windows
 			UpdateColorSwatch();
 			Add(_colorSwatch);
 			
-			MyPalette.Singleton.Position = new Point(1, Height - 3);
-			MyPalette.Singleton.ColorPicker = this;
-			Children.Add(MyPalette.Singleton);
+			CPPalette.Singleton.Position = new Point(1, Height - 3);
+			CPPalette.Singleton.ColorPicker = this;
+			Children.Add(CPPalette.Singleton);
 		}
 
 		public Color CurColor
@@ -132,7 +132,7 @@ namespace AEdit.Windows
 
 		public override bool ProcessMouse(MouseConsoleState state)
 		{
-			if (MyPalette.Singleton.ProcessMouse(state))
+			if (CPPalette.Singleton.ProcessMouse(state))
 			{
 				return true;
 			}
