@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+using AEdit.Consoles;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Controls;
+using SadConsole.Input;
 using SadConsole.Themes;
+using Console = SadConsole.Console;
 
 namespace AEdit.Windows
 {
@@ -13,10 +18,13 @@ namespace AEdit.Windows
 		private readonly ScrollBar _green;
 		private readonly ScrollBar _blue;
 		private readonly ScrollBar _alpha;
+		public const int WidthConst = 130;
+		public const int HeightConst = 9;
 
-		public ColorPicker(Action<ColorPicker> fn) : base(130, 8)
+		public ColorPicker(Action<ColorPicker> fn) : base(WidthConst, HeightConst)
 		{
 			Title = "Color Picker";
+			IsExclusiveMouse = false;
 			Center();
 
 			_red = ScrollBar.Create(Orientation.Horizontal, 123);
@@ -73,7 +81,7 @@ namespace AEdit.Windows
 
 			var button = new Button(9, 1)
 			{
-				Position = new Point(4, 6),
+				Position = new Point(4, Height - 2),
 				Text = "Save"
 			};
 			Add(button);
@@ -81,15 +89,20 @@ namespace AEdit.Windows
 			button.Click += (btn, args) =>
 			{
 				Hide();
+				MyPalette.Singleton.InsertMyPaletteColor(CurColor);
 				fn(this);
 			};
 
-			_colorSwatch = new DrawingSurface(125, 1)
+			_colorSwatch = new DrawingSurface(Width - 2, 1)
 			{
-				Position = new Point(2, 5)
+				Position = new Point(1, Height - 4)
 			};
 			UpdateColorSwatch();
 			Add(_colorSwatch);
+			
+			MyPalette.Singleton.Position = new Point(1, Height - 3);
+			MyPalette.Singleton.ColorPicker = this;
+			Children.Add(MyPalette.Singleton);
 		}
 
 		public Color CurColor
@@ -114,7 +127,33 @@ namespace AEdit.Windows
 
 		private void UpdateColorSwatch()
 		{
-			_colorSwatch.Surface.Print(0, 0, new string(' ', 123), Colors.White, CurColor);
+			_colorSwatch.Surface.Print(0, 0, new string(' ', Width - 2), Colors.White, CurColor);
+		}
+
+		public override bool ProcessMouse(MouseConsoleState state)
+		{
+			if (MyPalette.Singleton.ProcessMouse(state))
+			{
+				return true;
+			}
+			if (base.ProcessMouse(state) || IsExclusiveMouse)
+			{
+				if (CapturedControl != null)
+					CapturedControl.ProcessMouse(state);
+
+				else
+				{
+					foreach (var control in _controls)
+					{
+						if (control.IsVisible && control.ProcessMouse(state))
+							break;
+					}
+				}
+
+				return true;
+			}
+
+			return false;
 		}
 	}
 }

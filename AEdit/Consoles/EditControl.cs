@@ -11,5 +11,13 @@ namespace AEdit.Consoles
 		public virtual EditMode Mode => EditMode.Null;
 		public abstract bool Apply(EditObject edit);
 		public abstract object GetParmValue(string parm);
+
+		public virtual void Enable(bool doEnable)
+		{
+			foreach (var control in Controls)
+			{
+				control.IsEnabled = doEnable;
+			}
+		}
 	}
 }

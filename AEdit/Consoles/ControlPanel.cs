@@ -6,6 +6,7 @@ using SadConsole.Themes;
 using static AEdit.AEGlobals;
 using static AEdit.Program;
 using static AEdit.Undo.Undo;
+using Console = SadConsole.Console;
 
 namespace AEdit.Consoles
 {
@@ -13,7 +14,8 @@ namespace AEdit.Consoles
 	{
 		#region Private variables
 		private const int ButtonWidth = 10;
-		private const int LayerHeight = 20;
+		private const int LayerHeight = 19;
+		private const int BelowLayers = 0;
 
 		private static readonly (string, EventHandler)[] ButtonInfo = new (string, EventHandler)[]
 		{
@@ -45,8 +47,7 @@ namespace AEdit.Consoles
 		};
 
 		private static readonly int ButtonRowCount = (ButtonInfo.Length + 1) / 2;
-
-		private static readonly int ModeControlHeight = DefaultHeight - ButtonRowCount - LayerHeight;
+		private static readonly int ModeControlHeight = DefaultHeight - ButtonRowCount - LayerHeight - BelowLayers;
 		private static readonly EditControl[] ModeControlPanels =
 		{
 			new PaintControls(DefaultControlWidth, ModeControlHeight),
@@ -71,9 +72,13 @@ namespace AEdit.Consoles
 
 			var layers = new LayersControl(width, LayerHeight)
 			{
-				Position = new Point(0, height - LayerHeight)
+				Position = new Point(0, height - LayerHeight - BelowLayers)
 			};
 			Add(layers);
+		}
+
+		private void _palette_MouseButtonClicked(object sender, SadConsole.Input.MouseEventArgs e)
+		{
 		}
 
 		public void InstallModeSpecificControls(EditMode mode)
@@ -131,6 +136,16 @@ namespace AEdit.Consoles
 		#endregion
 
 		#region Operations
+		public void Enable(bool doEnable)
+		{
+			foreach (var control in Controls)
+			{
+				control.IsEnabled = doEnable;
+			}
+
+			_modeSpecificControls.Enable(false);
+		}
+
 		public void UpdateHandler()
 		{
 			Drawing.Handler.Update(_modeSpecificControls);
