@@ -2,11 +2,11 @@
 using AEdit.Undo;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using SadConsole.Controls;
 using SadConsole.Themes;
 using static AEdit.AEGlobals;
 using static AEdit.Program;
 using static AEdit.Undo.Undo;
-using Console = SadConsole.Console;
 
 namespace AEdit.Consoles
 {
@@ -70,16 +70,32 @@ namespace AEdit.Consoles
 				panel.Position = new Point(0, ButtonRowCount);
 			}
 
-			var layers = new LayersControl(width, LayerHeight)
+			var layers = new LayersControl(width - 1, LayerHeight)
 			{
 				Position = new Point(0, height - LayerHeight - BelowLayers)
 			};
 			Add(layers);
+
+			var btnUp = new Button(1, 1)
+			{
+				Text = "\x1E",
+				Position = new Point(width - 1, height - LayerHeight - BelowLayers)
+			};
+			btnUp.Click += BtnUp_Click;
+			Add(btnUp);
+
+			var btnDown = new Button(1, 1)
+			{
+				Text = "\x1F",
+				Position = new Point(width - 1, height - LayerHeight - BelowLayers + 1)
+			};
+			btnDown.Click += BtnDown_Click;
+			Add(btnDown);
+			
 		}
 
-		private void _palette_MouseButtonClicked(object sender, SadConsole.Input.MouseEventArgs e)
-		{
-		}
+		private void BtnUp_Click(object sender, EventArgs e) => DoRaiseEditEvent(Selected, EditAction.MoveUp);
+		private void BtnDown_Click(object sender, EventArgs e) => DoRaiseEditEvent(Selected, EditAction.MoveDown);
 
 		public void InstallModeSpecificControls(EditMode mode)
 		{
@@ -115,7 +131,7 @@ namespace AEdit.Consoles
 
 			foreach (var (title, handler) in ButtonInfo)
 			{
-				var btn = new SadConsole.Controls.Button(ButtonWidth, 1)
+				var btn = new Button(ButtonWidth, 1)
 				{
 					Text = title,
 					Position = new Point(col, row)

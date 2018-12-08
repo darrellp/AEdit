@@ -9,7 +9,9 @@ namespace AEdit.Consoles
 		Remove,
 		Select,
 		Deselect,
-		Clear
+		Clear,
+		MoveUp,
+		MoveDown
 	}
 
 	internal class EditObjectEventArgs : EventArgs

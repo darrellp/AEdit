@@ -56,6 +56,7 @@ namespace AEdit.Consoles
 		{
 			Drawing = new DrawingConsole(width, height);
 			Children.Add(Drawing);
+			RaiseEditEvent += OnRaiseEditEvent;
 		}
 		#endregion
 
@@ -131,6 +132,37 @@ namespace AEdit.Consoles
 			{
 				Children.Add(Drawing);
 			}
+		}
+		#endregion
+
+		#region Handlers
+		private void OnRaiseEditEvent(object sender, EditObjectEventArgs e)
+		{
+			switch (e.Action)
+			{
+				case EditAction.MoveUp:
+					MoveSelected(true);
+					break;
+
+				case EditAction.MoveDown:
+					MoveSelected(false);
+					break;
+			}
+		}
+
+		private void MoveSelected(bool isUp)
+		{
+			if (Selected == null)
+			{
+				return;
+			}
+			var iSelected = Children.IndexOf(Selected);
+			if (isUp && iSelected == 0 || !isUp && iSelected == Children.Count - 1)
+			{
+				return;
+			}
+			Children.Remove(Selected);
+			Children.Insert(iSelected + (isUp ? -1 : 1), Selected);
 		}
 		#endregion
 	}
