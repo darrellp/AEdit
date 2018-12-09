@@ -4,10 +4,10 @@ namespace AEdit.Undo
 {
 	class UndoEventArgs : EventArgs
 	{
-		public IUndoRecord UndoRecord { get; private set; }
-		public bool IsUndo { get; private set; }
+		public IApplyRecord UndoRecord { get; }
+		public bool IsUndo { get; }
 
-		public UndoEventArgs(IUndoRecord undoRecord, bool isUndo)
+		public UndoEventArgs(IApplyRecord undoRecord, bool isUndo)
 		{
 			UndoRecord = undoRecord;
 			IsUndo = isUndo;

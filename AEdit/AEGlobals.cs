@@ -1,5 +1,6 @@
 using System;
 using AEdit.Consoles;
+using AEdit.Undo;
 
 namespace AEdit
 {
@@ -24,6 +25,18 @@ namespace AEdit
 			if (handler != null)
 			{
 				var args = new EditObjectEventArgs(edit, action, childIndex);
+				handler(Main, args);
+			}
+		}
+
+		public static event EventHandler<UndoEventArgs> RaiseUndoEvent;
+		public static void DoRaiseUndoEvent(IApplyRecord undoRecord, bool isUndo)
+		{
+			var handler = RaiseUndoEvent;
+
+			if (handler != null)
+			{
+				var args = new UndoEventArgs(undoRecord, isUndo);
 				handler(Main, args);
 			}
 		}

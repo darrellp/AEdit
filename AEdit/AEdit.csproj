@@ -139,6 +139,7 @@
     <Compile Include="Stepper.cs" />
     <Compile Include="Undo\MoveRecord.cs" />
     <Compile Include="Undo\Undo.cs" />
+    <Compile Include="Undo\UndoEventArgs.cs" />
     <Compile Include="Windows\ColorPicker.cs" />
   </ItemGroup>
   <ItemGroup />

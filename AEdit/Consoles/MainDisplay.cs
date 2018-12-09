@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using AEdit.Undo;
 using Microsoft.Xna.Framework;
@@ -49,6 +50,7 @@ namespace AEdit.Consoles
 		}
 
 		public DrawingConsole Drawing { get; }
+		public int EditCount => Children.Count - 1;
 		#endregion
 
 		#region Constructor
@@ -57,6 +59,7 @@ namespace AEdit.Consoles
 			Drawing = new DrawingConsole(width, height);
 			Children.Add(Drawing);
 			RaiseEditEvent += OnRaiseEditEvent;
+			RaiseUndoEvent += MainDisplay_RaiseUndoEvent;
 		}
 		#endregion
 
@@ -68,10 +71,8 @@ namespace AEdit.Consoles
 			AddUndoRecord(insertRecord);
 			// The last child is "on top".  We want the new object to be above
 			// the top EditObject but still below the drawing console.
-			Children.Insert(Children.Count - 1, editObject);
 			Drawing.Clear();
-			DoRaiseEditEvent(editObject, EditAction.Add);
-			Selected = editObject;
+			ApplyInsert(editObject);
 		}
 		#endregion
 
@@ -93,9 +94,9 @@ namespace AEdit.Consoles
 			AddUndoRecord(new DeleteRecord(childIndex, edit));
 			Children.Remove(edit);
 			DoRaiseEditEvent(edit, EditAction.Remove, childIndex);
-			if (Main.Children.Count > 1)
+			if (Main.EditCount > 0)
 			{
-				Selected = (EditObject)Main.Children[Math.Min(childIndex, Main.Children.Count - 2)];
+				Selected = (EditObject)Main.Children[Math.Min(childIndex, Main.EditCount - 1)];
 			}
 		}
 
@@ -157,12 +158,56 @@ namespace AEdit.Consoles
 				return;
 			}
 			var iSelected = Children.IndexOf(Selected);
-			if (isUp && iSelected == 0 || !isUp && iSelected == Children.Count - 1)
+			if (isUp && iSelected == 0 || !isUp && iSelected == EditCount)
 			{
 				return;
 			}
 			Children.Remove(Selected);
 			Children.Insert(iSelected + (isUp ? -1 : 1), Selected);
+		}
+
+		private void MainDisplay_RaiseUndoEvent(object sender, UndoEventArgs e)
+		{
+			switch (e.UndoRecord)
+			{
+				case InsertRecord ir:
+					HandleInsert(ir.Edit, e.IsUndo);
+					break;
+			}
+		}
+
+		private void HandleInsert(EditObject edit, bool IsUndo)
+		{
+			if (IsUndo)
+			{
+				UndoInsert(edit);
+			}
+			else
+			{
+				ApplyInsert(edit);
+			}
+			// Don't count the drawing console
+		}
+
+		private void UndoInsert(EditObject edit)
+		{
+			var cUndos = Main.EditCount;
+			Debug.Assert(cUndos != 0, "Trying to undo when there's no edit in the picture");
+
+
+			DoRaiseEditEvent(edit, EditAction.Remove, cUndos - 1);
+			Main.Children.Remove(edit);
+			if ((Selected == null || Selected == edit) && Main.Children.Count > 1)
+			{
+				Selected = (EditObject)Main.Children[cUndos - 2];
+			}
+		}
+
+		private void ApplyInsert(EditObject edit)
+		{
+			Children.Insert(EditCount, edit);
+			DoRaiseEditEvent(edit, EditAction.Add, EditCount - 1);
+			Selected = edit;
 		}
 		#endregion
 	}
