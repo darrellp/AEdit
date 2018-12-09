@@ -182,8 +182,48 @@ namespace AEdit.Consoles
 				case DeleteRecord dr:
 					HandleDelete(dr, e.IsUndo);
 					break;
+
+				case ApplyRecord ar:
+					HandleApply(ar, e.IsUndo);
+					break;
 			}
 		}
+
+		#region Apply
+		private void HandleApply(ApplyRecord ar, bool isUndo)
+		{
+			if (isUndo)
+			{
+				UndoApply(ar);
+			}
+			else
+			{
+				ApplyApply(ar);
+			}
+		}
+
+		public bool ApplyApply(ApplyRecord ar)
+		{
+			var old = Ctrls.EditControls.GetParameterInfo();
+			Selected = ar.AppliedEdit;
+			Main.Mode = Mode;
+			Ctrls.EditControls.SetParameters(ar.ParmsNew);
+			bool ret = Ctrls.EditControls.Apply(ar.AppliedEdit);
+			if (!ret)
+			{
+				Ctrls.EditControls.SetParameters(old);
+			}
+			return ret;
+		}
+
+		private void UndoApply(ApplyRecord ar)
+		{
+			Selected = ar.AppliedEdit;
+			Main.Mode = Mode;
+			Ctrls.EditControls.SetParameters(ar.ParmsOld);
+			Ctrls.EditControls.Apply(Selected);
+		}
+		#endregion
 
 		#region Delete
 		private void HandleDelete(DeleteRecord dr, bool isUndo)

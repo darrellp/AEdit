@@ -5,33 +5,27 @@ namespace AEdit.Undo
 {
 	internal class ApplyRecord : IApplyRecord
 	{
-		private readonly EditObject _appliedEdit;
-		private readonly EditMode _mode;
-		private readonly object _parmsOld;
-		private readonly object _parmsNew;
+		public EditObject AppliedEdit { get; }
+		public EditMode Mode { get; }
+		public object ParmsOld { get; }
+		public object ParmsNew { get; }
 
 		public ApplyRecord(EditObject appliedEdit, EditMode mode, object parmsOld, object parmsNew)
 		{
-			_appliedEdit = appliedEdit;
-			_mode = mode;
-			_parmsOld = parmsOld;
-			_parmsNew = parmsNew;
+			AppliedEdit = appliedEdit;
+			Mode = mode;
+			ParmsOld = parmsOld;
+			ParmsNew = parmsNew;
 		}
 
 		public void Undo()
 		{
-			Selected = _appliedEdit;
-			Main.Mode = _mode;
-			Ctrls.EditControls.SetParameters(_parmsOld);
-			Ctrls.EditControls.Apply(Selected);
+			DoRaiseUndoEvent(this, true);
 		}
 
 		public void Apply()
 		{
-			Selected = _appliedEdit;
-			Main.Mode = _mode;
-			Ctrls.EditControls.SetParameters(_parmsNew);
-			Ctrls.EditControls.Apply(Selected);
+			DoRaiseUndoEvent(this, false);
 		}
 	}
 }
