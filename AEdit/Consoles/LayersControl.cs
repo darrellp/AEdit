@@ -26,9 +26,6 @@ namespace AEdit.Consoles
 					RemoveEdit(e.ChildIndex);
 					break;
 
-				case EditAction.Deselect:
-					break;
-
 				case EditAction.Select:
 					if (SelectedItem != e.Edit)
 					{
@@ -40,17 +37,13 @@ namespace AEdit.Consoles
 					Items.Clear();
 					break;
 
-				case EditAction.MoveUp:
-					MoveUp();
-					break;
+				//case EditAction.MoveUp:
+				//	MoveUp();
+				//	break;
 
-				case EditAction.MoveDown:
-					MoveDown();
-					break;
-
-				default:
-					Debug.Assert(false, "Unhandled Edit event");
-					break;
+				//case EditAction.MoveDown:
+				//	MoveDown();
+				//	break;
 			}
 		}
 

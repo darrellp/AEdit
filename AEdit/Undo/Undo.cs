@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {

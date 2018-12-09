@@ -59,8 +59,6 @@ namespace AEdit.Consoles
 		{
 			Drawing = new DrawingConsole(width, height);
 			Children.Add(Drawing);
-			RaiseEditEvent += OnRaiseEditEvent;
-			RaiseUndoEvent += MainDisplay_RaiseUndoEvent;
 		}
 		#endregion
 
@@ -81,7 +79,7 @@ namespace AEdit.Consoles
 		public void Clear()
 		{
 			Children.Clear();
-			Children.Add(Main.Drawing);
+			Children.Add(Drawing);
 		}
 
 		public void DeleteSelected()
@@ -134,60 +132,111 @@ namespace AEdit.Consoles
 		#endregion
 
 		#region Handlers
-		private void OnRaiseEditEvent(object sender, EditObjectEventArgs e)
-		{
-			switch (e.Action)
-			{
-				case EditAction.MoveUp:
-					MoveSelected(true);
-					break;
+		//private void OnRaiseEditEvent(object sender, EditObjectEventArgs e)
+		//{
+		//	switch (e.Action)
+		//	{
+		//		case EditAction.MoveUp:
+		//			ChangeZOrder(true);
+		//			break;
 
-				case EditAction.MoveDown:
-					MoveSelected(false);
-					break;
-			}
-		}
+		//		case EditAction.MoveDown:
+		//			ChangeZOrder(false);
+		//			break;
+		//	}
+		//}
 
-		private void MoveSelected(bool isUp)
+		public void ChangeZOrder(bool isUp)
 		{
 			if (Selected == null)
 			{
 				return;
 			}
 			var iSelected = Children.IndexOf(Selected);
-			if (isUp && iSelected == 0 || !isUp && iSelected == EditCount)
+			var iTo = iSelected + (isUp ? -1 : 1);
+			if (iTo < 0 || iTo >= EditCount)
 			{
 				return;
 			}
-			Children.Remove(Selected);
-			Children.Insert(iSelected + (isUp ? -1 : 1), Selected);
+			var record = new ZOrderRecord(iSelected, iTo);
+			TakeAction(record);
+			AddUndoRecord(record);
+			DoRaiseEditEvent((EditObject)Children[iTo], isUp ? EditAction.MoveUp : EditAction.MoveDown, iSelected);
 		}
 
-		private void MainDisplay_RaiseUndoEvent(object sender, UndoEventArgs e)
+		public void TakeAction(EditRecord record, bool isUndo = false)
 		{
-			switch (e.UndoRecord)
+			switch (record)
 			{
 				case InsertRecord ir:
-					HandleInsert(ir.Edit, e.IsUndo);
+					HandleInsert(ir.Edit, isUndo);
 					break;
 
 				case ClearRecord cr:
-					HandleClear(cr, e.IsUndo);
+					HandleClear(cr, isUndo);
 					break;
 
 				case MoveRecord mr:
-					HandleMove(mr, e.IsUndo);
+					HandleMove(mr, isUndo);
 					break;
 
 				case DeleteRecord dr:
-					HandleDelete(dr, e.IsUndo);
+					HandleDelete(dr, isUndo);
 					break;
 
 				case ApplyRecord ar:
-					HandleApply(ar, e.IsUndo);
+					HandleApply(ar, isUndo);
+					break;
+
+				case ZOrderRecord zr:
+					HandleZOrder(zr, isUndo);
 					break;
 			}
+			DoRaiseUndoEvent(record, isUndo);
 		}
+
+		#region Z Order
+		private void HandleZOrder(ZOrderRecord zr, bool isUndo)
+		{
+			if (isUndo)
+			{
+				UndoZOrder(zr);
+			}
+			else
+			{
+				ApplyZOrder(zr);
+			}
+		}
+
+		private void ApplyZOrder(ZOrderRecord zr)
+		{
+			DoZOrderSwap(zr.NewPos, zr.OldPos);
+		}
+
+		private void UndoZOrder(ZOrderRecord zr)
+		{
+			DoZOrderSwap(zr.OldPos, zr.NewPos);
+		}
+
+		private void DoZOrderSwap(int newPos, int oldPos)
+		{
+			if (oldPos < 0 || oldPos > EditCount - 1 || newPos < 0 || newPos > EditCount - 1)
+			{
+				return;
+			}
+			var isMovingSelection = Children[oldPos] == Selected;
+			var movedEdit = (EditObject)Children[oldPos];
+			Children.Remove(movedEdit);
+			DoRaiseEditEvent(movedEdit, EditAction.Remove, oldPos);
+
+			Children.Insert(newPos, movedEdit);
+			DoRaiseEditEvent(movedEdit, EditAction.Add, newPos);
+			if (isMovingSelection)
+			{
+				Selected = movedEdit;
+			}
+		}
+		#endregion
 
 		#region Apply
 		private void HandleApply(ApplyRecord ar, bool isUndo)
@@ -206,7 +255,7 @@ namespace AEdit.Consoles
 		{
 			var old = Ctrls.EditControls.GetParameterInfo();
 			Selected = ar.AppliedEdit;
-			Main.Mode = Mode;
+			Mode = ar.Mode;
 			Ctrls.EditControls.SetParameters(ar.ParmsNew);
 			bool ret = Ctrls.EditControls.Apply(ar.AppliedEdit);
 			if (!ret)
@@ -219,7 +268,7 @@ namespace AEdit.Consoles
 		private void UndoApply(ApplyRecord ar)
 		{
 			Selected = ar.AppliedEdit;
-			Main.Mode = Mode;
+			Mode = ar.Mode;
 			Ctrls.EditControls.SetParameters(ar.ParmsOld);
 			Ctrls.EditControls.Apply(Selected);
 		}
@@ -245,13 +294,15 @@ namespace AEdit.Consoles
 			Selected = dr.Edit;
 		}
 
-		public void ApplyDelete(DeleteRecord dr)
+		private void ApplyDelete(DeleteRecord dr)
 		{
-			Main.Children.Remove(dr.Edit);
+			var needNewSelection = Children[dr.Index] == Selected;
+
+			Children.Remove(Children[dr.Index]);
 			DoRaiseEditEvent(dr.Edit, EditAction.Remove, dr.Index);
-			if (Main.EditCount > 0)
+			if (EditCount > 0 && needNewSelection)
 			{
-				Selected = (EditObject)Main.Children[Math.Min(dr.Index, Main.EditCount - 1)];
+				Selected = (EditObject)Children[Math.Min(dr.Index, EditCount - 1)];
 			}
 		}
 		#endregion
@@ -269,7 +320,7 @@ namespace AEdit.Consoles
 			}
 		}
 
-		public void ApplyMove(MoveRecord mr)
+		private void ApplyMove(MoveRecord mr)
 		{
 			mr.Edit.Position = mr.End;
 			Selected = mr.Edit;
@@ -333,12 +384,11 @@ namespace AEdit.Consoles
 		{
 			Debug.Assert(EditCount != 0, "Trying to undo when there's no edit in the picture");
 
-
-			DoRaiseEditEvent(edit, EditAction.Remove, EditCount - 1);
-			Main.Children.Remove(edit);
+			Children.Remove(edit);
+			DoRaiseEditEvent(edit, EditAction.Remove, EditCount);
 			if ((Selected == null || Selected == edit) && EditCount > 0)
 			{
-				Selected = (EditObject)Main.Children[EditCount - 1];
+				Selected = (EditObject)Children[EditCount - 1];
 			}
 		}
 

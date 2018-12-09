@@ -3,23 +3,15 @@ using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	class ZOrderRecord : IUndoRecord
+	class ZOrderRecord : EditRecord
 	{
-		private bool _isUp;
+		public int OldPos { get; }
+		public int NewPos { get; }
 
-		public ZOrderRecord(bool isUp)
+		public ZOrderRecord(int oldPos, int newPos)
 		{
-			_isUp = isUp;
-		}
-
-		public void Undo()
-		{
-			DoRaiseEditEvent(Selected, _isUp ? EditAction.MoveDown : EditAction.MoveUp);
-		}
-
-		public void Redo()
-		{
-			DoRaiseEditEvent(Selected, _isUp ? EditAction.MoveUp : EditAction.MoveDown);
+			OldPos = oldPos;
+			NewPos = newPos;
 		}
 	}
 }

@@ -12,12 +12,12 @@ namespace AEdit.Undo
 	{
 		public void Undo()
 		{
-			DoRaiseUndoEvent(this, true);
+			Main.TakeAction(this, true);
 		}
 
 		public void Apply()
 		{
-			DoRaiseUndoEvent(this, false);
+			Main.TakeAction(this, false);
 		}
 	}
 }

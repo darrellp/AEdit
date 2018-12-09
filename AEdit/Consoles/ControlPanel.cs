@@ -94,8 +94,8 @@ namespace AEdit.Consoles
 			
 		}
 
-		private void BtnUp_Click(object sender, EventArgs e) => DoRaiseEditEvent(Selected, EditAction.MoveUp);
-		private void BtnDown_Click(object sender, EventArgs e) => DoRaiseEditEvent(Selected, EditAction.MoveDown);
+		private void BtnUp_Click(object sender, EventArgs e) => Main.ChangeZOrder(true);
+		private void BtnDown_Click(object sender, EventArgs e) => Main.ChangeZOrder(false);
 
 		public void InstallModeSpecificControls(EditMode mode)
 		{

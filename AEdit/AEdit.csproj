@@ -140,6 +140,7 @@
     <Compile Include="Undo\MoveRecord.cs" />
     <Compile Include="Undo\Undo.cs" />
     <Compile Include="Undo\UndoEventArgs.cs" />
+    <Compile Include="Undo\ZOrderRecord.cs" />
     <Compile Include="Windows\ColorPicker.cs" />
   </ItemGroup>
   <ItemGroup />
