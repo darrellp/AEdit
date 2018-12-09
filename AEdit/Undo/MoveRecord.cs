@@ -7,27 +7,25 @@ namespace AEdit.Undo
 {
 	class MoveRecord : IApplyRecord
 	{
-		private readonly Point _start;
-		private readonly Point _end;
-		private readonly EditObject _edit;
+		public Point Start { get; }
+		public Point End { get; }
+		public EditObject Edit { get; }
 
 		public MoveRecord(Point start, Point end, EditObject edit)
 		{
-			_start = start;
+			Start = start;
 			Debug.Assert(start != end, "Start and end identical in MoveRecord constructor");
-			_end = end;
-			_edit = edit;
+			End = end;
+			Edit = edit;
 		}
 		public void Undo()
 		{
-			_edit.Position = _start;
-			Selected = _edit;
+			DoRaiseUndoEvent(this, true);
 		}
 
 		public void Apply()
 		{
-			_edit.Position = _end;
-			Selected = _edit;
+			DoRaiseUndoEvent(this, false);
 		}
 	}
 }

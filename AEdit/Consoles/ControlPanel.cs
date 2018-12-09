@@ -24,8 +24,7 @@ namespace AEdit.Consoles
 			("Clear", (s, a) =>
 			{
 				AddUndoRecord(new ClearRecord());
-				Main.Clear();
-				DoRaiseEditEvent(null, EditAction.Clear);
+				Main.ApplyClear();
 			}),
 			("Delete", (s, a) => Main.DeleteSelected()),
 			("Copy", (s, a) => Main.CopySelected()),

@@ -176,25 +176,57 @@ namespace AEdit.Consoles
 					break;
 
 				case ClearRecord cr:
-					HandleClear(cr.ClearedEdits, cr.SelectedObject, e.IsUndo);
+					HandleClear(cr, e.IsUndo);
+					break;
+
+				case MoveRecord mr:
+					HandleMove(mr, e.IsUndo);
 					break;
 			}
 		}
 
-		private void HandleClear(List<EditObject> ClearedEdits, EditObject SelectedObject, bool IsUndo)
+		#region Move
+		private void HandleMove(MoveRecord mr, bool isUndo)
 		{
-			if (IsUndo)
+			if (isUndo)
 			{
-				UndoClear(ClearedEdits, SelectedObject);
+				UndoMove(mr);
 			}
 			else
 			{
-				ApplyClear(ClearedEdits, SelectedObject);
+				ApplyMove(mr);
 			}
 		}
 
-		private void ApplyClear(List<EditObject> clearedEdits, EditObject selectedObject)
+		public void ApplyMove(MoveRecord mr)
 		{
+			mr.Edit.Position = mr.End;
+			Selected = mr.Edit;
+		}
+
+		private void UndoMove(MoveRecord mr)
+		{
+			mr.Edit.Position = mr.Start;
+			Selected = mr.Edit;
+		}
+		#endregion
+
+		#region Clear
+		private void HandleClear(ClearRecord cr, bool isUndo)
+		{
+			if (isUndo)
+			{
+				UndoClear(cr.ClearedEdits, cr.SelectedObject);
+			}
+			else
+			{
+				ApplyClear();
+			}
+		}
+
+		public void ApplyClear()
+		{
+
 			Children.Clear();
 			Children.Add(Drawing);
 			DoRaiseEditEvent(null, EditAction.Clear);
@@ -211,10 +243,12 @@ namespace AEdit.Consoles
 			Children.Add(Drawing);
 			Selected = selectedObject;
 		}
+		#endregion
 
-		private void HandleInsert(EditObject edit, bool IsUndo)
+		#region Insert
+		private void HandleInsert(EditObject edit, bool isUndo)
 		{
-			if (IsUndo)
+			if (isUndo)
 			{
 				UndoInsert(edit);
 			}
@@ -233,7 +267,7 @@ namespace AEdit.Consoles
 			Main.Children.Remove(edit);
 			if ((Selected == null || Selected == edit) && EditCount > 0)
 			{
-				Selected = (EditObject)Main.Children[EditCount - 2];
+				Selected = (EditObject)Main.Children[EditCount - 1];
 			}
 		}
 
@@ -243,6 +277,7 @@ namespace AEdit.Consoles
 			DoRaiseEditEvent(edit, EditAction.Add, EditCount - 1);
 			Selected = edit;
 		}
+		#endregion
 		#endregion
 	}
 }
