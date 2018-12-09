@@ -6,30 +6,23 @@ namespace AEdit.Undo
 {
 	internal class DeleteRecord : IApplyRecord
 	{
-		private readonly int _index;
-		private readonly EditObject _edit;
+		public int Index { get; }
+		public EditObject Edit { get; }
 
 		public DeleteRecord(int index, EditObject edit)
 		{
-			_index = index;
-			_edit = edit;
+			Index = index;
+			Edit = edit;
 		}
 
 		public void Undo()
 		{
-			Main.Children.Insert(_index, _edit);
-			DoRaiseEditEvent(_edit, EditAction.Add, _index);
-			Selected = _edit;
+			DoRaiseUndoEvent(this, true);
 		}
 
 		public void Apply()
 		{
-			Main.Children.Remove(_edit);
-			DoRaiseEditEvent(_edit, EditAction.Remove, _index);
-			if (Main.Children.Count > 1)
-			{
-				Selected = (EditObject)Main.Children[Math.Min(_index, Main.Children.Count - 2)];
-			}
+			DoRaiseUndoEvent(this, false);
 		}
 	}
 }

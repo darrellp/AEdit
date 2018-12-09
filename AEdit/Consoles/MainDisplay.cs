@@ -92,13 +92,9 @@ namespace AEdit.Consoles
 			}
 			var edit = Selected;
 			var childIndex = Children.IndexOf(edit);
-			AddUndoRecord(new DeleteRecord(childIndex, edit));
-			Children.Remove(edit);
-			DoRaiseEditEvent(edit, EditAction.Remove, childIndex);
-			if (Main.EditCount > 0)
-			{
-				Selected = (EditObject)Main.Children[Math.Min(childIndex, Main.EditCount - 1)];
-			}
+			var record = new DeleteRecord(childIndex, edit);
+			AddUndoRecord(record);
+			ApplyDelete(record);
 		}
 
 		public void CopySelected()
@@ -182,8 +178,43 @@ namespace AEdit.Consoles
 				case MoveRecord mr:
 					HandleMove(mr, e.IsUndo);
 					break;
+
+				case DeleteRecord dr:
+					HandleDelete(dr, e.IsUndo);
+					break;
 			}
 		}
+
+		#region Delete
+		private void HandleDelete(DeleteRecord dr, bool isUndo)
+		{
+			if (isUndo)
+			{
+				UndoDelete(dr);
+			}
+			else
+			{
+				ApplyDelete(dr);
+			}
+		}
+
+		private void UndoDelete(DeleteRecord dr)
+		{
+			Children.Insert(dr.Index, dr.Edit);
+			DoRaiseEditEvent(dr.Edit, EditAction.Add, dr.Index);
+			Selected = dr.Edit;
+		}
+
+		public void ApplyDelete(DeleteRecord dr)
+		{
+			Main.Children.Remove(dr.Edit);
+			DoRaiseEditEvent(dr.Edit, EditAction.Remove, dr.Index);
+			if (Main.EditCount > 0)
+			{
+				Selected = (EditObject)Main.Children[Math.Min(dr.Index, Main.EditCount - 1)];
+			}
+		}
+		#endregion
 
 		#region Move
 		private void HandleMove(MoveRecord mr, bool isUndo)
