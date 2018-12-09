@@ -7,32 +7,23 @@ namespace AEdit.Undo
 {
 	class ClearRecord : IApplyRecord
 	{
-		private readonly List<EditObject> _clearedEdits;
-		private readonly EditObject _selected;
+		public List<EditObject> ClearedEdits { get; }
+		public EditObject SelectedObject { get; }
 
 		public ClearRecord()
 		{
-			_clearedEdits = Main.Children.Take(Main.Children.Count - 1).Cast<EditObject>().ToList();
-			_selected = Selected;
+			ClearedEdits = Main.Children.Take(Main.EditCount).Cast<EditObject>().ToList();
+			SelectedObject = Selected;
 		}
 
 		public void Undo()
 		{
-			Main.Children.Clear();
-			foreach (var edit in _clearedEdits)
-			{
-				Main.Children.Add(edit);
-				DoRaiseEditEvent(edit, EditAction.Add);
-			}
-			Main.Children.Add(Main.Drawing);
-			Selected = _selected;
+			DoRaiseUndoEvent(this, true);
 		}
 
 		public void Apply()
 		{
-			Main.Children.Clear();
-			Main.Children.Add(Main.Drawing);
-			DoRaiseEditEvent(null, EditAction.Clear);
+			DoRaiseUndoEvent(this, false);
 		}
 	}
 }

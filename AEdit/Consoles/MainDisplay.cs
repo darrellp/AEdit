@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using AEdit.Undo;
@@ -173,7 +174,42 @@ namespace AEdit.Consoles
 				case InsertRecord ir:
 					HandleInsert(ir.Edit, e.IsUndo);
 					break;
+
+				case ClearRecord cr:
+					HandleClear(cr.ClearedEdits, cr.SelectedObject, e.IsUndo);
+					break;
 			}
+		}
+
+		private void HandleClear(List<EditObject> ClearedEdits, EditObject SelectedObject, bool IsUndo)
+		{
+			if (IsUndo)
+			{
+				UndoClear(ClearedEdits, SelectedObject);
+			}
+			else
+			{
+				ApplyClear(ClearedEdits, SelectedObject);
+			}
+		}
+
+		private void ApplyClear(List<EditObject> clearedEdits, EditObject selectedObject)
+		{
+			Children.Clear();
+			Children.Add(Drawing);
+			DoRaiseEditEvent(null, EditAction.Clear);
+		}
+
+		private void UndoClear(List<EditObject> clearedEdits, EditObject selectedObject)
+		{
+			Children.Clear();
+			foreach (var edit in clearedEdits)
+			{
+				Children.Add(edit);
+				DoRaiseEditEvent(edit, EditAction.Add);
+			}
+			Children.Add(Drawing);
+			Selected = selectedObject;
 		}
 
 		private void HandleInsert(EditObject edit, bool IsUndo)
@@ -186,20 +222,18 @@ namespace AEdit.Consoles
 			{
 				ApplyInsert(edit);
 			}
-			// Don't count the drawing console
 		}
 
 		private void UndoInsert(EditObject edit)
 		{
-			var cUndos = Main.EditCount;
-			Debug.Assert(cUndos != 0, "Trying to undo when there's no edit in the picture");
+			Debug.Assert(EditCount != 0, "Trying to undo when there's no edit in the picture");
 
 
-			DoRaiseEditEvent(edit, EditAction.Remove, cUndos - 1);
+			DoRaiseEditEvent(edit, EditAction.Remove, EditCount - 1);
 			Main.Children.Remove(edit);
-			if ((Selected == null || Selected == edit) && Main.Children.Count > 1)
+			if ((Selected == null || Selected == edit) && EditCount > 0)
 			{
-				Selected = (EditObject)Main.Children[cUndos - 2];
+				Selected = (EditObject)Main.Children[EditCount - 2];
 			}
 		}
 
