@@ -6,14 +6,14 @@ namespace AEdit.Undo
 	{
 		#region Private Variables
 		// Stack to pop from when undoing
-		private static readonly Stack<IUndoRecord> History = new Stack<IUndoRecord>();
+		private static readonly Stack<IApplyRecord> History = new Stack<IApplyRecord>();
 
 		// Stack to pop from when redoing
-		private static readonly Stack<IUndoRecord> Future = new Stack<IUndoRecord>();
+		private static readonly Stack<IApplyRecord> Future = new Stack<IApplyRecord>();
 		#endregion
 
 		#region Undo operations
-		public static void AddUndoRecord(IUndoRecord record)
+		public static void AddUndoRecord(IApplyRecord record)
 		{
 			History.Push(record);
 			Future.Clear();
@@ -39,7 +39,7 @@ namespace AEdit.Undo
 			}
 			var undoRecord = Future.Pop();
 
-			undoRecord.Redo();
+			undoRecord.Apply();
 			History.Push(undoRecord);
 		}
 		#endregion

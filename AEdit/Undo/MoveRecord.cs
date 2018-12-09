@@ -5,7 +5,7 @@ using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	class MoveRecord : IUndoRecord
+	class MoveRecord : IApplyRecord
 	{
 		private readonly Point _start;
 		private readonly Point _end;
@@ -24,7 +24,7 @@ namespace AEdit.Undo
 			Selected = _edit;
 		}
 
-		public void Redo()
+		public void Apply()
 		{
 			_edit.Position = _end;
 			Selected = _edit;

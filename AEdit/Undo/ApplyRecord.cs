@@ -3,7 +3,7 @@ using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	internal class ApplyRecord : IUndoRecord
+	internal class ApplyRecord : IApplyRecord
 	{
 		private readonly EditObject _appliedEdit;
 		private readonly EditMode _mode;
@@ -26,7 +26,7 @@ namespace AEdit.Undo
 			Ctrls.EditControls.Apply(Selected);
 		}
 
-		public void Redo()
+		public void Apply()
 		{
 			Selected = _appliedEdit;
 			Main.Mode = _mode;

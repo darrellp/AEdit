@@ -5,7 +5,7 @@ using static AEdit.AEGlobals;
 namespace AEdit.Undo
 {
 	// Undoes/Redoes the last EditObject insertion
-	class InsertRecord : IUndoRecord
+	class InsertRecord : IApplyRecord
 	{
 		private EditObject Edit { get; set; }
 
@@ -31,7 +31,7 @@ namespace AEdit.Undo
 
 		}
 
-		public void Redo()
+		public void Apply()
 		{
 			Main.Children.Insert(Main.Children.Count - 1, Edit);
 			DoRaiseEditEvent(Edit, EditAction.Add, Main.Children.Count - 2);

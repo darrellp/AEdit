@@ -4,7 +4,7 @@ using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	internal class DeleteRecord : IUndoRecord
+	internal class DeleteRecord : IApplyRecord
 	{
 		private readonly int _index;
 		private readonly EditObject _edit;
@@ -22,7 +22,7 @@ namespace AEdit.Undo
 			Selected = _edit;
 		}
 
-		public void Redo()
+		public void Apply()
 		{
 			Main.Children.Remove(_edit);
 			DoRaiseEditEvent(_edit, EditAction.Remove, _index);

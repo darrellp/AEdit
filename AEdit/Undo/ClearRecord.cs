@@ -5,7 +5,7 @@ using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	class ClearRecord : IUndoRecord
+	class ClearRecord : IApplyRecord
 	{
 		private readonly List<EditObject> _clearedEdits;
 		private readonly EditObject _selected;
@@ -28,7 +28,7 @@ namespace AEdit.Undo
 			Selected = _selected;
 		}
 
-		public void Redo()
+		public void Apply()
 		{
 			Main.Children.Clear();
 			Main.Children.Add(Main.Drawing);

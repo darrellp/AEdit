@@ -1,8 +1,8 @@
 ﻿namespace AEdit.Undo
 {
-	interface IUndoRecord
+	interface IApplyRecord
 	{
 		void Undo();
-		void Redo();
+		void Apply();
 	}
 }
