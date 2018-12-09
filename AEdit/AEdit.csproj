@@ -132,7 +132,7 @@
     <Compile Include="Undo\ClearRecord.cs" />
     <Compile Include="Undo\DeleteRecord.cs" />
     <Compile Include="Undo\InsertRecord.cs" />
-    <Compile Include="Undo\IApplyRecord.cs" />
+    <Compile Include="Undo\EditRecord.cs" />
     <Compile Include="LineStepper.cs" />
     <Compile Include="program.cs" />
     <Compile Include="SadGeometry.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
@@ -6,14 +7,14 @@ namespace AEdit.Undo
 	{
 		#region Private Variables
 		// Stack to pop from when undoing
-		private static readonly Stack<IApplyRecord> History = new Stack<IApplyRecord>();
+		private static readonly Stack<EditRecord> History = new Stack<EditRecord>();
 
 		// Stack to pop from when redoing
-		private static readonly Stack<IApplyRecord> Future = new Stack<IApplyRecord>();
+		private static readonly Stack<EditRecord> Future = new Stack<EditRecord>();
 		#endregion
 
 		#region Undo operations
-		public static void AddUndoRecord(IApplyRecord record)
+		public static void AddUndoRecord(EditRecord record)
 		{
 			History.Push(record);
 			Future.Clear();
@@ -26,7 +27,6 @@ namespace AEdit.Undo
 				return;
 			}
 			var undoRecord = History.Pop();
-
 			undoRecord.Undo();
 			Future.Push(undoRecord);
 		}
@@ -37,10 +37,9 @@ namespace AEdit.Undo
 			{
 				return;
 			}
-			var undoRecord = Future.Pop();
-
-			undoRecord.Apply();
-			History.Push(undoRecord);
+			var redoRecord = Future.Pop();
+			redoRecord.Apply();
+			History.Push(redoRecord);
 		}
 		#endregion
 	}

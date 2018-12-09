@@ -30,7 +30,7 @@ namespace AEdit
 		}
 
 		public static event EventHandler<UndoEventArgs> RaiseUndoEvent;
-		public static void DoRaiseUndoEvent(IApplyRecord undoRecord, bool isUndo)
+		public static void DoRaiseUndoEvent(EditRecord undoRecord, bool isUndo)
 		{
 			var handler = RaiseUndoEvent;
 

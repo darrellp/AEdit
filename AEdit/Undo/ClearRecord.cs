@@ -5,7 +5,7 @@ using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	class ClearRecord : IApplyRecord
+	internal class ClearRecord : EditRecord
 	{
 		public List<EditObject> ClearedEdits { get; }
 		public EditObject SelectedObject { get; }
@@ -14,16 +14,6 @@ namespace AEdit.Undo
 		{
 			ClearedEdits = Main.Children.Take(Main.EditCount).Cast<EditObject>().ToList();
 			SelectedObject = Selected;
-		}
-
-		public void Undo()
-		{
-			DoRaiseUndoEvent(this, true);
-		}
-
-		public void Apply()
-		{
-			DoRaiseUndoEvent(this, false);
 		}
 	}
 }

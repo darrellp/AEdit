@@ -1,9 +1,8 @@
 ﻿using AEdit.Consoles;
-using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	internal class ApplyRecord : IApplyRecord
+	internal class ApplyRecord : EditRecord
 	{
 		public EditObject AppliedEdit { get; }
 		public EditMode Mode { get; }
@@ -16,16 +15,6 @@ namespace AEdit.Undo
 			Mode = mode;
 			ParmsOld = parmsOld;
 			ParmsNew = parmsNew;
-		}
-
-		public void Undo()
-		{
-			DoRaiseUndoEvent(this, true);
-		}
-
-		public void Apply()
-		{
-			DoRaiseUndoEvent(this, false);
 		}
 	}
 }

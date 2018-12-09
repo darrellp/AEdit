@@ -1,27 +1,15 @@
-﻿using System.Diagnostics;
-using AEdit.Consoles;
-using static AEdit.AEGlobals;
+﻿using AEdit.Consoles;
 
 namespace AEdit.Undo
 {
 	// Undoes/Redoes the last EditObject insertion
-	class InsertRecord : IApplyRecord
+	internal class InsertRecord : EditRecord
 	{
 		public EditObject Edit { get; }
 
 		public InsertRecord(EditObject editObject)
 		{
 			Edit = editObject;
-		}
-
-		public void Undo()
-		{
-			DoRaiseUndoEvent(this, true);
-		}
-
-		public void Apply()
-		{
-			DoRaiseUndoEvent(this, false);
 		}
 	}
 }

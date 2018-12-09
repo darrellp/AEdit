@@ -1,10 +1,8 @@
-﻿using System;
-using AEdit.Consoles;
-using static AEdit.AEGlobals;
+﻿using AEdit.Consoles;
 
 namespace AEdit.Undo
 {
-	internal class DeleteRecord : IApplyRecord
+	internal class DeleteRecord : EditRecord
 	{
 		public int Index { get; }
 		public EditObject Edit { get; }
@@ -13,16 +11,6 @@ namespace AEdit.Undo
 		{
 			Index = index;
 			Edit = edit;
-		}
-
-		public void Undo()
-		{
-			DoRaiseUndoEvent(this, true);
-		}
-
-		public void Apply()
-		{
-			DoRaiseUndoEvent(this, false);
 		}
 	}
 }
