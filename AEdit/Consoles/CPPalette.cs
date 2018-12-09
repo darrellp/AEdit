@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using AEdit.Windows;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using SadConsole;
 using SadConsole.Input;
 using Console = SadConsole.Console;
 
@@ -50,7 +52,11 @@ namespace AEdit.Consoles
 			}
 
 			ColorPicker.CurColor = cell.Background;
-
+			if (!(Global.KeyboardState.IsKeyDown(Keys.LeftControl) ||
+			     Global.KeyboardState.IsKeyDown(Keys.RightControl)))
+			{
+				ColorPicker.SaveColor();
+			}
 			return true;
 		}
 

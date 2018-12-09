@@ -18,6 +18,7 @@ namespace AEdit.Windows
 		private readonly ScrollBar _green;
 		private readonly ScrollBar _blue;
 		private readonly ScrollBar _alpha;
+		private Action<ColorPicker> _fnSave;
 		public const int WidthConst = 130;
 		public const int HeightConst = 9;
 
@@ -26,6 +27,7 @@ namespace AEdit.Windows
 			Title = "Color Picker";
 			IsExclusiveMouse = false;
 			Center();
+			_fnSave = fn;
 
 			_red = ScrollBar.Create(Orientation.Horizontal, 123);
 			_red.Position = new Point(6, 1);
@@ -86,12 +88,7 @@ namespace AEdit.Windows
 			};
 			Add(button);
 
-			button.Click += (btn, args) =>
-			{
-				Hide();
-				CPPalette.Singleton.InsertMyPaletteColor(CurColor);
-				fn(this);
-			};
+			button.Click += (btn, args) => { SaveColor(); };
 
 			_colorSwatch = new DrawingSurface(Width - 2, 1)
 			{
@@ -103,6 +100,13 @@ namespace AEdit.Windows
 			CPPalette.Singleton.Position = new Point(1, Height - 3);
 			CPPalette.Singleton.ColorPicker = this;
 			Children.Add(CPPalette.Singleton);
+		}
+
+		public void SaveColor()
+		{
+			Hide();
+			CPPalette.Singleton.InsertMyPaletteColor(CurColor);
+			_fnSave(this);
 		}
 
 		public Color CurColor
