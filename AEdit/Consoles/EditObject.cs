@@ -126,6 +126,32 @@ namespace AEdit.Consoles
 			IsDirty = true;
 			SetRenderCells();
 		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Merges one editObject onto another. </summary>
+		///
+		/// <remarks>	Doesn't check for the merged one being interior to this.  Caller needs to ensure
+		/// 			that this is large enough before making the call.
+		/// 			Darrell Plank, 12/8/2018. </remarks>
+		///
+		/// <param name="edit">	The edit to be merged. </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		public void Merge(EditObject edit)
+		{
+			var offset = edit.Position - Position;
+
+			for (var iRow = 0; iRow < edit.Height; iRow++)
+			{
+				for (var iCol = 0; iCol < edit.Width; iCol++)
+				{
+					var cell = edit[iCol, iRow];
+					if (cell.IsVisible)
+					{
+						cell.CopyAppearanceTo(this[iCol + offset.X, iRow + offset.Y]);
+					}
+				}
+			}
+		}
 		#endregion
 
 		#region Overrides

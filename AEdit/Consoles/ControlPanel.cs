@@ -51,7 +51,8 @@ namespace AEdit.Consoles
 		private static readonly EditControl[] ModeControlPanels =
 		{
 			new PaintControls(DefaultControlWidth, ModeControlHeight),
-			new LineControls(DefaultControlWidth, ModeControlHeight)
+			new LineControls(DefaultControlWidth, ModeControlHeight),
+			new FlatControl(DefaultControlWidth, ModeControlHeight), 
 		};
 		private static EditControl _modeSpecificControls;
 		#endregion
@@ -91,7 +92,19 @@ namespace AEdit.Consoles
 			};
 			btnDown.Click += BtnDown_Click;
 			Add(btnDown);
-			
+
+			var btnMerge = new Button(1, 1)
+			{
+				Text = "M",
+				Position = new Point(width - 1, height - LayerHeight - BelowLayers + 2)
+			};
+			btnMerge.Click += BtnMerge_Click;
+			Add(btnMerge);
+		}
+
+		private void BtnMerge_Click(object sender, EventArgs e)
+		{
+			Main.MergeDown();
 		}
 
 		private void BtnUp_Click(object sender, EventArgs e) => Main.ChangeZOrder(true);

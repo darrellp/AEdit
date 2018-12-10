@@ -1,31 +1,20 @@
 ﻿using AEdit.Consoles;
-using static AEdit.AEGlobals;
 
 namespace AEdit.Undo
 {
-	class MergeRecord : IUndoRecord
+	class MergeRecord : EditRecord
 	{
 		public EditObject Above { get; }
 		public EditObject Below { get; }
 		public EditObject Merge { get; }
-		public int IndexOfAbove { get; }
+		public int IndexAbove { get; }
 
-		public MergeRecord(EditObject above, EditObject below, EditObject merge, int index)
+		public MergeRecord(EditObject above, EditObject below, EditObject merge, int indexAbove)
 		{
 			Above = above;
 			Below = below;
-			IndexOfAbove = index;
+			IndexAbove = indexAbove;
 			Merge = merge;
-		}
-
-		public void Undo()
-		{
-			DoRaiseUndoEvent(this, true);
-		}
-
-		public void Redo()
-		{
-			DoRaiseUndoEvent(this, false);
 		}
 	}
 }

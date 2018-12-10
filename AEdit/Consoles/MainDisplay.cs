@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using SadConsole;
 using static AEdit.AEGlobals;
 using static AEdit.Undo.Undo;
+using static System.Math;
 
 namespace AEdit.Consoles
 {
@@ -71,15 +72,22 @@ namespace AEdit.Consoles
 			// The last child is "on top".  We want the new object to be above
 			// the top EditObject but still below the drawing console.
 			Drawing.Clear();
-			ApplyInsert(editObject);
+			TakeAction(insertRecord);
 		}
 		#endregion
 
 		#region Operations
-		public void Clear()
+		private void RemoveChild(EditObject child)
 		{
-			Children.Clear();
-			Children.Add(Drawing);
+			var iChild = Children.IndexOf(child);
+			Children.Remove(child);
+			DoRaiseEditEvent(child, EditAction.Remove, iChild);
+		}
+
+		private void AddChild(EditObject child, int iPosition)
+		{
+			Children.Insert(iPosition, child);
+			DoRaiseEditEvent(child, EditAction.Add, iPosition);
 		}
 
 		public void DeleteSelected()
@@ -129,22 +137,38 @@ namespace AEdit.Consoles
 				Children.Add(Drawing);
 			}
 		}
-		#endregion
 
-		#region Handlers
-		//private void OnRaiseEditEvent(object sender, EditObjectEventArgs e)
-		//{
-		//	switch (e.Action)
-		//	{
-		//		case EditAction.MoveUp:
-		//			ChangeZOrder(true);
-		//			break;
+		public void MergeDown()
+		{
+			if (Selected == null || EditCount < 2)
+			{
+				return;
+			}
 
-		//		case EditAction.MoveDown:
-		//			ChangeZOrder(false);
-		//			break;
-		//	}
-		//}
+			var iSelected = Children.IndexOf(Selected);
+			if (iSelected == EditCount - 1)
+			{
+				return;
+			}
+
+			var above = Selected;
+			var below = (EditObject)Children[iSelected + 1];
+			var mergeUL = new Point(
+				Min(above.Position.X, below.Position.X),
+				Min(above.Position.Y, below.Position.Y));
+			var mergeLR = new Point(
+				Max(above.Position.X + above.Width, below.Position.X + below.Width),
+				Max(above.Position.Y + above.Height, below.Position.Y + below.Height));
+			var mergeSize = mergeLR - mergeUL;
+
+			var merge = new EditObject(Drawing, EditMode.Canvas, null, new Rectangle(mergeUL, mergeSize));
+			merge.Merge(above);
+			merge.Merge(below);
+			var mergeRecord = new MergeRecord(above, below, merge, iSelected);
+			TakeAction(mergeRecord);
+			AddUndoRecord(mergeRecord);
+			Selected = merge;
+		}
 
 		public void ChangeZOrder(bool isUp)
 		{
@@ -163,7 +187,9 @@ namespace AEdit.Consoles
 			AddUndoRecord(record);
 			DoRaiseEditEvent((EditObject)Children[iTo], isUp ? EditAction.MoveUp : EditAction.MoveDown, iSelected);
 		}
+		#endregion
 
+		#region Handlers
 		public void TakeAction(EditRecord record, bool isUndo = false)
 		{
 			switch (record)
@@ -191,9 +217,45 @@ namespace AEdit.Consoles
 				case ZOrderRecord zr:
 					HandleZOrder(zr, isUndo);
 					break;
+
+				case MergeRecord mr:
+					HandleMerge(mr, isUndo);
+					break;
 			}
 			DoRaiseUndoEvent(record, isUndo);
 		}
+
+		#region Merge
+		private void HandleMerge(MergeRecord mr, bool isUndo)
+		{
+			if (isUndo)
+			{
+				UndoMerge(mr);
+			}
+			else
+			{
+				PerformMerge(mr);
+			}
+		}
+
+		private void PerformMerge(MergeRecord mr)
+		{
+			RemoveChild((EditObject) Children[mr.IndexAbove]);
+			RemoveChild((EditObject)Children[mr.IndexAbove]);
+			AddChild(mr.Merge, mr.IndexAbove);
+			Selected = mr.Merge;
+			Mode = EditMode.Canvas;
+		}
+
+		private void UndoMerge(MergeRecord mr)
+		{
+			RemoveChild((EditObject) Children[mr.IndexAbove]);
+			AddChild(mr.Below, mr.IndexAbove);
+			AddChild(mr.Above, mr.IndexAbove);
+			Selected = mr.Above;
+			Mode = Selected.Mode;
+		}
+		#endregion
 
 		#region Z Order
 		private void HandleZOrder(ZOrderRecord zr, bool isUndo)
@@ -226,11 +288,8 @@ namespace AEdit.Consoles
 			}
 			var isMovingSelection = Children[oldPos] == Selected;
 			var movedEdit = (EditObject)Children[oldPos];
-			Children.Remove(movedEdit);
-			DoRaiseEditEvent(movedEdit, EditAction.Remove, oldPos);
-
-			Children.Insert(newPos, movedEdit);
-			DoRaiseEditEvent(movedEdit, EditAction.Add, newPos);
+			RemoveChild(movedEdit);
+			AddChild(movedEdit, newPos);
 			if (isMovingSelection)
 			{
 				Selected = movedEdit;
@@ -289,8 +348,7 @@ namespace AEdit.Consoles
 
 		private void UndoDelete(DeleteRecord dr)
 		{
-			Children.Insert(dr.Index, dr.Edit);
-			DoRaiseEditEvent(dr.Edit, EditAction.Add, dr.Index);
+			AddChild(dr.Edit, dr.Index);
 			Selected = dr.Edit;
 		}
 
@@ -298,8 +356,7 @@ namespace AEdit.Consoles
 		{
 			var needNewSelection = Children[dr.Index] == Selected;
 
-			Children.Remove(Children[dr.Index]);
-			DoRaiseEditEvent(dr.Edit, EditAction.Remove, dr.Index);
+			RemoveChild((EditObject)Children[dr.Index]);
 			if (EditCount > 0 && needNewSelection)
 			{
 				Selected = (EditObject)Children[Math.Min(dr.Index, EditCount - 1)];
@@ -348,7 +405,6 @@ namespace AEdit.Consoles
 
 		public void ApplyClear()
 		{
-
 			Children.Clear();
 			Children.Add(Drawing);
 			DoRaiseEditEvent(null, EditAction.Clear);
@@ -359,8 +415,9 @@ namespace AEdit.Consoles
 			Children.Clear();
 			foreach (var edit in clearedEdits)
 			{
-				Children.Add(edit);
-				DoRaiseEditEvent(edit, EditAction.Add);
+				// Since we took out the Drawing layer above we don't want to use EditCount
+				// here but instead use Children.Count.
+				AddChild(edit, Children.Count);
 			}
 			Children.Add(Drawing);
 			Selected = selectedObject;

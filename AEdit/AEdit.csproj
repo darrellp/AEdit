@@ -115,6 +115,7 @@
     <Compile Include="Consoles\DrawingConsole.cs" />
     <Compile Include="Consoles\EditControl.cs" />
     <Compile Include="Consoles\EditObjectEventArgs.cs" />
+    <Compile Include="Consoles\FlatControl.cs" />
     <Compile Include="Consoles\LayersControl.cs" />
     <Compile Include="Consoles\LineControls.cs" />
     <Compile Include="Consoles\MainDisplay.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Consoles\CPPalette.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="AEGlobals.cs" />
+    <Compile Include="Handlers\FlatHandler.cs" />
     <Compile Include="Handlers\IHandler.cs" />
     <Compile Include="Handlers\LineHandler.cs" />
     <Compile Include="Handlers\PaintHandler.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="program.cs" />
     <Compile Include="SadGeometry.cs" />
     <Compile Include="Stepper.cs" />
+    <Compile Include="Undo\MergeRecord.cs" />
     <Compile Include="Undo\MoveRecord.cs" />
     <Compile Include="Undo\Undo.cs" />
     <Compile Include="Undo\UndoEventArgs.cs" />

@@ -15,6 +15,7 @@ namespace AEdit.Consoles
 		Null = -1,
 		Brush,
 		Line,
+		Canvas,
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +35,7 @@ namespace AEdit.Consoles
 		{
 			new PaintHandler(),
 			new LineHandler(),
+			new FlatHandler(), 
 		};
 
 		private EditMode _mode = EditMode.Null;
