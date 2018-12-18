@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using SadConsole.Controls;
+using SadConsole.Input;
 using SadConsole.Themes;
+using static AEdit.AEGlobals;
 
 namespace AEdit.Consoles
 {
@@ -81,6 +83,11 @@ namespace AEdit.Consoles
 			}
 
 			return null;
+		}
+
+		public override bool ProcessKeyboard(Keyboard info)
+		{
+			return Drawing.ProcessKeyboard(info) || base.ProcessKeyboard(info);
 		}
 	}
 }

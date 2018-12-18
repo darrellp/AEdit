@@ -10,7 +10,7 @@ namespace AEdit.Consoles
 	static class ControlHelpers
 	{
 
-		public static DrawingSurface SetColorButton(EditControl console, Point btnPos, string text, Color color, Action<Color> fnAssign)
+		public static DrawingSurface SetColorButton(EditControl controls, Point btnPos, string text, Color color, Action<Color> fnAssign)
 		{
 
 			var colorSwatch = new DrawingSurface(5, 1)
@@ -18,7 +18,7 @@ namespace AEdit.Consoles
 				Position = new Point(12, 0) + btnPos
 			};
 			UpdateColorSwatch(colorSwatch, color);
-			console.Add(colorSwatch);
+			controls.Add(colorSwatch);
 
 			var button = new Button(9, 1)
 			{
@@ -34,10 +34,10 @@ namespace AEdit.Consoles
 					UpdateColorSwatch(colorSwatch, newColor);
 					Ctrls.UpdateHandler();
 				});
-				cp.CurColor = (Color) console.GetParmValue(text);
+				cp.CurColor = (Color) controls.GetParmValue(text);
 				cp.Show(true);
 			};
-			console.Add(button);
+			controls.Add(button);
 			return colorSwatch;
 		}
 

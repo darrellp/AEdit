@@ -1,10 +1,9 @@
-﻿using System.Diagnostics;
-using SadConsole.Controls;
+﻿using AEdit.Consoles.Controls;
 using static AEdit.AEGlobals;
 
 namespace AEdit.Consoles
 {
-	internal class LayersControl : MyListBox
+	internal class LayersControl : Layers
 	{
 		public LayersControl(int width, int height) : base(width, height)
 		{
@@ -36,14 +35,6 @@ namespace AEdit.Consoles
 				case EditAction.Clear:
 					Items.Clear();
 					break;
-
-				//case EditAction.MoveUp:
-				//	MoveUp();
-				//	break;
-
-				//case EditAction.MoveDown:
-				//	MoveDown();
-				//	break;
 			}
 		}
 
@@ -55,24 +46,6 @@ namespace AEdit.Consoles
 		private void RemoveEdit(int childIndex)
 		{
 			Items.RemoveAt(childIndex);
-		}
-
-		private void MoveUp()
-		{
-			if (SelectedIndex <= 0)
-			{
-				return;
-			}
-			Items.Move(SelectedIndex, SelectedIndex - 1);
-		}
-
-		private void MoveDown()
-		{
-			if (SelectedIndex >= Items.Count - 1)
-			{
-				return;
-			}
-			Items.Move(SelectedIndex, SelectedIndex + 1);
 		}
 
 		private void ListOnSelectedItemChanged(object sender, SelectedItemEventArgs e)

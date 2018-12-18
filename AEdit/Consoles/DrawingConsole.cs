@@ -16,6 +16,7 @@ namespace AEdit.Consoles
 		Brush,
 		Line,
 		Canvas,
+		Figlet,
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,8 @@ namespace AEdit.Consoles
 		{
 			new PaintHandler(),
 			new LineHandler(),
-			new FlatHandler(), 
+			new FlatHandler(),
+			new FigletHandler(),
 		};
 
 		private EditMode _mode = EditMode.Null;

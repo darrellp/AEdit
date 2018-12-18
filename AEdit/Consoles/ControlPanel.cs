@@ -44,6 +44,7 @@ namespace AEdit.Consoles
 			}),
 			("Line", (s, a) => Main.Mode = EditMode.Line),
 			("Paint", (s, a) => Main.Mode = EditMode.Brush),
+			("Figlet", (s, a) => Main.Mode = EditMode.Figlet),
 		};
 
 		private static readonly int ButtonRowCount = (ButtonInfo.Length + 1) / 2;
@@ -52,7 +53,8 @@ namespace AEdit.Consoles
 		{
 			new PaintControls(DefaultControlWidth, ModeControlHeight),
 			new LineControls(DefaultControlWidth, ModeControlHeight),
-			new FlatControl(DefaultControlWidth, ModeControlHeight), 
+			new CanvasControl(DefaultControlWidth, ModeControlHeight),
+			new FigletControls(DefaultControlWidth, ModeControlHeight),
 		};
 		private static EditControl _modeSpecificControls;
 		#endregion
@@ -130,6 +132,8 @@ namespace AEdit.Consoles
 			if (index >= 0)
 			{
 				_modeSpecificControls = ModeControlPanels[index];
+				Global.FocusedConsoles.Push(_modeSpecificControls);
+				_modeSpecificControls.UseKeyboard = true;
 				Children.Add(_modeSpecificControls);
 			}
 		}

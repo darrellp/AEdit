@@ -1,9 +1,20 @@
-﻿namespace AEdit.Consoles
+﻿using Microsoft.Xna.Framework;
+using SadConsole.Controls;
+using SadConsole.Themes;
+
+namespace AEdit.Consoles
 {
-	class FlatControl : EditControl
+	class CanvasControl : EditControl
 	{
-		public FlatControl(int width, int height) : base(width, height)
+		public CanvasControl(int width, int height) : base(width, height)
 		{
+			var label = new DrawingSurface(20, 1)
+			{
+				Position = new Point(1, 1),
+
+			};
+			label.Surface.Print(0, 0, "CANVAS", Colors.Yellow, Color.Transparent);
+			Add(label);
 		}
 
 		public override object GetParameterInfo()

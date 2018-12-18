@@ -1,17 +1,18 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-
 using System.Runtime.Serialization;
+using Microsoft.Xna.Framework;
+using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Surfaces;
+using SadConsole.Themes;
 
-namespace SadConsole.Themes
+namespace AEdit.Consoles.Controls
 {
 	/// <summary>
 	/// The theme for a ListBox control.
 	/// </summary>
 	[DataContract]
-	public class MyListBoxTheme : ThemeBase<MyListBox>
+	public class LayersTheme : ThemeBase<Layers>
 	{
 		/// <summary>
 		/// The drawing theme for the boarder when <see cref="DrawBorder"/> is true.
@@ -43,7 +44,7 @@ namespace SadConsole.Themes
 		[DataMember]
 		public ScrollBarTheme ScrollBarTheme;
 
-		public MyListBoxTheme()
+		public LayersTheme()
 		{
 			SetForeground(Normal.Foreground);
 			SetBackground(Normal.Background);
@@ -57,12 +58,12 @@ namespace SadConsole.Themes
 			BorderLineStyle = (int[])SurfaceBase.ConnectedLineThick.Clone();
 		}
 
-		public override void Attached(MyListBox control)
+		public override void Attached(Layers control)
 		{
 			control.Surface = new BasicNoDraw(control.Width, control.Height);
 		}
 
-		public override void UpdateAndDraw(MyListBox control, TimeSpan time)
+		public override void UpdateAndDraw(Layers control, TimeSpan time)
 		{
 			if (!control.IsDirty) return;
 
@@ -149,7 +150,7 @@ namespace SadConsole.Themes
 		/// <returns>The cloned object.</returns>
 		public override object Clone()
 		{
-			return new MyListBoxTheme()
+			return new LayersTheme()
 			{
 				Normal = Normal.Clone(),
 				Disabled = Disabled.Clone(),
@@ -165,7 +166,7 @@ namespace SadConsole.Themes
 			};
 		}
 
-		public MyListBoxTheme(ListBoxTheme lbTheme)
+		public LayersTheme(ListBoxTheme lbTheme)
 		{
 			Normal = lbTheme.Normal.Clone();
 			Disabled = lbTheme.Disabled.Clone();

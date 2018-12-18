@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using AEdit.Consoles;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Input;
 using SadConsole.Themes;
-using Console = SadConsole.Console;
 
 namespace AEdit.Windows
 {

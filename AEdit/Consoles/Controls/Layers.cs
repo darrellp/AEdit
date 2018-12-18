@@ -1,14 +1,16 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using SadConsole.Themes;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using SadConsole;
+using SadConsole.Controls;
+using SadConsole.Themes;
 
-namespace SadConsole.Controls
+namespace AEdit.Consoles.Controls
 {
 	[DataContract]
-	public class MyListBox : ControlBase
+	public class Layers : ControlBase
 	{
 		public class SelectedItemEventArgs : EventArgs
 		{
@@ -27,7 +29,7 @@ namespace SadConsole.Controls
 		protected int selectedIndex;
 
 		[DataMember(Name = "Theme")]
-		protected MyListBoxTheme _theme;
+		protected LayersTheme _theme;
 		protected object selectedItem;
 		[DataMember(Name = "ShowSlider")]
 		//[DataMember(Name = "BorderLines")]
@@ -87,7 +89,7 @@ namespace SadConsole.Controls
 		/// <summary>
 		/// The theme of this control. If the theme is not explicitly set, the theme is taken from the library.
 		/// </summary>
-		public virtual MyListBoxTheme Theme
+		public virtual LayersTheme Theme
 		{
 			get => _theme;
 			set
@@ -177,7 +179,7 @@ namespace SadConsole.Controls
 		/// <summary>
 		/// Creates a new instance of the listbox control.
 		/// </summary>
-		public MyListBox(int width, int height) : base(width, height)
+		public Layers(int width, int height) : base(width, height)
 		{
 			initialized = true;
 			SliderRenderLocation = new Point(width - 1, 0);
@@ -205,7 +207,7 @@ namespace SadConsole.Controls
 			{
 				return;
 			}
-			Theme = new MyListBoxTheme((ListBoxTheme)Library.Default.ListBoxTheme.Clone());
+			Theme = new LayersTheme((ListBoxTheme)Library.Default.ListBoxTheme.Clone());
 			//_slider.Width, height < 3 ? 3 : height - _scrollBarSizeAdjust
 			Slider = ScrollBar.Create(Orientation.Vertical, Height);
 			Slider.ValueChanged += new EventHandler(_slider_ValueChanged);
@@ -259,7 +261,7 @@ namespace SadConsole.Controls
 			}
 		}
 
-		public override bool ProcessKeyboard(Input.Keyboard info)
+		public override bool ProcessKeyboard(SadConsole.Input.Keyboard info)
 		{
 			//if (_hasFocus)
 			if (info.IsKeyReleased(Keys.Up))
@@ -307,7 +309,7 @@ namespace SadConsole.Controls
 			return false;
 		}
 
-		protected override void OnMouseIn(Input.MouseConsoleState state)
+		protected override void OnMouseIn(SadConsole.Input.MouseConsoleState state)
 		{
 			base.OnMouseIn(state);
 
@@ -335,7 +337,7 @@ namespace SadConsole.Controls
 			}
 		}
 
-		protected override void OnLeftMouseClicked(Input.MouseConsoleState state)
+		protected override void OnLeftMouseClicked(SadConsole.Input.MouseConsoleState state)
 		{
 			base.OnLeftMouseClicked(state);
 
@@ -375,7 +377,7 @@ namespace SadConsole.Controls
 				}
 			}
 		}
-		public override bool ProcessMouse(Input.MouseConsoleState state)
+		public override bool ProcessMouse(SadConsole.Input.MouseConsoleState state)
 		{
 			if (isEnabled)
 			{
@@ -409,7 +411,7 @@ namespace SadConsole.Controls
 			Theme.UpdateAndDraw(this, time);
 		}
 
-		[OnDeserializedAttribute]
+		[OnDeserialized]
 		private void AfterDeserialized(StreamingContext context)
 		{
 			initialized = true;

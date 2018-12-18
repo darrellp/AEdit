@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AEdit.Windows;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -44,7 +45,7 @@ namespace AEdit.Consoles
 				return false;
 			}
 
-			var cell = Cells[localPos.X];
+			var cell = Cells[Math.Min(Cells.Length - 1, localPos.X)];
 
 			if (cell.Background == Color.Transparent)
 			{
