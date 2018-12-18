@@ -117,6 +117,7 @@
     <Compile Include="Consoles\ControlHelpers.cs" />
     <Compile Include="Consoles\ControlPanel.cs" />
     <Compile Include="Consoles\Controls\TestTextBox.cs" />
+    <Compile Include="Consoles\Controls\TestTextBoxTheme.cs" />
     <Compile Include="Consoles\DrawingConsole.cs" />
     <Compile Include="Consoles\EditControl.cs" />
     <Compile Include="Consoles\EditObjectEventArgs.cs" />

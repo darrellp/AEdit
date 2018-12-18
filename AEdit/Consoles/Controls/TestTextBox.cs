@@ -1,18 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using SadConsole.Controls;
+using SadConsole.Themes;
 using Keyboard = SadConsole.Input.Keyboard;
 
 namespace AEdit.Consoles.Controls
 {
 	class TestTextBox : TextBox
 	{
+		/// <summary>
+		/// The theme of the control.
+		/// </summary>
+		[DataMember(Name = "Theme")]
+		protected TestTextBoxTheme _theme;
+
+		/// <summary>
+		/// The theme of this control. If the theme is not explicitly set, the theme is taken from the library.
+		/// </summary>
+		public TestTextBoxTheme Theme
+		{
+			get => _theme;
+			set
+			{
+				_theme = value;
+				_theme.Attached(this);
+				DetermineState();
+				IsDirty = true;
+			}
+		}
+
 		public TestTextBox(int width) : base(width)
 		{
+			Theme = new TestTextBoxTheme();
+		}
+
+		public override void Update(TimeSpan time)
+		{
+			Theme.UpdateAndDraw(this, time);
 		}
 
 		public override bool ProcessKeyboard(Keyboard info)
@@ -90,14 +119,12 @@ namespace AEdit.Consoles.Controls
 									_caretPos = newText.Length;
 							}
 
-							else if (info.KeysPressed[i].Key == Keys.Delete && _caretPos != newText.Length)
+							else if ((info.KeysPressed[i].Key == Keys.Decimal || info.KeysPressed[i].Key == Keys.Delete) && _caretPos != newText.Length)
 							{
-								var oldcursor = _caretPos;
 								newText.Remove(_caretPos, 1);
+
 								if (_caretPos > newText.Length)
 									_caretPos = newText.Length;
-								Text = newText.ToString();
-								_caretPos = oldcursor;
 							}
 
 							else if (info.KeysPressed[i].Key == Keys.Enter)
@@ -161,9 +188,7 @@ namespace AEdit.Consoles.Controls
 
 					}
 
-					string newString = newText.ToString();
-					if (newString != EditingText)
-						EditingText = newString;
+					EditingText = newText.ToString();
 
 					ValidateEdit();
 				}
@@ -192,8 +217,6 @@ namespace AEdit.Consoles.Controls
 
 				if (EditingText.Length == MaxLength)
 					_caretPos = EditingText.Length - 1;
-				else
-					_caretPos = EditingText.Length;
 			}
 
 			// Test to see if caret is off edge of box
