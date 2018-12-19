@@ -1,24 +1,20 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AEdit.Undo
 {
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	/// <summary>	Information about a figlet. </summary>
-	///
-	/// <remarks>	Currently we only have a foreground color with a transparent background color.
-	/// 			Darrell Plank, 12/9/2018. </remarks>
-	////////////////////////////////////////////////////////////////////////////////////////////////////
-	class FigletRecord : EditRecord
+	internal class FigletRecord : EditRecord
 	{
-		public string FontName { get; }
-		public string Text { get; }
-		public Color Foreground { get; }
-
-		public FigletRecord(string fontName, string text, Color foreground)
+		public FigletRecord(FigletInfo newInfo, FigletInfo oldInfo)
 		{
-			FontName = fontName;
-			Text = text;
-			Foreground = foreground;
+			OldInfo = oldInfo;
+			NewInfo = newInfo;
 		}
+
+		public FigletInfo OldInfo { get; }
+		public FigletInfo NewInfo { get; }
 	}
 }

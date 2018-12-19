@@ -19,16 +19,35 @@ namespace AEdit.Consoles
 		private readonly DrawingSurface _foreSwatch;
 		private string _figletFont;
 		private TestTextBox _textbox;
+		private Color _foreground;
 		#endregion
 
 		#region Public Properties
 		public string Text
 		{
 			get => _textbox.EditingText;
-			set => _textbox.Text = value;
+			set
+			{
+				// ReSharper disable once RedundantCheckBeforeAssignment
+				if (value != _textbox.Text)
+				{
+					_textbox.Text = value;
+				}
+			}
 		}
 
-		public Color Foreground { get; private set; }
+		public Color Foreground
+		{
+			get => _foreground;
+			private set
+			{
+				_foreground = value;
+				if (Selected != null)
+				{
+					FillEdit(Selected);
+				}
+			}
+		}
 		#endregion
 
 		#region Constructor
@@ -36,7 +55,7 @@ namespace AEdit.Consoles
 		{
 			DefaultBackground = Color.Transparent;
 			Clear();
-			Foreground = Color.White;
+			_foreground = Color.White;
 
 			_foreSwatch = ControlHelpers.SetColorButton(this, new Point(1, 3), "Foregnd", Foreground, c => Foreground = c);
 
@@ -77,16 +96,17 @@ namespace AEdit.Consoles
 		#region EditControl abstract methods
 		public override object GetParameterInfo()
 		{
-			return new FigletRecord(_figletFont, Text, Foreground);
+			return new FigletInfo(_figletFont, Text, Foreground);
 		}
 
 		public override void SetParameters(object parms)
 		{
-			var fr = parms as FigletRecord;
-			Debug.Assert(fr != null, "Bad record in SetParameters");
-			Text = fr.Text;
-			_figletFont = fr.FontName;
-			Foreground = fr.Foreground;
+			var finfo = parms as FigletInfo;
+
+			Debug.Assert(finfo != null, "Bad record in SetParameters");
+			Text = finfo.Text;
+			_figletFont = finfo.FontName;
+			Foreground = finfo.Foreground;
 			ControlHelpers.UpdateColorSwatch(_foreSwatch, Foreground);
 		}
 
@@ -102,34 +122,37 @@ namespace AEdit.Consoles
 			return true;
 		}
 
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Fills (and possibly resizes) edit with new char info. </summary>
+		///
+		/// <remarks>	Darrell Plank, 12/18/2018. </remarks>
+		///
+		/// <param name="edit">	The edit. </param>
+		////////////////////////////////////////////////////////////////////////////////////////////////////
 		private void FillEdit(EditObject edit)
 		{
-			var (figlet, width, height) = FigletFromParms();
-			edit.Resize(Math.Max(1, width), Math.Max(1, height), true);
-			edit.DefaultBackground = Color.Transparent;
-			edit.DefaultForeground = Foreground;
-			edit.Clear();
-			var iCells = 0;
-			foreach (var line in figlet.Split('\n'))
+			var finfo = edit.Parms as FigletInfo;
+			Debug.Assert(finfo != null);
+			if (finfo.Foreground == Foreground && finfo.FontName == _figletFont && finfo.Text == Text)
 			{
-				foreach (var ch in line)
-				{
-					if (ch != ' ')
-					{
-						edit.Cells[iCells].Glyph = ch;
-					}
-
-					iCells++;
-				}
-
-				iCells = width * ((iCells + width - 1) / width);
+				return;
 			}
+
+			var fr = new FigletRecord(new FigletInfo( _figletFont, Text, Foreground), finfo);
+			Main.TakeAction(fr);
+			AddUndoRecord(fr);
 		}
 
 		private (string figlet, int width, int height) FigletFromParms()
 		{
-			var font = FigletFont.FigletFromName(_figletFont);
-			var arranger = new Arranger(font, 100) {Text = Text == string.Empty ? " " : Text};
+			var text = Text == string.Empty ? " " : Text;
+			return FigletFromParms(_figletFont, text);
+		}
+
+		public static (string figlet, int width, int height) FigletFromParms(string fontName, string text)
+		{
+			var font = FigletFont.FigletFromName(fontName);
+			var arranger = new Arranger(font, 100) { Text = text == string.Empty ? " " : text };
 			var figlet = arranger.StringContents;
 			var (width, height) = BoundingBoxSize(figlet);
 			return (figlet, width, height);

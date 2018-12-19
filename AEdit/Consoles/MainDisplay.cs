@@ -36,6 +36,8 @@ namespace AEdit.Consoles
 				_selected = value;
 				if (value != null)
 				{
+					// TODO: For Figlets the SetParameters resets the effects set up in DisplayAsSelected
+					// That means Figlets don't blink when selected.  Fix this!
 					_selected.DisplayAsSelected(true);
 					Mode = _selected.Mode;
 					Ctrls.EditControls.SetParameters(_selected.Parms);
@@ -221,9 +223,48 @@ namespace AEdit.Consoles
 				case MergeRecord mr:
 					HandleMerge(mr, isUndo);
 					break;
+
+				case FigletRecord fr:
+					HandleFiglet(fr, isUndo);
+					break;
 			}
 			DoRaiseUndoEvent(record, isUndo);
 		}
+
+		#region Figlet Handling
+		private void HandleFiglet(FigletRecord fr, bool isUndo)
+		{
+			var finfo = fr.NewInfo;
+			if (isUndo)
+			{
+				finfo = fr.OldInfo;
+			}
+
+			// Redo case
+			var (figlet, width, height) = FigletControls.FigletFromParms(finfo.FontName, finfo.Text);
+			Selected.Resize(Math.Max(1, width), Math.Max(1, height), true);
+			Selected.DefaultBackground = Color.Transparent;
+			Selected.DefaultForeground = finfo.Foreground;
+			Selected.Clear();
+			var iCells = 0;
+			foreach (var line in figlet.Split('\n'))
+			{
+				foreach (var ch in line)
+				{
+					if (ch != ' ')
+					{
+						Selected.Cells[iCells].Glyph = ch;
+					}
+
+					iCells++;
+				}
+
+				iCells = width * ((iCells + width - 1) / width);
+			}
+
+			Selected.Parms = finfo;
+		}
+		#endregion
 
 		#region Merge
 		private void HandleMerge(MergeRecord mr, bool isUndo)

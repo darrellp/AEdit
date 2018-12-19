@@ -141,6 +141,7 @@
     <Compile Include="Undo\ApplyRecord.cs" />
     <Compile Include="Undo\ClearRecord.cs" />
     <Compile Include="Undo\DeleteRecord.cs" />
+    <Compile Include="Undo\FigletInfo.cs" />
     <Compile Include="Undo\FigletRecord.cs" />
     <Compile Include="Undo\InsertRecord.cs" />
     <Compile Include="Undo\EditRecord.cs" />
